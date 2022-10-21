@@ -1,0 +1,183 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+    <!--
+    /*
+     *	This content is generated from the API File Info.
+     *	(Alt+Shift+Ctrl+I).
+     *
+     *	@desc
+     *	@file 		log_in_page
+     *	@date 		Saturday 01st of October 2022 02:28:35 PM
+     *	@title 		Page 1
+     *	@author
+     *	@keywords
+     *	@generator 	Export Kit v1.3.figma
+     *
+     */
+    -->
+
+    <View
+        android:id="@+id/_bg__log_in_page_ek2"
+        android:background="@drawable/_bg__log_in_page_ek2_shape"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:src="@drawable/background_image"
+        android:contentDescription="background_image"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="fitXY"/>
+
+
+    <RelativeLayout
+        android:id="@+id/log_in_button"
+        android:layout_marginTop="540dp"
+        android:layout_marginStart="-0.36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/error_field"
+            android:layout_width="251dp"
+            android:layout_height="42dp"
+            android:textColor="@color/rectangle_50_color"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="0dp" />
+
+        <TextView
+            android:id="@+id/_don_t_have_an_account_"
+            android:fontFamily="Montserrat"
+            android:textColor="@color/_bg__log_in_page_ek2_color"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="74.02dp"
+            android:layout_width="265dp"
+            android:layout_height="31dp"
+            android:text="@string/_don_t_have_an_account__string" />
+
+        <Button
+            android:id="@+id/log_in"
+            android:layout_width="251dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="27dp"
+            android:background="@drawable/rectangle_2_shape"
+            android:text="@string/log_in_string"
+            android:textColor="@color/log_in_color" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/log_in_fields"
+        android:layout_marginTop="395dp"
+        android:layout_marginStart="-0.36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/forgot_your_password_"
+            android:fontFamily="Montserrat"
+            android:layout_gravity="center_vertical|end"
+            android:gravity="end"
+            android:textColor="@color/_bg__log_in_page_ek2_color"
+            android:layout_marginStart="58dp"
+            android:layout_marginTop="105dp"
+            android:layout_width="260dp"
+            android:layout_height="31dp"
+            android:text="@string/forgot_your_password__string" />
+
+
+        <RelativeLayout
+            android:id="@+id/group_ek1"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="64.9dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/password"
+                android:background="@drawable/password_shape"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="50dp"
+                android:layout_width="251dp"
+                android:layout_height="42dp" />
+
+            <View
+                android:id="@+id/email"
+                android:background="@drawable/email_shape"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_width="251dp"
+                android:layout_height="42dp" />
+
+            <EditText
+                android:id="@+id/email_address"
+                android:fontFamily="Montserrat"
+                android:textSize="12sp"
+                android:textColor="@color/email_address_color"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="0dp"
+                android:layout_width="241dp"
+                android:layout_height="40dp"
+                android:hint="@string/email_address_string"
+                android:autofillHints="emailAddress"
+                android:inputType="textEmailAddress"/>
+
+            <EditText
+                android:id="@+id/password_ek1"
+                android:fontFamily="Montserrat"
+                android:textSize="12sp"
+                android:textColor="@color/email_address_color"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="50dp"
+                android:layout_width="241dp"
+                android:layout_height="40dp"
+                android:hint="@string/password_ek1_string"
+                android:autofillHints="password"
+                android:inputType="textPassword"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/app_info"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/mysport"
+            android:fontFamily="Montserrat"
+            android:textSize="36sp"
+            android:textColor="@color/rectangle_2_color"
+            android:layout_marginLeft="68.36dp"
+            android:layout_marginTop="181.5dp"
+            android:layout_width="261dp"
+            android:layout_height="175dp"
+            android:text="@string/mysport_string" />
+
+        <TextView
+            android:id="@+id/quote"
+            android:fontFamily="Montserrat"
+            android:textSize="12sp"
+            android:textColor="@color/rectangle_2_color"
+            android:layout_marginLeft="69dp"
+            android:layout_marginTop="270dp"
+            android:layout_width="243dp"
+            android:layout_height="70dp"
+            android:text="@string/quote_string" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
