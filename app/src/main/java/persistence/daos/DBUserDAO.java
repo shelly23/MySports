@@ -1,5 +1,6 @@
 package persistence.daos;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,7 +27,7 @@ import service.ConnectionService;
 
 public class DBUserDAO implements UserDAO {
     private static final Logger LOG = LoggerFactory.getLogger(DBUserDAO.class);
-    private static final long id = 0;
+    private static long id = 0;
     final String USER_COLUMN_PRENAME = "prename";
     final String USER_COLUMN_SURNAME = "surname";
     final String USER_COLUMN_USERNAME = "username";
@@ -40,8 +41,9 @@ public class DBUserDAO implements UserDAO {
         database = con.getWritableDatabase();
     }
 
-    private ContentValues buildInsert(String prename, String surname, String username, String password) {
+    private ContentValues buildInsert(String prename, String surname, String username, String password, long id) {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(BaseColumns._ID, id);
         contentValues.put(USER_COLUMN_PRENAME, prename);
         contentValues.put(USER_COLUMN_SURNAME, surname);
         contentValues.put(USER_COLUMN_USERNAME, username);
@@ -49,10 +51,24 @@ public class DBUserDAO implements UserDAO {
         return contentValues;
     }
 
+    @SuppressLint("Range")
     @Override
     public void create(User user) throws NoSuchAlgorithmException {
-        ContentValues values = buildInsert(user.getPrename(), user.getSurname(), user.getUsername(), hashPassword(user.getPassword()));
-        long id = database.insert(USER_TABLE, null, values);
+
+        final String MY_QUERY = "SELECT MAX(_id) AS _id FROM "+ USER_TABLE;
+        Cursor mCursor = database.rawQuery(MY_QUERY, null);
+
+        if (mCursor.getCount() > 0) {
+            mCursor.moveToFirst();
+            if (mCursor.getColumnIndex(MY_QUERY) >= 0) {
+                id = mCursor.getInt(mCursor.getColumnIndex(MY_QUERY));
+            }
+        }
+
+        id++;
+
+        ContentValues values = buildInsert(user.getPrename(), user.getSurname(), user.getUsername(), hashPassword(user.getPassword()), id);
+        database.insert(USER_TABLE, null, values);
 
         LOG.debug("Created DB-Entry {}", user.getUsername());
         user.setId(id);
