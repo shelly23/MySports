@@ -26,12 +26,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mysports.R;
+import com.savvi.rangedatepicker.CalendarPickerView;
+import com.savvi.rangedatepicker.SubTitle;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 	public class homescreen_activity extends Activity {
 
@@ -121,6 +126,7 @@ import java.util.Date;
 	private ImageView vector_ek135;
 	private View ellipse_36;
 	private View ellipse_37;
+	private CalendarPickerView calendarPickerView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -137,10 +143,6 @@ import java.util.Date;
 		vector_ek127 = (ImageView) findViewById(R.id.vector_ek127);
 		vector_ek129 = (ImageView) findViewById(R.id.vector_ek129);
 		vector_ek131 = (ImageView) findViewById(R.id.vector_ek131);
-		tag_legende = (View) findViewById(R.id.tag_legende);
-		aktiver_tag = (TextView) findViewById(R.id.aktiver_tag);
-		akuter_schub = (TextView) findViewById(R.id.akuter_schub);
-		schub_legende = (View) findViewById(R.id.schub_legende);
 		chat_rectangle = (View) findViewById(R.id.chat_rectangle);
 		ellipse_31 = (ImageView) findViewById(R.id.ellipse_31);
 		ellipse_32 = (ImageView) findViewById(R.id.ellipse_32);
@@ -168,8 +170,42 @@ import java.util.Date;
 		vector_ek135 = (ImageView) findViewById(R.id.vector_ek135);
 		ellipse_36 = (View) findViewById(R.id.ellipse_36);
 		ellipse_37 = (View) findViewById(R.id.ellipse_37);
-	
-		
+		calendarPickerView = (CalendarPickerView) findViewById(R.id.calendar_view);
+
+		Calendar timeFrom = Calendar.getInstance();
+		timeFrom.add(Calendar.DATE, -15);
+
+		Calendar timeTo = Calendar.getInstance();
+		timeTo.add(Calendar.DATE, +15);
+
+		ArrayList<SubTitle> subTitles = new ArrayList<>();
+
+		ArrayList<Date> marked = new ArrayList<>();
+		Calendar marked1 = Calendar.getInstance();
+		marked1.add(Calendar.DATE, 5);
+		marked.add(marked1.getTime());
+		subTitles.add(new SubTitle(marked1.getTime(), "Schub"));
+		marked1.add(Calendar.DATE, 1);
+		marked.add(marked1.getTime());
+		subTitles.add(new SubTitle(marked1.getTime(), "Schub"));
+
+		ArrayList<Date> marked2 = new ArrayList<>();
+		Calendar marked3 = Calendar.getInstance();
+		marked3.add(Calendar.DATE, -5);
+		marked.add(marked3.getTime());
+		subTitles.add(new SubTitle(marked3.getTime(), "Aktiv"));
+		marked3.add(Calendar.DATE, -1);
+		marked.add(marked3.getTime());
+		subTitles.add(new SubTitle(marked3.getTime(), "Aktiv"));
+
+		calendarPickerView.init(timeFrom.getTime(), timeTo.getTime())
+				.inMode(CalendarPickerView.SelectionMode.RANGE)
+				.withSelectedDate(Calendar.getInstance().getTime())
+				.withHighlightedDates(marked)
+				.displayOnly()
+				.withSubTitles(subTitles)
+				.withSelectedDates(marked2)
+		;
 		//custom code goes here
 
 	}

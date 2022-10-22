@@ -184,7 +184,7 @@ public class DBUserDAO implements UserDAO {
 
         if (cursor.moveToNext()) {
             return (cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_USERNAME)).equals(username) &&
-                    cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PASSWORD)).equals(password));
+                    cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PASSWORD)).equals(hashPassword(password)));
         }
         return false;
     }
