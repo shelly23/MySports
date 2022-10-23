@@ -156,7 +156,7 @@
 
 				<RelativeLayout android:id="@+id/calendar"
 					android:layout_marginTop="25dp"
-					android:layout_marginStart="29dp"
+					android:gravity="center_horizontal"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					>
@@ -164,6 +164,7 @@
 					<com.savvi.rangedatepicker.CalendarPickerView
 						android:id="@+id/calendar_view"
 						android:layout_marginTop="0dp"
+						android:layout_marginStart="33dp"
 						android:layout_width="317dp"
 						android:layout_height="335dp"
 						xmlns:android="http://schemas.android.com/apk/res/android"
@@ -175,10 +176,43 @@
 
 				</RelativeLayout>
 
+				<ImageView android:id="@+id/vector_ek135"
+					android:src="@drawable/vector_ek135"
+					android:contentDescription="vector_ek135"
+					android:layout_marginStart="50dp"
+					android:layout_marginTop="375dp"
+					android:layout_width="20dp"
+					android:layout_height="33.08dp" />
+
+				<TextView android:id="@+id/schritte_heute__1253_von_1500"
+					android:fontFamily="Montserrat"
+					android:textSize="12sp"
+					android:textColor="@color/email_address_color"
+					android:layout_marginStart="90dp"
+					android:layout_marginTop="385dp"
+					android:layout_width="188dp"
+					android:layout_height="23dp"
+					android:text="@string/schritte_heute__1253_von_1500_string"
+					/>
+
+				<View   android:id="@+id/ellipse_36"
+					android:background="@drawable/ellipse_36_shape"
+					android:layout_marginStart="275dp"
+					android:layout_marginTop="375dp"
+					android:layout_width="17.5dp"
+					android:layout_height="34.83dp" /> <!-- TODO make diagramm -->
+
+				<View   android:id="@+id/ellipse_37"
+					android:background="@drawable/ellipse_37_shape"
+					android:layout_marginStart="290dp"
+					android:layout_marginTop="375dp"
+					android:layout_width="19.9dp"
+					android:layout_height="35dp" />
+
 
 				<RelativeLayout android:id="@+id/chat"
-					android:layout_marginTop="400dp"
-					android:layout_marginStart="9dp"
+					android:layout_marginTop="425dp"
+					android:layout_marginStart="13dp"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					>
@@ -189,7 +223,7 @@
 						 android:layout_marginStart="0dp"
 						android:layout_marginTop="0dp"
 						android:layout_width="357dp"
-						android:layout_height="215dp" />
+						android:layout_height="230dp" />
 
 
 					<RelativeLayout android:id="@+id/kreis"
@@ -229,8 +263,8 @@
 
 
 					<RelativeLayout android:id="@+id/speech_bubble_ek1"
-						android:layout_marginTop="47dp"
-						android:layout_marginStart="1dp"
+						android:layout_marginTop="100dp"
+						android:layout_marginStart="10dp"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						>
@@ -242,28 +276,13 @@
 							android:layout_width="319dp"
 							android:layout_height="51.31dp" />
 
-						<View   android:id="@+id/line_8_ek1"
-							android:background="@drawable/line_8_ek1_shape"
-							 android:layout_marginStart="315dp"
-							android:layout_marginTop="34dp"
-							android:layout_width="19.42dp"
-							android:layout_height="2dp" />
-
-						<ImageView android:id="@+id/line_9_ek1"
-							android:src="@drawable/line_9_ek1"
-							android:contentDescription="line_9_ek1"
-							 android:layout_marginStart="310dp"
-							android:layout_marginTop="41dp"
-							android:layout_width="23.09dp"
-							android:layout_height="0dp" />
-
 						<TextView android:id="@+id/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1"
 							android:fontFamily="Montserrat"
 							android:textSize="12sp"
 							android:textColor="@color/email_address_color"
-							android:layout_marginLeft="105dp"
-							android:layout_marginTop="-21dp"
-							android:layout_width="213dp"
+							android:layout_marginStart="10dp"
+							android:layout_marginTop="10dp"
+							android:layout_width="310dp"
 							android:layout_height="38dp"
 							android:text="@string/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string"
 							 />
@@ -272,8 +291,8 @@
 
 
 					<RelativeLayout android:id="@+id/speech_bubble_ek2"
-						android:layout_marginTop="152dp"
-						android:layout_marginStart="21dp"
+						android:layout_marginTop="165dp"
+						android:layout_marginStart="30dp"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						>
@@ -285,27 +304,13 @@
 							android:layout_width="319dp"
 							android:layout_height="51.31dp" />
 
-						<View   android:id="@+id/line_8_ek2"
-							android:background="@drawable/line_8_ek2_shape"
-							 android:layout_marginStart="315dp"
-							android:layout_marginTop="34dp"
-							android:layout_width="19.42dp"
-							android:layout_height="2dp" />
-
-						<ImageView android:id="@+id/line_9_ek2"
-							android:src="@drawable/line_9_ek2"
-							android:contentDescription="line_9_ek2"
-							 android:layout_marginStart="310dp"
-							android:layout_marginTop="41dp"
-							android:layout_width="23.09dp"
-							android:layout_height="0dp" />
 
 					</RelativeLayout>
 
 
 					<RelativeLayout android:id="@+id/speech_bubble_ek3"
-						android:layout_marginTop="-13dp"
-						android:layout_marginStart="1dp"
+						android:layout_marginTop="35dp"
+						android:layout_marginStart="10dp"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						>
@@ -317,28 +322,12 @@
 							android:layout_width="319dp"
 							android:layout_height="51.31dp" />
 
-						<View   android:id="@+id/line_8_ek3"
-							android:background="@drawable/line_8_ek3_shape"
-							 android:layout_marginStart="315dp"
-							android:layout_marginTop="34dp"
-							android:layout_width="19.42dp"
-							android:layout_height="2dp" />
-
-						<ImageView android:id="@+id/line_9_ek3"
-							android:src="@drawable/line_9_ek3"
-							android:contentDescription="line_9_ek3"
-							 android:layout_marginStart="310dp"
-							android:layout_marginTop="41dp"
-							android:layout_width="23.09dp"
-							android:layout_height="0dp" />
-
 						<TextView android:id="@+id/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3"
 							android:fontFamily="Montserrat"
 							android:textStyle="bold"
 							android:textSize="12sp"
-							android:textColor="@color/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__color"
-							android:layout_marginLeft="54dp"
-							android:layout_marginTop="-21dp"
+							android:layout_marginStart="10dp"
+							android:layout_marginTop="10dp"
 							android:layout_width="264dp"
 							android:layout_height="38dp"
 							android:text="@string/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3_string"
@@ -466,39 +455,6 @@
 						android:layout_height="48dp" />
 
 				</RelativeLayout>
-
-				<TextView android:id="@+id/schritte_heute__1253_von_1500"
-					android:fontFamily="Montserrat"
-					android:textSize="12sp"
-					android:textColor="@color/email_address_color"
-					android:layout_marginLeft="91dp"
-					android:layout_marginTop="375dp"
-					android:layout_width="188dp"
-					android:layout_height="23dp"
-					android:text="@string/schritte_heute__1253_von_1500_string"
-					 />
-
-				<ImageView android:id="@+id/vector_ek135"
-					android:src="@drawable/vector_ek135"
-					android:contentDescription="vector_ek135"
-					 android:layout_marginStart="32dp"
-					android:layout_marginTop="400dp"
-					android:layout_width="20dp"
-					android:layout_height="33.08dp" />
-
-				<View   android:id="@+id/ellipse_36"
-					android:background="@drawable/ellipse_36_shape"
-					 android:layout_marginStart="293dp"
-					android:layout_marginTop="331dp"
-					android:layout_width="35dp"
-					android:layout_height="35dp" />
-
-				<View   android:id="@+id/ellipse_37"
-					android:background="@drawable/ellipse_37_shape"
-					 android:layout_marginStart="293dp"
-					android:layout_marginTop="331dp"
-					android:layout_width="35dp"
-					android:layout_height="35dp" />
 
 			</RelativeLayout>
 

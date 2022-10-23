@@ -2,7 +2,7 @@
 <resources>
 	<!-- log_in_page strings -->
 
-	<string name="app_name"><b>M</b>y <b>S</b>ports</string>
+	<string name="app_name">My Sports</string>
 	<string name="ek_img_content">ExportKit Image</string>
 	<string name="_don_t_have_an_account__string">Noch kein Account?</string>
 	<string name="log_in_string">Einloggen</string>
@@ -10,7 +10,7 @@
 	<string name="email_address_string">Email-Adresse</string>
 	<string name="password_ek1_string">Passwort</string>
 	<string name="password_ek1_hint_string">Passwort wiederholen</string>
-	<string name="mysport_string">MySports</string>
+	<string name="mysport_string"><b>M</b>y<b>S</b>ports</string>
 	<string name="quote_string">"Es gibt kein Medikament und keine Maßnahme, die einen vergleichbaren Effekt hat wie das körperliche Training. " \n- Prof. Dr. Wildor</string>
 	<string name="figma_string">Figma</string>
 	<string name="_42__string">42%</string>
@@ -67,11 +67,11 @@
 	<string name="aktiver_tag_string">aktiver Tag</string>
 	<string name="akuter_schub_string">akuter Schub</string>
 	<string name="_47_8__string">47,8%</string>
-	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string">Es ist ein herrlicher Nachmittag! Was mchtest Du nun tun?</string>
+	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string">Es ist ein herrlicher Nachmittag! Was möchtest Du nun tun?</string>
 	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3_string">11 aktive Tage (von 23)! Das sind fast 50%, weiter so!</string>
 	<string name="statistiken_anzeigen_string">Statistiken anzeigen</string>
-	<string name="akuten_schub_tracken_string">Akuten Schubtracken</string>
-	<string name="aktivit_t_durchf_hren_string">Aktivitt durchfhren</string>
+	<string name="akuten_schub_tracken_string">Akuten Schub tracken</string>
+	<string name="aktivit_t_durchf_hren_string">Aktivität durchführen</string>
 	<string name="chat_ek1_string">CHAT</string>
 	<string name="schritte_heute__1253_von_1500_string">Schritte heute: 1253 von 1500</string>
 	<string name="figma_ek7_string">Figma</string>
