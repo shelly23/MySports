@@ -33,11 +33,10 @@ public class DBUserDAO implements UserDAO {
     final String USER_COLUMN_USERNAME = "username";
     final String USER_COLUMN_PASSWORD = "password";
     final String USER_TABLE = "users";
-    private final DBHelper con;
-    private SQLiteDatabase database;
+    private final SQLiteDatabase database;
 
     public DBUserDAO(ConnectionService connectionService, Context context) throws PersistenceException {
-        con = connectionService.getConnection(context);
+        DBHelper con = connectionService.getConnection(context);
         database = con.getWritableDatabase();
     }
 
@@ -55,17 +54,7 @@ public class DBUserDAO implements UserDAO {
     @Override
     public void create(User user) throws NoSuchAlgorithmException {
 
-        final String MY_QUERY = "SELECT MAX(_id) AS _id FROM "+ USER_TABLE;
-        Cursor mCursor = database.rawQuery(MY_QUERY, null);
-
-        if (mCursor.getCount() > 0) {
-            mCursor.moveToFirst();
-            if (mCursor.getColumnIndex(MY_QUERY) >= 0) {
-                id = mCursor.getInt(mCursor.getColumnIndex(MY_QUERY));
-            }
-        }
-
-        id++;
+        id = DBUtils.getNewId(USER_TABLE, database);
 
         ContentValues values = buildInsert(user.getPrename(), user.getSurname(), user.getUsername(), hashPassword(user.getPassword()), id);
         database.insert(USER_TABLE, null, values);
@@ -154,9 +143,11 @@ public class DBUserDAO implements UserDAO {
             return new User (cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PRENAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_SURNAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_USERNAME)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PASSWORD)));
+                    cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PASSWORD)),
+                    cursor.getLong(cursor.getColumnIndexOrThrow(BaseColumns._ID)));
 
         }
+        cursor.close();
         return null;
     }
 
@@ -186,6 +177,7 @@ public class DBUserDAO implements UserDAO {
             return (cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_USERNAME)).equals(username) &&
                     cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PASSWORD)).equals(hashPassword(password)));
         }
+        cursor.close();
         return false;
     }
 

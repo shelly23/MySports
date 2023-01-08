@@ -1,240 +1,150 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent">
-	<!--
-	/*
-	 *	This content is generated from the API File Info.
-	 *	(Alt+Shift+Ctrl+I).
-	 *
-	 *	@desc
-	 *	@file 		log_in_page
-	 *	@date 		Saturday 01st of October 2022 02:28:35 PM
-	 *	@title 		Page 1
-	 *	@author
-	 *	@keywords
-	 *	@generator 	Export Kit v1.3.figma
-	 *
-	 */
-	-->
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--
+    /*
+     *	This content is generated from the API File Info.
+     *	(Alt+Shift+Ctrl+I).
+     *
+     *	@desc
+     *	@file 		log_in_page
+     *	@date 		Saturday 01st of October 2022 02:28:35 PM
+     *	@title 		Page 1
+     *	@author
+     *	@keywords
+     *	@generator 	Export Kit v1.3.figma
+     *
+     */
+    -->
 
-	<RelativeLayout android:id="@+id/page_register_page_ek1"
-		android:layout_marginTop="0dp"
-		android:layout_marginStart="0dp"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		>
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:contentDescription="@string/background_image"
+        android:scaleType="fitXY"
+        android:src="@drawable/background_image" />
 
-		<View   android:id="@+id/_bg__register_page_ek2"
-			android:background="@drawable/_bg__register_page_ek2_shape"
-			android:layout_marginStart="0dp"
-			android:layout_marginTop="0dp"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent" />
+    <RelativeLayout
+        android:id="@+id/app_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp">
 
-		<ImageView android:id="@+id/background_image_ek1"
-			android:src="@drawable/background_image_ek1"
-			android:contentDescription="background_image"
-			android:layout_marginStart="0dp"
-			android:layout_marginTop="0dp"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:scaleType="fitXY"/>
+        <TextView
+            android:id="@+id/mysport_ek1"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/mysport_ek1_string"
+            android:textColor="@color/rectangle_2_color"
+            android:textSize="28sp" />
 
+    </RelativeLayout>
 
-		<RelativeLayout android:id="@+id/app_info_ek1"
-			android:layout_marginTop="20dp"
-			android:layout_marginStart="0dp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			>
+    <RelativeLayout
+        android:id="@+id/register_fields"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_info"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp">
 
-			<TextView android:id="@+id/mysport_ek1"
-				android:fontFamily="Montserrat"
-				android:textSize="27sp"
-				android:textColor="@color/rectangle_2_color"
-				android:layout_marginLeft="68.36dp"
-				android:layout_marginTop="175dp"
-				android:layout_width="261dp"
-				android:layout_height="175dp"
-				android:text="@string/mysport_ek1_string"
-				/>
+        <EditText
+            android:id="@+id/password2"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/password1"
+            android:layout_marginTop="10dp"
+            android:autofillHints="password"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/password_ek1_hint_string"
+            android:inputType="textPassword"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
 
-		</RelativeLayout>
+        <EditText
+            android:id="@+id/password1"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/email"
+            android:layout_marginTop="10dp"
+            android:autofillHints="password"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/password_ek1_string"
+            android:inputType="textPassword"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
 
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/nachname"
+            android:layout_marginTop="10dp"
+            android:autofillHints="emailAddress"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/email_address_string"
+            android:inputType="textEmailAddress"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
 
-		<RelativeLayout android:id="@+id/register_button"
-			android:layout_marginTop="515dp"
-			android:layout_marginStart="-0.36dp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			>
+        <EditText
+            android:id="@+id/nachname"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/vorname"
+            android:layout_marginTop="10dp"
+            android:autofillHints="name"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/nachname_ek1_string"
+            android:inputType="textPersonName"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
 
+        <EditText
+            android:id="@+id/vorname"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:autofillHints="name"
+            android:fontFamily="Montserrat"
+            android:hint="@string/vorname_ek1_string"
+            android:inputType="textPersonName"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
 
-			<RelativeLayout android:id="@+id/group_ek5"
-				android:layout_marginTop="27dp"
-				android:layout_marginStart="65dp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				>
+    </RelativeLayout>
 
-				<TextView
-					android:id="@+id/error_field"
-					android:layout_width="251dp"
-					android:layout_height="42dp"
-					android:textColor="@color/rectangle_50_color"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="8dp"
-					/>
+    <RelativeLayout
+        android:id="@+id/register_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/register_fields"
+        android:layout_centerHorizontal="true">
 
-				<Button
-					android:id="@+id/register"
-					android:layout_width="251dp"
-					android:layout_height="48dp"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="35dp"
-					android:background="@drawable/rectangle_2_shape"
-					android:text="@string/register_string"
-					android:textColor="@color/log_in_color"/>
-
-			</RelativeLayout>
-
-		</RelativeLayout>
-
-
-		<RelativeLayout android:id="@+id/register_fields"
-			android:layout_marginTop="300dp"
-			android:layout_marginStart="-0.36dp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			>
-
-
-			<RelativeLayout android:id="@+id/group_ek6"
-				android:layout_marginTop="12dp"
-				android:layout_marginStart="64.9dp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				>
-
-                <View   android:id="@+id/passwort2"
-					android:background="@drawable/passwort2_shape"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="184dp"
-					android:layout_width="251dp"
-					android:layout_height="42dp" />
-
-				<View   android:id="@+id/passwort1"
-					android:background="@drawable/passwort1_shape"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="138dp"
-					android:layout_width="251dp"
-					android:layout_height="42dp" />
-
-				<View   android:id="@+id/e_mail"
-					android:background="@drawable/e_mail_shape"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="92dp"
-					android:layout_width="251dp"
-					android:layout_height="42dp" />
-
-				<View   android:id="@+id/nachname_view"
-					android:background="@drawable/nachname_shape"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="46dp"
-					android:layout_width="251dp"
-					android:layout_height="42dp" />
-
-				<View   android:id="@+id/vorname_view"
-					android:background="@drawable/vorname_shape"
-					android:layout_marginStart="0dp"
-					android:layout_marginTop="0dp"
-					android:layout_width="251dp"
-					android:layout_height="42dp" />
+        <Button
+            android:id="@+id/register"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/rectangle_2_shape"
+            android:text="@string/register_string"
+            android:fontFamily="@font/montserrat_regular"
+            android:textStyle="bold"
+            android:textColor="@color/log_in_color" />
 
 
-                <EditText
-                    android:id="@+id/password2"
-                    android:layout_width="241dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="184dp"
-                    android:autofillHints="password"
-                    android:fontFamily="Montserrat"
-                    android:hint="@string/password_ek1_hint_string"
-                    android:inputType="textPassword"
-                    android:textColor="@color/email_address_color"
-                    android:textSize="12sp" />
+        <TextView
+            android:id="@+id/error_field"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/register"
+            android:layout_marginTop="20dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/rectangle_50_color" />
 
-                <EditText
-                    android:id="@+id/password1"
-                    android:layout_width="241dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="138dp"
-                    android:autofillHints="password"
-                    android:fontFamily="Montserrat"
-                    android:hint="@string/password_ek1_string"
-                    android:inputType="textPassword"
-                    android:textColor="@color/email_address_color"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/email"
-                    android:layout_width="241dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="92dp"
-                    android:autofillHints="emailAddress"
-                    android:fontFamily="Montserrat"
-                    android:hint="@string/email_address_string"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/email_address_color"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/nachname"
-                    android:layout_width="241dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="46dp"
-                    android:autofillHints="name"
-                    android:fontFamily="Montserrat"
-                    android:hint="@string/nachname_ek1_string"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/email_address_color"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/vorname"
-                    android:layout_width="241dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="0dp"
-                    android:autofillHints="name"
-                    android:fontFamily="Montserrat"
-                    android:hint="@string/vorname_ek1_string"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/email_address_color"
-                    android:textSize="12sp" />
-
-			</RelativeLayout>
-
-		</RelativeLayout>
-
-	</RelativeLayout>
-
-
-	<TextView android:id="@+id/text"
-		android:fontFamily="Montserrat"
-		android:layout_gravity="center_vertical|end"
-		android:gravity="end"
-		android:textColor="@color/log_in_color"
-		android:layout_marginLeft="1556dp"
-		android:layout_marginTop="1731dp"
-		android:layout_width="10dp"
-		android:layout_height="19dp"
-		android:text="@string/text_string"
-		/>
+    </RelativeLayout>
 
 
 </RelativeLayout>

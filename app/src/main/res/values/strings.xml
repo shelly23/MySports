@@ -2,20 +2,22 @@
 <resources>
 	<!-- log_in_page strings -->
 
-	<string name="app_name">My Sports</string>
+	<string name="app_name">MySports</string>
 	<string name="ek_img_content">ExportKit Image</string>
 	<string name="_don_t_have_an_account__string">Noch kein Account?</string>
 	<string name="log_in_string">Einloggen</string>
 	<string name="forgot_your_password__string">Passwort vergessen?</string>
-	<string name="email_address_string">Email-Adresse</string>
-	<string name="password_ek1_string">Passwort</string>
+	<string name="email_address_string"> Email-Adresse</string>
+	<string name="date_from_hint">Start-Datum</string>
+	<string name="date_end_hint">End-Datum</string>
+	<string name="password_ek1_string"> Passwort</string>
 	<string name="password_ek1_hint_string">Passwort wiederholen</string>
 	<string name="mysport_string"><b>M</b>y<b>S</b>ports</string>
 	<string name="quote_string">"Es gibt kein Medikament und keine Maßnahme, die einen vergleichbaren Effekt hat wie das körperliche Training. " \n- Prof. Dr. Wildor</string>
 	<string name="figma_string">Figma</string>
 	<string name="_42__string">42%</string>
 	<string name="_9_42_am_string">9:42 AM</string>
-	<string name="mysport_ek1_string">Willkommen bei MySports! Schön, dass Du da bist!</string>
+	<string name="mysport_ek1_string">Willkommen bei <b>M</b>y<b>S</b>ports! Schön, dass Du da bist!</string>
 	<string name="register_string">Registrieren</string>
 	<string name="nachname_ek1_string">Nachname</string>
 	<string name="vorname_ek1_string">Vorname</string>
@@ -67,13 +69,13 @@
 	<string name="aktiver_tag_string">aktiver Tag</string>
 	<string name="akuter_schub_string">akuter Schub</string>
 	<string name="_47_8__string">47,8%</string>
-	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string">Es ist ein herrlicher Nachmittag! Was möchtest Du nun tun?</string>
-	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3_string">11 aktive Tage (von 23)! Das sind fast 50%, weiter so!</string>
+	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string">Es ist ein herrlicher {}! Was möchtest Du nun tun?</string>
+	<string name="_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3_string">Schon <b>{}</b> aktive Tage in diesem Monat! Das sind []%, weiter so!</string>
 	<string name="statistiken_anzeigen_string">Statistiken anzeigen</string>
-	<string name="akuten_schub_tracken_string">Akuten Schub tracken</string>
+	<string name="akuten_schub_tracken_string">Schub tracken</string>
 	<string name="aktivit_t_durchf_hren_string">Aktivität durchführen</string>
 	<string name="chat_ek1_string">CHAT</string>
-	<string name="schritte_heute__1253_von_1500_string">Schritte heute: 1253 von 1500</string>
+	<string name="schritte_heute__1253_von_1500_string">Schritte heute: {} von 1500</string>
 	<string name="figma_ek7_string">Figma</string>
 	<string name="_42__ek7_string">42%</string>
 	<string name="_9_42_am_ek7_string">9:42 AM</string>
@@ -179,4 +181,12 @@
 	<string name="password_not_equal">Passwörter stimmen nicht überein!</string>
 	<string name="email_invalide">Bitte valide Email-Adresse angeben!</string>
     <string name="login_incorrect">Anmeldedaten sind nicht korrekt.</string>
+	<string name="background_image">background_image</string>
+	<string name="background_image_ek7">background_image_ek7</string>
+	<string name="settings">settings</string>
+	<string name="exercise">exercise</string>
+	<string name="statistics">statistics</string>
+	<string name="home">home</string>
+	<string name="game">game</string>
+	<string name="steps_today">steps_today</string>
 </resources>

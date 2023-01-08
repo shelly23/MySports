@@ -15,7 +15,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_ENTRIES);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_ENTRIES_USER);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_ENTRIES_DAYS);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA0);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA1);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA2);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA3);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA4);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA5);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA6);
+        sqLiteDatabase.execSQL(DBCommands.SQL_CREATE_MOCKDATA7);
     }
 
     @Override

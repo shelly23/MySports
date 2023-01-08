@@ -1,6 +1,8 @@
 package persistence.dtos;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     private String prename;
     private String surname;

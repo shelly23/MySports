@@ -1,7 +1,5 @@
 package service;
 
-import com.google.android.material.datepicker.CalendarConstraints;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,18 +18,18 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private UserDAO DBpersistence;
-    private TextValidator textValidator;
+    private final UserDAO DBpersistenceUser;
+    private final TextValidator textValidator;
 
-    public UserServiceImpl(UserDAO vehiclePersistenceDB, TextValidator textValidator) {
-        DBpersistence = vehiclePersistenceDB;
+    public UserServiceImpl(UserDAO DBpersistenceUser, TextValidator textValidator) {
+        this.DBpersistenceUser = DBpersistenceUser;
         this.textValidator = textValidator;
     }
 
     @Override
     public void saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException {
         if (checkUser(user)) {
-            this.DBpersistence.create(user);
+            this.DBpersistenceUser.create(user);
             LOG.debug("Saved user {}", user.getUsername());
         } else {
             LOG.error("Failed to create user {}, cause: invalid user", user.getUsername());
@@ -41,10 +39,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User loginUser(String username, String password) throws InvalidValueException, MandatoryValueException, IOException, PersistenceException, NoSuchAlgorithmException {
         if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-            boolean result = this.DBpersistence.canLogin(username, password);
+            boolean result = this.DBpersistenceUser.canLogin(username, password);
             if (result) {
                 LOG.debug("Logged in user {}", username);
-                return this.DBpersistence.getUser(username);
+                return this.DBpersistenceUser.getUser(username);
             } else {
                 LOG.error("Failed to login user {}", username);
                 return null;
@@ -57,20 +55,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(List<User> users) throws PersistenceException {
-        this.DBpersistence.delete(users);
+        this.DBpersistenceUser.delete(users);
         LOG.debug("Deleted vehicles");
     }
 
     @Override
     public List<User> getAllUsers() throws PersistenceException {
         LOG.debug("Read all users");
-        return DBpersistence.read();
+        return DBpersistenceUser.read();
     }
 
     @Override
     public boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException {
         if (checkUser(user)) {
-            DBpersistence.update(user);
+            DBpersistenceUser.update(user);
             return true;
         }
         LOG.error("Failed to update user {}", user.getUsername());

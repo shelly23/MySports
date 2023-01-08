@@ -22,13 +22,13 @@
                 android:id="@+id/messageButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/titleText"
+                android:layout_below="@id/dateTo"
                 android:background="@drawable/rectangle_2_shape"
                 android:textColor="@color/log_in_color"/>
 
 
             <TextView
-                android:id="@+id/titleText"
+                android:id="@+id/titleText1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -36,6 +36,30 @@
                 android:padding="10dp"
                 android:textColor="@color/rectangle_2_color"
                 android:textSize="20sp" />
+
+            <EditText
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:id="@+id/dateFrom"
+                android:fontFamily="@font/montserrat_regular"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_below="@id/titleText1"
+                android:hint="@string/date_from_hint"/>
+
+            <EditText
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:id="@+id/dateTo"
+                android:fontFamily="@font/montserrat_regular"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_below="@id/dateFrom"
+                android:hint="@string/date_end_hint"/>
 
         </RelativeLayout>
 

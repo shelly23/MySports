@@ -20,6 +20,5 @@ public interface UserService {
     boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException;
 
     User loginUser(String username, String password) throws InvalidValueException, MandatoryValueException, IOException, PersistenceException, NoSuchAlgorithmException;
-    //List<Vehicle> getSearchedVehicles(VehicleSearchFilter vehicleSearchFilter) throws PersistenceException, InvalidValueException;
 
 }

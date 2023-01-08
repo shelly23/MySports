@@ -1,207 +1,309 @@
 
 	 
 	/*
-	 *	This content is generated from the API File Info.
-	 *	(Alt+Shift+Ctrl+I).
-	 *
-	 *	@desc 		
-	 *	@file 		log_in_page
-	 *	@date 		Saturday 01st of October 2022 02:28:35 PM
-	 *	@title 		Page 1
-	 *	@author 	
-	 *	@keywords 	
-	 *	@generator 	Export Kit v1.3.figma
-	 *
-	 */
-	
-
-package com.example.mysports.activities;
-
-import android.app.Activity;
-import android.os.Bundle;
+     *	This content is generated from the API File Info.
+     *	(Alt+Shift+Ctrl+I).
+     *
+     *	@desc
+     *	@file 		log_in_page
+     *	@date 		Saturday 01st of October 2022 02:28:35 PM
+     *	@title 		Page 1
+     *	@author
+     *	@keywords
+     *	@generator 	Export Kit v1.3.figma
+     *
+     */
 
 
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+    package com.example.mysports.activities;
 
-import com.example.mysports.R;
-import com.savvi.rangedatepicker.CalendarPickerView;
-import com.savvi.rangedatepicker.SubTitle;
+    import android.app.Activity;
+    import android.app.DatePickerDialog;
+    import android.os.Build;
+    import android.os.Bundle;
+    import android.text.Html;
+    import android.view.Gravity;
+    import android.view.LayoutInflater;
+    import android.view.View;
+    import android.widget.Button;
+    import android.widget.DatePicker;
+    import android.widget.EditText;
+    import android.widget.LinearLayout;
+    import android.widget.PopupWindow;
+    import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+    import androidx.annotation.RequiresApi;
 
-	public class homescreen_activity extends Activity {
+    import com.example.mysports.R;
+    import com.github.mikephil.charting.charts.PieChart;
+    import com.github.mikephil.charting.data.PieData;
+    import com.github.mikephil.charting.data.PieDataSet;
+    import com.github.mikephil.charting.data.PieEntry;
+    import com.savvi.rangedatepicker.CalendarPickerView;
+    import com.savvi.rangedatepicker.SubTitle;
 
-	
-	private View _bg__homescreen_ek2;
-	private ImageView background_image_ek7;
-	private ImageView path_ek18;
-	private ImageView path_ek19;
-	private ImageView path_ek20;
-	private ImageView oval_1_ek6;
-	private ImageView oval_1_copy_ek6;
-	private ImageView oval_1_copy_2_ek6;
-	private ImageView shape_ek18;
-	private ImageView shape_ek19;
-	private TextView figma_ek6;
-	private ImageView shape_ek20;
-	private ImageView charge_ek6;
-	private ImageView ___ek6;
-	private TextView _42__ek6;
-	private ImageView vector_3_ek6;
-	private TextView _9_42_am_ek6;
-	private View menu_bar_ek11;
-	private ImageView vector_ek122;
-	private ImageView vector_ek123;
-	private ImageView vector_ek124;
-	private ImageView vector_ek125;
-	private ImageView vector_ek126;
-	private ImageView vector_ek127;
-	private ImageView vector_ek128;
-	private ImageView vector_ek129;
-	private ImageView vector_ek130;
-	private ImageView vector_ek131;
-	private ImageView vector_ek132;
-	private ImageView vector_ek133;
-	private TextView so_06_13_20_27;
-	private TextView sa_05_12_19_26;
-	private TextView fr_04_11_18_25;
-	private TextView do_03_10_17_24;
-	private TextView mi_02_09_16_23;
-	private TextView di_01_08_15_22;
-	private TextView mo_07_14_21_28;
-	private View calendar_back;
-	private View line_7;
-	private TextView februar_2022;
-	private ImageView back;
-	private ImageView front;
-	private View ellipse_27;
-	private View ellipse_28;
-	private View rectangle_25;
-	private View ellipse_27_ek1;
-	private View ellipse_28_ek1;
-	private View rectangle_25_ek1;
-	private View ellipse_27_ek2;
-	private View ellipse_28_ek2;
-	private View rectangle_25_ek2;
-	private View ellipse_27_ek3;
-	private View ellipse_28_ek3;
-	private View rectangle_25_ek3;
-	private View tag_legende;
-	private TextView aktiver_tag;
-	private TextView akuter_schub;
-	private View schub_legende;
-	private View chat_rectangle;
-	private ImageView ellipse_31;
-	private ImageView ellipse_32;
-	private TextView _47_8_;
-	private View rectangle_26_ek1;
-	private View line_8_ek1;
-	private ImageView line_9_ek1;
-	private TextView _11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1;
-	private View rectangle_26_ek2;
-	private View line_8_ek2;
-	private ImageView line_9_ek2;
-	private View rectangle_26_ek3;
-	private View line_8_ek3;
-	private ImageView line_9_ek3;
-	private TextView _11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3;
-	private View rectangle_2_ek2;
-	private TextView statistiken_anzeigen;
-	private View rectangle_2_ek3;
-	private TextView akuten_schub_tracken;
-	private View rectangle_2_ek4;
-	private TextView aktivit_t_durchf_hren;
-	private TextView chat_ek1;
-	private ImageView vector_ek134;
-	private TextView schritte_heute__1253_von_1500;
-	private ImageView vector_ek135;
-	private View ellipse_36;
-	private View ellipse_37;
-	private CalendarPickerView calendarPickerView;
+    import java.text.ParseException;
+    import java.text.SimpleDateFormat;
+    import java.time.Month;
+    import java.time.Year;
+    import java.util.ArrayList;
+    import java.util.Calendar;
+    import java.util.Date;
+    import java.util.Locale;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
+    import persistence.daos.DBDayDAO;
+    import persistence.dtos.Day;
+    import persistence.dtos.User;
+    import persistence.exceptions.PersistenceException;
+    import persistence.validators.TextValidator;
+    import service.ConnectionServiceDB;
+    import service.DayService;
+    import service.DayServiceImpl;
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.homescreen);
+    public class homescreen_activity extends Activity {
 
-		
-		_bg__homescreen_ek2 = (View) findViewById(R.id._bg__homescreen_ek2);
-		background_image_ek7 = (ImageView) findViewById(R.id.background_image_ek7);
-		menu_bar_ek11 = (View) findViewById(R.id.menu_bar_ek11);
-		vector_ek123 = (ImageView) findViewById(R.id.vector_ek123);
-		vector_ek125 = (ImageView) findViewById(R.id.vector_ek125);
-		vector_ek127 = (ImageView) findViewById(R.id.vector_ek127);
-		vector_ek129 = (ImageView) findViewById(R.id.vector_ek129);
-		vector_ek131 = (ImageView) findViewById(R.id.vector_ek131);
-		chat_rectangle = (View) findViewById(R.id.chat_rectangle);
-		ellipse_31 = (ImageView) findViewById(R.id.ellipse_31);
-		ellipse_32 = (ImageView) findViewById(R.id.ellipse_32);
-		_47_8_ = (TextView) findViewById(R.id._47_8_);
-		rectangle_26_ek1 = (View) findViewById(R.id.rectangle_26_ek1);
-		_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1 = (TextView) findViewById(R.id._11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1);
-		rectangle_26_ek2 = (View) findViewById(R.id.rectangle_26_ek2);
-		rectangle_26_ek3 = (View) findViewById(R.id.rectangle_26_ek3);
-		_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3 = (TextView) findViewById(R.id._11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3);
-		rectangle_2_ek2 = (View) findViewById(R.id.rectangle_2_ek2);
-		statistiken_anzeigen = (TextView) findViewById(R.id.statistiken_anzeigen);
-		rectangle_2_ek3 = (View) findViewById(R.id.rectangle_2_ek3);
-		akuten_schub_tracken = (TextView) findViewById(R.id.akuten_schub_tracken);
-		rectangle_2_ek4 = (View) findViewById(R.id.rectangle_2_ek4);
-		aktivit_t_durchf_hren = (TextView) findViewById(R.id.aktivit_t_durchf_hren);
-		chat_ek1 = (TextView) findViewById(R.id.chat_ek1);
-		vector_ek134 = (ImageView) findViewById(R.id.vector_ek134);
-		schritte_heute__1253_von_1500 = (TextView) findViewById(R.id.schritte_heute__1253_von_1500);
-		vector_ek135 = (ImageView) findViewById(R.id.vector_ek135);
-		calendarPickerView = (CalendarPickerView) findViewById(R.id.calendar_view);
+        private CalendarPickerView calendarPickerView;
+        private User user;
+        private Day day;
+        private java.sql.Date currentDate;
+        private TextView greeting;
+        private TextView stepMessage;
+        private TextView activeDays;
+        private TextView herrlicher;
+        private PieChart pieChart;
+        private float stepsToday;
+        private float stepsTotal;
+        private Button schubTracken;
 
-		Calendar timeFrom = Calendar.getInstance();
-		timeFrom.add(Calendar.DATE, -15);
+        private DayService dayService;
 
-		Calendar timeTo = Calendar.getInstance();
-		timeTo.add(Calendar.DATE, +15);
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
 
-		ArrayList<SubTitle> subTitles = new ArrayList<>();
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.homescreen);
+            currentDate = new java.sql.Date(System.currentTimeMillis());
 
-		ArrayList<Date> marked = new ArrayList<>();
-		Calendar marked1 = Calendar.getInstance();
-		marked1.add(Calendar.DATE, 5);
-		marked.add(marked1.getTime());
-		subTitles.add(new SubTitle(marked1.getTime(), "Schub"));
-		marked1.add(Calendar.DATE, 1);
-		marked.add(marked1.getTime());
-		subTitles.add(new SubTitle(marked1.getTime(), "Schub"));
+            try {
+                dayService = new DayServiceImpl(new DBDayDAO(new ConnectionServiceDB(), getApplicationContext()), new TextValidator());
+                user = (User) getIntent().getSerializableExtra("USER");
+                day = dayService.getDay(user.getId(), currentDate);
+            } catch (PersistenceException e) {
+                e.printStackTrace();
+            }
 
-		ArrayList<Date> marked2 = new ArrayList<>();
-		Calendar marked3 = Calendar.getInstance();
-		marked3.add(Calendar.DATE, -5);
-		marked.add(marked3.getTime());
-		subTitles.add(new SubTitle(marked3.getTime(), "Aktiv"));
-		marked3.add(Calendar.DATE, -1);
-		marked.add(marked3.getTime());
-		subTitles.add(new SubTitle(marked3.getTime(), "Aktiv"));
+            stepsToday = day.getSteps();
+            stepsTotal = 1500; // TODOMOCK --> SETTINGS
 
-		calendarPickerView.init(timeFrom.getTime(), timeTo.getTime())
-				.inMode(CalendarPickerView.SelectionMode.RANGE)
-				.withSelectedDate(Calendar.getInstance().getTime())
-				.withHighlightedDates(marked)
-				.displayOnly()
-				.withSubTitles(subTitles)
-				.withSelectedDates(marked2)
-		;
-		//custom code goes here
+            greeting = findViewById(R.id.greeting);
+            calendarPickerView = findViewById(R.id.calendar_view);
+            pieChart = findViewById(R.id.piechart);
+            stepMessage = findViewById(R.id.schritte_heute__1253_von_1500);
+            activeDays = findViewById(R.id.active_days);
+            herrlicher = findViewById(R.id.herrlicher);
+            schubTracken = findViewById(R.id.button_schub);
 
-	}
+            stepMessage.setText(stepMessage.getText().toString().replace("{}", String.valueOf((int) stepsToday)));
 
-}
+            ArrayList<PieEntry> pieEntries = new ArrayList<>();
+            float percentToday = (stepsToday / stepsTotal) * 100;
+            pieEntries.add(new PieEntry(stepsToday, (int) percentToday + "%"));
+            pieEntries.add(new PieEntry(stepsTotal - stepsToday, ""));
+
+            ArrayList<Integer> colours = new ArrayList<>();
+            colours.add(getResources().getColor(R.color._11_aktive_tage__von_23___das_sind_fast_50___weiter_so__color));
+            colours.add(getResources().getColor(R.color.menu_bar_ek1_color));
+
+            PieDataSet pieDataSet = new PieDataSet(pieEntries, "");
+            pieDataSet.setColors(colours);
+
+            PieData pieData = new PieData(pieDataSet);
+            pieData.setDrawValues(false);
+            pieChart.setData(pieData);
+            pieChart.setDrawEntryLabels(false);
+            pieChart.getDescription().setEnabled(false);
+            pieChart.setRotationEnabled(false);
+            pieChart.getLegend().setEnabled(false);
+            pieChart.setDrawHoleEnabled(true);
+            pieChart.setHoleColor(getResources().getColor(R.color.whiteTR));
+            pieChart.setDrawEntryLabels(true);
+            //pieChart.invalidate();
+
+            String greet_Text;
+            Date morning = null;
+            Date evening = null;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH-mm");
+
+            try {
+                morning = sdf.parse("10-00");
+                evening = sdf.parse("18-00");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar now = Calendar.getInstance();
+
+            if (morning != null && now.before(morning)) {
+                greet_Text = "Guten Morgen, ";
+                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Morgen"));
+            } else if (evening != null && now.after(evening)) {
+                greet_Text = "Guten Abend, ";
+                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Abend"));
+            } else {
+                greet_Text = "Hallo, ";
+                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Tag"));
+            }
+
+            greet_Text += user.getPrename();
+            greet_Text += "!";
+            greeting.setText(greet_Text);
+
+
+            Calendar timeFrom = Calendar.getInstance();
+            timeFrom.add(Calendar.DATE, -30);
+
+            Calendar timeTo = Calendar.getInstance();
+            timeTo.add(Calendar.DATE, +30);
+
+            ArrayList<SubTitle> subTitles = new ArrayList<>();
+            ArrayList<Date> markedSchub = new ArrayList<>();
+            ArrayList<Date> markedAktiv = new ArrayList<>();
+
+            for (int i = -30; i <= 30; i++) {
+
+                Calendar dayToBeChecked = Calendar.getInstance();
+                dayToBeChecked.add(Calendar.DATE, i);
+
+                try {
+                    Day toBeChecked = dayService.getDay(user.getId(), new java.sql.Date(dayToBeChecked.getTime().getTime()));
+                    if (toBeChecked != null) {
+                        if (toBeChecked.isActive()) {
+                            markedAktiv.add(dayToBeChecked.getTime());
+                            subTitles.add(new SubTitle(dayToBeChecked.getTime(), "Aktiv"));
+                        } else if (toBeChecked.isAttack()) {
+                            markedSchub.add(dayToBeChecked.getTime());
+                            subTitles.add(new SubTitle(dayToBeChecked.getTime(), "Schub"));
+                        }
+                    }
+                } catch (PersistenceException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            int month = Calendar.getInstance().get(Calendar.MONTH);
+            int activeDaysInt = 0;
+
+            Calendar calendar = Calendar.getInstance();
+
+            for (Date date : markedAktiv) {
+                calendar = Calendar.getInstance();
+                calendar.setTime(date);
+                if (calendar.get(Calendar.MONTH) == month) {
+                    activeDaysInt++;
+                }
+            }
+
+            int daysOfMonth = Month.of(month + 1).length(Year.now().isLeap());
+
+            float percent = ((float) activeDaysInt / (float) daysOfMonth) * 100;
+
+            activeDays.setText(Html.fromHtml(activeDays.getText().toString().replace("{}", String.valueOf(activeDaysInt)).replace("[]", String.valueOf((int) percent))));
+
+            if (activeDaysInt == 1) {
+                activeDays.setText(Html.fromHtml(activeDays.getText().toString().replace("aktive Tage", "aktiver Tag")));
+            }
+
+            calendarPickerView.init(timeFrom.getTime(), timeTo.getTime())
+                    .inMode(CalendarPickerView.SelectionMode.RANGE)
+                    .withSelectedDate(Calendar.getInstance().getTime())
+                    .withHighlightedDates(markedSchub)
+                    .withHighlightedDates(markedAktiv)
+                    .displayOnly()
+                    .withSubTitles(subTitles)
+            ;
+            calendarPickerView.setDrawingCacheBackgroundColor(getResources().getColor(R.color.whiteTR));
+            calendarPickerView.setBackgroundColor(getResources().getColor(R.color.whiteTR));
+            calendarPickerView.setDrawingCacheBackgroundColor(getResources().getColor(R.color.whiteTR));
+
+            schubTracken.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Create a View object yourself through inflater
+                    v.getContext();
+                    LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View popupView = inflater.inflate(R.layout.popupscreen_schub, null);
+
+                    //Specify the length and width through constants
+                    int width = LinearLayout.LayoutParams.MATCH_PARENT;
+                    int height = LinearLayout.LayoutParams.MATCH_PARENT;
+
+                    //Make Inactive Items Outside Of PopupWindow
+                    boolean focusable = true;
+
+                    //Create a window with our parameters
+                    final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+                    popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            finish();
+                        }
+                    });
+
+                    //Set the location of the window on the screen
+                    popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+                    //Initialize the elements of our window, install the handler
+
+                    TextView test2 = popupView.findViewById(R.id.titleText1);
+                    test2.setText("Akuten Schub tracken");
+
+                    Calendar dateFromCal = Calendar.getInstance();
+                    Calendar dateToCal = Calendar.getInstance();
+
+                    EditText dateFrom = popupView.findViewById(R.id.dateFrom);
+
+                    DatePickerDialog.OnDateSetListener dateFromPicker = new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int month, int day) {
+                            dateFromCal.set(Calendar.YEAR, year);
+                            dateFromCal.set(Calendar.MONTH, month);
+                            dateFromCal.set(Calendar.DAY_OF_MONTH, day);
+                            updateLabel(dateFrom, dateFromCal);
+                        }
+                    };
+
+                    dateFrom.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            new DatePickerDialog(homescreen_activity.this, dateFromPicker, dateFromCal.get(Calendar.YEAR), dateFromCal.get(Calendar.MONTH), dateFromCal.get(Calendar.DAY_OF_MONTH)).show();
+                        }
+                    });
+
+                    Button buttonEdit = popupView.findViewById(R.id.messageButton);
+                    buttonEdit.setText("Zurück zum Login");
+                    buttonEdit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            popupWindow.dismiss();
+                        }
+                    });
+                }
+
+                //custom code goes here
+
+            });
+
+        }
+
+        private void updateLabel(EditText editText, Calendar myCalendar) {
+            String myFormat = "MM/dd/yy";
+            SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.GERMAN);
+            editText.setText(dateFormat.format(myCalendar.getTime()));
+        }
+
+    }
 	
 	
