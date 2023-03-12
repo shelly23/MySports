@@ -25,6 +25,8 @@ public class DBDayDAO implements DayDAO {
     private static final long userId = 0;
     final String DAY_COLUMN_DATE = "actual_date";
     final String DAY_COLUMN_STEPS = "steps";
+
+    final String DAY_COLUMN_STEPS_START = "steps_start";
     final String DAY_COLUMN_ACTIVE = "active";
     final String DAY_COLUMN_ATTACK = "attack";
     final String DAY_COLUMN_USERID = "user_id";
@@ -36,11 +38,23 @@ public class DBDayDAO implements DayDAO {
         database = con.getWritableDatabase();
     }
 
-    private ContentValues buildInsert(Date date, long steps, boolean active, boolean attack, long id, long userId) {
+    private ContentValues buildInsert(Date date, long steps, long steps_start, boolean active, boolean attack, long id, long userId) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BaseColumns._ID, id);
         contentValues.put(DAY_COLUMN_DATE, String.valueOf(date));
         contentValues.put(DAY_COLUMN_STEPS, steps);
+        contentValues.put(DAY_COLUMN_STEPS_START, steps_start);
+        contentValues.put(DAY_COLUMN_ACTIVE, active);
+        contentValues.put(DAY_COLUMN_ATTACK, attack);
+        contentValues.put(DAY_COLUMN_USERID, userId);
+        return contentValues;
+    }
+
+    private ContentValues buildUpdate(Date date, long steps, long steps_start, boolean active, boolean attack, long userId) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DAY_COLUMN_DATE, String.valueOf(date));
+        contentValues.put(DAY_COLUMN_STEPS, steps);
+        contentValues.put(DAY_COLUMN_STEPS_START, steps_start);
         contentValues.put(DAY_COLUMN_ACTIVE, active);
         contentValues.put(DAY_COLUMN_ATTACK, attack);
         contentValues.put(DAY_COLUMN_USERID, userId);
@@ -51,7 +65,7 @@ public class DBDayDAO implements DayDAO {
     public Day create(Day day) throws PersistenceException {
         id = DBUtils.getNewId(DAY_TABLE, database);
 
-        ContentValues values = buildInsert(day.getCurrent_date(), day.getSteps(), day.isActive(), day.isAttack(), id, day.getUser_id());
+        ContentValues values = buildInsert(day.getCurrent_date(), day.getSteps(), day.getSteps_start(), day.isActive(), day.isAttack(), id, day.getUser_id());
 
         database.insert(DAY_TABLE, null, values);
 
@@ -73,7 +87,7 @@ public class DBDayDAO implements DayDAO {
     @Override
     public void update(Day day) throws PersistenceException {
 
-        ContentValues contentValues = buildInsert(day.getCurrent_date(), day.getSteps(), day.isActive(), day.isAttack(), day.getId(), day.getUser_id());
+        ContentValues contentValues = buildUpdate(day.getCurrent_date(), day.getSteps(), day.getSteps_start(), day.isActive(), day.isAttack(), day.getUser_id());
 
         String selection = DAY_COLUMN_DATE + " = ? AND " + DAY_COLUMN_USERID + " = ?";
         String[] selectionArgs = {String.valueOf(day.getCurrent_date()), String.valueOf(day.getUser_id())};
@@ -87,6 +101,7 @@ public class DBDayDAO implements DayDAO {
                 BaseColumns._ID,
                 DAY_COLUMN_DATE,
                 DAY_COLUMN_STEPS,
+                DAY_COLUMN_STEPS_START,
                 DAY_COLUMN_ACTIVE,
                 DAY_COLUMN_ATTACK,
                 DAY_COLUMN_USERID
@@ -107,6 +122,7 @@ public class DBDayDAO implements DayDAO {
 
         if (cursor.moveToNext()) {
             return new Day(cursor.getInt(cursor.getColumnIndexOrThrow(DAY_COLUMN_STEPS)),
+                    cursor.getInt(cursor.getColumnIndexOrThrow(DAY_COLUMN_STEPS_START)),
                     Date.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_DATE))),
                     parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_ACTIVE))),
                     parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_ATTACK))),

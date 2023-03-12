@@ -115,7 +115,7 @@
                         try {
                             user = userService.loginUser(email_text, password_text);
                             if (user != null) {
-                                currentDay = new Day(1253, new Date(System.currentTimeMillis()), false, false, 0, user.getId());
+                                currentDay = new Day(0, -1, new Date(System.currentTimeMillis()), false, false, 0, user.getId());
                                 currentDay = dayService.saveDay(currentDay);
                             }
                         } catch (InvalidValueException | MandatoryValueException | IOException | PersistenceException | NoSuchAlgorithmException e) {

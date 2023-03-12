@@ -189,4 +189,6 @@
 	<string name="home">home</string>
 	<string name="game">game</string>
 	<string name="steps_today">steps_today</string>
+	<string name="zur_ck">Zurück</string>
+	<string name="speichern">Speichern</string>
 </resources>

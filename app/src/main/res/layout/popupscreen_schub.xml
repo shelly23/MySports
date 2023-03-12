@@ -18,14 +18,44 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <Button
-                android:id="@+id/messageButton"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dateTo"
-                android:background="@drawable/rectangle_2_shape"
-                android:textColor="@color/log_in_color"/>
+                android:layout_marginTop="20dp"
+                android:id="@+id/buttons">
 
+                <Button
+                    android:id="@+id/messageButtonBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rectangle_2_shape"
+                    android:text="@string/zur_ck"
+                    android:textColor="@color/log_in_color"
+                    android:layout_alignParentStart="true"/>
+
+
+                <Button
+                    android:id="@+id/messageButtonOK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/messageButtonBack"
+                    android:background="@drawable/rectangle_2_shape"
+                    android:text="@string/speichern"
+                    android:textColor="@color/log_in_color"
+                    android:layout_alignParentEnd="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/error_field_schub"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@id/buttons"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:textColor="@color/rectangle_50_color" />
 
             <TextView
                 android:id="@+id/titleText1"
@@ -38,8 +68,8 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:layout_width="260dp"
-                android:layout_height="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/dateFrom"
                 android:fontFamily="@font/montserrat_regular"
                 android:clickable="false"
@@ -50,8 +80,8 @@
                 android:hint="@string/date_from_hint"/>
 
             <EditText
-                android:layout_width="260dp"
-                android:layout_height="35dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/dateTo"
                 android:fontFamily="@font/montserrat_regular"
                 android:clickable="false"

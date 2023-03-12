@@ -86,7 +86,17 @@ public class DayServiceImpl implements DayService {
 
     @Override
     public boolean update(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException {
-        return false;
+        if (checkDay(day)) {
+            Day dayToBeUpdated = this.DBpersistenceDay.getDay(day.getUser_id(), day.getCurrent_date());
+            dayToBeUpdated.setSteps(day.getSteps());
+            dayToBeUpdated.setSteps_start(day.getSteps_start());
+            dayToBeUpdated.setActive(day.isActive());
+            dayToBeUpdated.setAttack(day.isAttack());
+            this.DBpersistenceDay.update(dayToBeUpdated);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -102,11 +112,15 @@ public class DayServiceImpl implements DayService {
 
         if (checkDays(dateFrom, dateTo)) {
 
-            while (dateFrom.compareTo(dateTo) != 0) {
+            while (dateFrom.compareTo(dateTo) <= 0) {
 
                 Date date = new Date(dateFrom.getTime().getTime());
 
                 Day dayToBeMarked = this.DBpersistenceDay.getDay(user_id, date);
+
+                if (dayToBeMarked == null) {
+                    dayToBeMarked = this.DBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), false, false, 0, user_id));
+                }
 
                 if (schub != null) {
                     dayToBeMarked.setAttack(schub);
