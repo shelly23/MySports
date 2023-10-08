@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- ellipse_34 from your XD file. -->
+<?xml version="1.0" encoding="utf-8"?><!-- ellipse_34 from your XD file. -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-	android:shape="oval" >
-	<stroke android:color="#3430ff" android:width="2dp" />
-	<solid android:color="@color/ellipse_34_color" />
+    android:shape="oval">
+    <stroke
+        android:width="2dp"
+        android:color="#3430ff" />
+    <solid android:color="@color/ellipse_34_color" />
 </shape>
 

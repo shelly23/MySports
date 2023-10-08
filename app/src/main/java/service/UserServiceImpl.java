@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException {
+    public void saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException {
         if (checkUser(user)) {
             this.DBpersistenceUser.create(user);
             LOG.debug("Saved user {}", user.getUsername());
@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User loginUser(String username, String password) throws InvalidValueException, MandatoryValueException, IOException, PersistenceException, NoSuchAlgorithmException {
+    public User loginUser(String username, String password) throws InvalidValueException, MandatoryValueException, IOException, PersistenceException, NoSuchAlgorithmException, InterruptedException {
         if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
             boolean result = this.DBpersistenceUser.canLogin(username, password);
             if (result) {
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllUsers() throws PersistenceException {
+    public List<User> getAllUsers() throws PersistenceException, InterruptedException {
         LOG.debug("Read all users");
         return DBpersistenceUser.read();
     }

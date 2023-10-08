@@ -1,7 +1,5 @@
 package persistence;
 
-import android.provider.BaseColumns;
-
 public class DBCommands {
 
     static final String SQL_CREATE_ENTRIES_USER =

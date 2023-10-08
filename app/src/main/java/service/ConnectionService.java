@@ -2,8 +2,6 @@ package service;
 
 import android.content.Context;
 
-import java.sql.Connection;
-
 import persistence.DBHelper;
 import persistence.exceptions.PersistenceException;
 

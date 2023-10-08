@@ -25,24 +25,23 @@
     import android.view.View;
     import android.widget.Button;
     import android.widget.EditText;
+    import android.widget.ProgressBar;
     import android.widget.TextView;
 
     import com.example.mysports.R;
 
     import java.io.IOException;
     import java.security.NoSuchAlgorithmException;
-    import java.sql.Date;
-    import java.time.LocalDate;
+    import java.util.Date;
 
-    import persistence.daos.DBDayDAO;
-    import persistence.daos.DBUserDAO;
+    import persistence.daos.FBDayDAO;
+    import persistence.daos.FBUserDAO;
     import persistence.dtos.Day;
     import persistence.dtos.User;
     import persistence.exceptions.InvalidValueException;
     import persistence.exceptions.MandatoryValueException;
     import persistence.exceptions.PersistenceException;
     import persistence.validators.TextValidator;
-    import service.ConnectionServiceDB;
     import service.DayService;
     import service.DayServiceImpl;
     import service.UserService;
@@ -50,7 +49,6 @@
 
     public class log_in_page_activity extends Activity {
 
-        private ConnectionServiceDB connectionServiceDB;
         private UserService userService;
         private DayService dayService;
 
@@ -62,7 +60,19 @@
         private TextView password;
         private TextView error_field;
 
+        private User user;
+
+        private ProgressBar spinner;
+
         public log_in_page_activity() throws PersistenceException {
+        }
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+            spinner.setVisibility(View.GONE);
+            log_in.setText(R.string.log_in_string);
+            user = null;
         }
 
         @Override
@@ -76,18 +86,18 @@
             email = findViewById(R.id.email_address);
             error_field = findViewById(R.id.error_field);
             password = findViewById(R.id.password_ek1);
+            spinner = findViewById(R.id.progressBar1);
+
+            spinner.setVisibility(View.GONE);
+            log_in.setText(R.string.log_in_string);
+
 
             Drawable originalDrawablePW = password.getBackground();
             Drawable originalDrawableEM = email.getBackground();
             Drawable originalDrawableEF = error_field.getBackground();
 
-            try {
-                connectionServiceDB = new ConnectionServiceDB();
-                userService = new UserServiceImpl(new DBUserDAO(connectionServiceDB, getApplicationContext()), new TextValidator());
-                dayService = new DayServiceImpl(new DBDayDAO(connectionServiceDB, getApplicationContext()), new TextValidator());
-            } catch (PersistenceException e) {
-                e.printStackTrace();
-            }
+            userService = new UserServiceImpl(new FBUserDAO(), new TextValidator());
+            dayService = new DayServiceImpl(new FBDayDAO(), new TextValidator());
 
             _don_t_have_an_account_.setOnClickListener(new View.OnClickListener() {
 
@@ -111,21 +121,30 @@
 
                     if (validateCredentials(email_text, password_text)) {
                         //check database for login-data
-                        User user = null;
+                        user = null;
                         try {
+                            spinner.setVisibility(View.VISIBLE);
+
                             user = userService.loginUser(email_text, password_text);
                             if (user != null) {
-                                currentDay = new Day(0, -1, new Date(System.currentTimeMillis()), false, false, 0, user.getId());
-                                currentDay = dayService.saveDay(currentDay);
+                                Date current = new Date(System.currentTimeMillis());
+                                currentDay = dayService.getDay(user.getId(), current);
+                                if (currentDay == null) {
+                                    currentDay = dayService.saveDay(new Day(0, -1, new Date(System.currentTimeMillis()), false, false, false, 0, user.getId()));
+                                }
                             }
-                        } catch (InvalidValueException | MandatoryValueException | IOException | PersistenceException | NoSuchAlgorithmException e) {
+                        } catch (InvalidValueException | MandatoryValueException | IOException |
+                                 PersistenceException | NoSuchAlgorithmException |
+                                 InterruptedException e) {
                             e.printStackTrace();
                         }
+
                         if (user != null) {
                             Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
                             nextScreen.putExtra("USER", user);
                             startActivity(nextScreen);
                         } else {
+                            spinner.setVisibility(View.INVISIBLE);
                             error_field.setText(R.string.login_incorrect);
                             error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                         }

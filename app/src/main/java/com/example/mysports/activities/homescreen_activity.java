@@ -17,10 +17,9 @@
 
     package com.example.mysports.activities;
 
-    import android.Manifest;
     import android.app.Activity;
     import android.app.DatePickerDialog;
-    import android.content.pm.PackageManager;
+    import android.graphics.Typeface;
     import android.graphics.drawable.Drawable;
     import android.hardware.Sensor;
     import android.hardware.SensorEvent;
@@ -33,17 +32,17 @@
     import android.view.LayoutInflater;
     import android.view.View;
     import android.view.WindowManager;
-    import android.webkit.PermissionRequest;
     import android.widget.Button;
+    import android.widget.CompoundButton;
     import android.widget.DatePicker;
     import android.widget.EditText;
     import android.widget.LinearLayout;
     import android.widget.PopupWindow;
+    import android.widget.ProgressBar;
+    import android.widget.Switch;
     import android.widget.TextView;
 
-    import androidx.activity.result.contract.ActivityResultContracts;
     import androidx.annotation.RequiresApi;
-    import androidx.core.content.ContextCompat;
 
     import com.example.mysports.R;
     import com.github.mikephil.charting.charts.PieChart;
@@ -63,14 +62,13 @@
     import java.util.Date;
     import java.util.Locale;
 
-    import persistence.daos.DBDayDAO;
+    import persistence.daos.FBDayDAO;
     import persistence.dtos.Day;
     import persistence.dtos.User;
     import persistence.exceptions.InvalidValueException;
     import persistence.exceptions.MandatoryValueException;
     import persistence.exceptions.PersistenceException;
     import persistence.validators.TextValidator;
-    import service.ConnectionServiceDB;
     import service.DayService;
     import service.DayServiceImpl;
 
@@ -82,18 +80,16 @@
         private CalendarPickerView calendarPickerView;
         private User user;
         private Day day;
-        private java.sql.Date currentDate;
+        private Date currentDate;
         private TextView greeting;
         private TextView stepMessage;
         private TextView activeDays;
         private TextView herrlicher;
         private PieChart pieChart;
         private long stepsToday;
-
         private long stepsTodayStart;
         private long stepsTotal;
         private Button schubTracken;
-
         private DayService dayService;
 
         @RequiresApi(api = Build.VERSION_CODES.O)
@@ -114,18 +110,18 @@
                 // set text of stepcounter
             }
 
-            currentDate = new java.sql.Date(System.currentTimeMillis());
+            currentDate = new Date(System.currentTimeMillis());
 
             try {
-                dayService = new DayServiceImpl(new DBDayDAO(new ConnectionServiceDB(), getApplicationContext()), new TextValidator());
+                dayService = new DayServiceImpl(new FBDayDAO(), new TextValidator());
                 user = (User) getIntent().getSerializableExtra("USER");
                 day = dayService.getDay(user.getId(), currentDate);
-            } catch (PersistenceException e) {
+            } catch (PersistenceException | InterruptedException e) {
                 e.printStackTrace();
             }
 
 
-            stepsToday = day.getSteps();
+            stepsToday = day.getSteps(); // wir holen den day noch nicht, getter fehlt!!
             stepsTodayStart = day.getSteps_start();
             stepsTotal = 1500; // TODOMOCK --> SETTINGS
 
@@ -179,7 +175,7 @@
                     //Create a View object yourself through inflater
                     v.getContext();
                     LayoutInflater inflater = (LayoutInflater) v.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                    View popupView = inflater.inflate(R.layout.popupscreen_schub, null);
+                    View popupView = inflater.inflate(R.layout.popupscreen_schub, findViewById(R.id.popup_root));
 
                     //Specify the length and width through constants
                     int width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -191,26 +187,44 @@
                     //Create a window with our parameters
                     final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
 
-                    popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            finish();
-                        }
-                    });
-
                     //Set the location of the window on the screen
                     popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
                     //Initialize the elements of our window, install the handler
 
                     TextView test2 = popupView.findViewById(R.id.titleText1);
-                    test2.setText("Akuten Schub tracken");
+                    test2.setText("Schub/Pause tracken");
 
                     Calendar dateFromCal = Calendar.getInstance();
                     Calendar dateToCal = Calendar.getInstance();
 
                     EditText dateFrom = popupView.findViewById(R.id.dateFrom);
                     EditText dateTo = popupView.findViewById(R.id.dateTo);
+
+                    Switch pauseSchub = popupView.findViewById(R.id.switch1);
+
+                    TextView schubText = popupView.findViewById(R.id.textView1);
+                    TextView pauseText = popupView.findViewById(R.id.textView);
+
+                    ProgressBar spinner = popupView.findViewById(R.id.progressBar2);
+                    spinner.setVisibility(View.GONE);
+
+                    Typeface fontBold = Typeface.createFromAsset(getAssets(), "montserrat_bold.ttf");
+                    Typeface fontRegular = Typeface.createFromAsset(getAssets(), "montserrat_regular.ttf");
+
+                    pauseSchub.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                            if (b) {
+                                schubText.setTypeface(fontRegular);
+                                pauseText.setTypeface(fontBold);
+                            } else {
+                                schubText.setTypeface(fontBold);
+                                pauseText.setTypeface(fontRegular);
+                            }
+                        }
+                    });
 
                     TextView error_field = popupView.findViewById(R.id.error_field_schub);
 
@@ -269,14 +283,22 @@
                         @Override
                         public void onClick(View view) {
 
-                            dateFrom.setBackground(fromOriginal);
-                            dateTo.setBackground(toOriginal);
+                            setSpinner(spinner, dateFrom, dateTo, error_field);
+
+                            boolean schub = !pauseSchub.isChecked();
+                            boolean pause = pauseSchub.isChecked();
+
+                            // wird erst am Ende der Methode alles gezeigt, daher nie sichtbar
 
                             try {
                                 if (fromSet[0] && toSet[0]) {
-                                    dayService.markDays(day.getUser_id(), dateFromCal, dateToCal, true, day.isActive());
+                                    spinner.setVisibility(View.VISIBLE);
+
+                                    dayService.markDays(day.getUser_id(), dateFromCal, dateToCal, schub, pause, day.isActive());
                                     updateCalendar();
+                                    popupWindow.dismiss();
                                 } else {
+                                    spinner.setVisibility(View.INVISIBLE);
                                     if (!fromSet[0]) {
                                         dateFrom.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
                                     } else {
@@ -287,7 +309,7 @@
                                     error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                                 }
                             } catch (PersistenceException | InvalidValueException |
-                                     MandatoryValueException e) {
+                                     MandatoryValueException | InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
@@ -300,8 +322,18 @@
 
         }
 
+        private void setSpinner(ProgressBar spinner, EditText dateFrom, EditText dateTo, TextView error_field) {
+            spinner.setVisibility(View.VISIBLE);
+
+            dateFrom.setBackgroundColor(getResources().getColor(R.color.log_in_color));
+            dateTo.setBackgroundColor(getResources().getColor(R.color.log_in_color));
+            error_field.setText("");
+            error_field.setBackgroundColor(getResources().getColor(R.color.log_in_color));
+
+        }
+
         private void updateLabel(EditText editText, Calendar myCalendar) {
-            String myFormat = "MM/dd/yy";
+            String myFormat = "dd/MM/yy";
             SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat, Locale.GERMAN);
             editText.setText(dateFormat.format(myCalendar.getTime()));
         }
@@ -352,6 +384,7 @@
             ArrayList<SubTitle> subTitles = new ArrayList<>();
             ArrayList<Date> markedSchub = new ArrayList<>();
             ArrayList<Date> markedAktiv = new ArrayList<>();
+            ArrayList<Date> markedPause = new ArrayList<>();
 
             for (int i = -30; i <= 30; i++) {
 
@@ -359,7 +392,7 @@
                 dayToBeChecked.add(Calendar.DATE, i);
 
                 try {
-                    Day toBeChecked = dayService.getDay(user.getId(), new java.sql.Date(dayToBeChecked.getTime().getTime()));
+                    Day toBeChecked = dayService.getDay(user.getId(), new Date(dayToBeChecked.getTime().getTime()));
                     if (toBeChecked != null) {
                         if (toBeChecked.isActive()) {
                             markedAktiv.add(dayToBeChecked.getTime());
@@ -367,9 +400,12 @@
                         } else if (toBeChecked.isAttack()) {
                             markedSchub.add(dayToBeChecked.getTime());
                             subTitles.add(new SubTitle(dayToBeChecked.getTime(), "Schub"));
+                        } else if (toBeChecked.isPause()) {
+                            markedPause.add(dayToBeChecked.getTime());
+                            subTitles.add(new SubTitle(dayToBeChecked.getTime(), "Pause"));
                         }
                     }
-                } catch (PersistenceException e) {
+                } catch (PersistenceException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
@@ -400,8 +436,9 @@
             calendarPickerView.init(timeFrom.getTime(), timeTo.getTime())
                     .inMode(CalendarPickerView.SelectionMode.RANGE)
                     .withSelectedDate(Calendar.getInstance().getTime())
-                    .withHighlightedDates(markedSchub)
+                    //.withHighlightedDates(markedSchub)
                     .withHighlightedDates(markedAktiv)
+                    .withHighlightedDates(markedPause)
                     .displayOnly()
                     .withSubTitles(subTitles)
             ;
@@ -425,7 +462,7 @@
                 try {
                     dayService.update(day);
                 } catch (PersistenceException | InvalidValueException | MandatoryValueException |
-                         IOException e) {
+                         IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }

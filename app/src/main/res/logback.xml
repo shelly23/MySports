@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <property name="DEV_HOME"
-              value="D:/Desktop/MySports/logs"/>
+    <property name="DEV_HOME" value="D:/Desktop/MySports/logs" />
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${DEV_HOME}/mysports.log</file>
@@ -35,19 +34,19 @@
         </encoder>
     </appender>-->
 
-    <logger name="com.mkyong.web" level="debug" additivity="false">
-        <appender-ref ref="FILE"/>
+    <logger name="com.mkyong.web" additivity="false" level="debug">
+        <appender-ref ref="FILE" />
     </logger>
     <root level="error">
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </root>
     <root level="info">
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </root>
     <root level="debug">
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
     </root>
 </configuration>

@@ -12,17 +12,17 @@ import persistence.exceptions.PersistenceException;
  */
 public interface UserDAO {
 
-    void create(User user) throws PersistenceException, NoSuchAlgorithmException;
+    void create(User user) throws PersistenceException, NoSuchAlgorithmException, InterruptedException;
 
-    List<User> read() throws PersistenceException;
+    List<User> read() throws PersistenceException, InterruptedException;
 
     void delete(List<User> vehicles) throws PersistenceException;
 
     void update(User vehicle) throws PersistenceException;
 
-    User getUser(String username) throws PersistenceException;
+    User getUser(String username) throws PersistenceException, InterruptedException;
 
-    boolean canLogin(String username, String password) throws NoSuchAlgorithmException;
+    boolean canLogin(String username, String password) throws NoSuchAlgorithmException, InterruptedException;
 
     //List<User> search(UserSearchFilter userSearchFilter) throws PersistenceException;
 }

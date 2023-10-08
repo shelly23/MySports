@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/titleText"
                 android:background="@drawable/rectangle_2_shape"
-                android:textColor="@color/log_in_color"/>
+                android:textColor="@color/log_in_color" />
 
 
             <TextView

@@ -6,8 +6,6 @@ import android.os.Build;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-
 import persistence.DBHelper;
 import persistence.H2Handler;
 import persistence.exceptions.PersistenceException;
@@ -23,18 +21,18 @@ public class ConnectionServiceDB implements ConnectionService {
     public DBHelper getConnection(Context context) throws PersistenceException {
         return new DBHelper(context);
         /**try {
-            Connection con = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                con = H2Handler.getConnection();
-            }
-            LOG.debug("Database connection established");
-            return con;
-        } catch (ClassNotFoundException e) {
-            LOG.error("Could not load H2 JDBC driver.");
-            throw new PersistenceException(e.getMessage());
-        } catch (SQLException e) {
-            throw new PersistenceException(e.getMessage());
-        }**/
+         Connection con = null;
+         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+         con = H2Handler.getConnection();
+         }
+         LOG.debug("Database connection established");
+         return con;
+         } catch (ClassNotFoundException e) {
+         LOG.error("Could not load H2 JDBC driver.");
+         throw new PersistenceException(e.getMessage());
+         } catch (SQLException e) {
+         throw new PersistenceException(e.getMessage());
+         }**/
     }
 
     @Override

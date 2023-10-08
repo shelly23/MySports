@@ -5,11 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import persistence.daos.DayDAO;
@@ -32,7 +29,7 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public Day saveDay(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException {
+    public Day saveDay(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException {
         Day result = null;
         if (checkDay(day)) {
             if (!this.DBpersistenceDay.exists(day.getUser_id(), day.getCurrent_date())) {
@@ -85,7 +82,7 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public boolean update(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException {
+    public boolean update(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, InterruptedException {
         if (checkDay(day)) {
             Day dayToBeUpdated = this.DBpersistenceDay.getDay(day.getUser_id(), day.getCurrent_date());
             dayToBeUpdated.setSteps(day.getSteps());
@@ -100,7 +97,7 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public Day getDay(long user_id, Date date) throws PersistenceException {
+    public Day getDay(long user_id, Date date) throws PersistenceException, InterruptedException {
         if (date != null) {
             return this.DBpersistenceDay.getDay(user_id, date);
         }
@@ -108,7 +105,7 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public void markDays(long user_id, Calendar dateFrom, Calendar dateTo, Boolean schub, Boolean active) throws PersistenceException, InvalidValueException, MandatoryValueException {
+    public void markDays(long user_id, Calendar dateFrom, Calendar dateTo, Boolean schub, Boolean pause, Boolean active) throws PersistenceException, InvalidValueException, MandatoryValueException, InterruptedException {
 
         if (checkDays(dateFrom, dateTo)) {
 
@@ -119,18 +116,23 @@ public class DayServiceImpl implements DayService {
                 Day dayToBeMarked = this.DBpersistenceDay.getDay(user_id, date);
 
                 if (dayToBeMarked == null) {
-                    dayToBeMarked = this.DBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), false, false, 0, user_id));
+                    dayToBeMarked = this.DBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id));
+                } else {
+
+                    if (schub != null) {
+                        dayToBeMarked.setAttack(schub);
+                    }
+                    if (active != null) {
+                        dayToBeMarked.setActive(active);
+                    }
+                    if (pause != null) {
+                        dayToBeMarked.setPause(pause);
+                    }
+
+                    this.DBpersistenceDay.update(dayToBeMarked);
                 }
 
-                if (schub != null) {
-                    dayToBeMarked.setAttack(schub);
-                } else if (active != null) {
-                    dayToBeMarked.setActive(active);
-                }
-
-                this.DBpersistenceDay.update(dayToBeMarked);
-
-                LOG.debug("Day {} successfully marked: Attack: {} and Active: {}", date, schub != null ? schub.toString() : "-", active != null ? active.toString() : "-");
+                LOG.debug("Day {} successfully marked: Attack: {} and Active: {} and Pause: {}", date, schub != null ? schub.toString() : "-", active != null ? active.toString() : "-", pause != null ? pause.toString() : "-");
 
                 dateFrom.add(Calendar.DATE, 1);
             }

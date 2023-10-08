@@ -28,6 +28,7 @@
     import android.widget.EditText;
     import android.widget.LinearLayout;
     import android.widget.PopupWindow;
+    import android.widget.ProgressBar;
     import android.widget.TextView;
 
     import com.example.mysports.R;
@@ -35,13 +36,12 @@
     import java.io.IOException;
     import java.security.NoSuchAlgorithmException;
 
-    import persistence.daos.DBUserDAO;
+    import persistence.daos.FBUserDAO;
     import persistence.dtos.User;
     import persistence.exceptions.InvalidValueException;
     import persistence.exceptions.MandatoryValueException;
     import persistence.exceptions.PersistenceException;
     import persistence.validators.TextValidator;
-    import service.ConnectionServiceDB;
     import service.UserService;
     import service.UserServiceImpl;
 
@@ -57,6 +57,8 @@
         private Button register;
         private TextView error_field;
 
+        private ProgressBar spinner;
+
         private UserService userService;
 
         public register_page_activity() throws PersistenceException {
@@ -68,14 +70,17 @@
             super.onCreate(savedInstanceState);
             setContentView(R.layout.register_page);
 
-            mysport_ek1 = (TextView) findViewById(R.id.mysport_ek1);
-            register = (Button) findViewById(R.id.register);
-            nachname = (EditText) findViewById(R.id.nachname);
-            vorname = (EditText) findViewById(R.id.vorname);
-            email_adresse = (EditText) findViewById(R.id.email);
-            passwort = (EditText) findViewById(R.id.password1);
-            passwort_wiederholen = (EditText) findViewById(R.id.password2);
-            error_field = (TextView) findViewById(R.id.error_field);
+            mysport_ek1 = findViewById(R.id.mysport_ek1);
+            register = findViewById(R.id.register);
+            nachname = findViewById(R.id.nachname);
+            vorname = findViewById(R.id.vorname);
+            email_adresse = findViewById(R.id.email);
+            passwort = findViewById(R.id.password1);
+            passwort_wiederholen = findViewById(R.id.password2);
+            error_field = findViewById(R.id.error_field);
+            spinner = findViewById(R.id.progressBar3);
+
+            spinner.setVisibility(View.GONE);
 
             Drawable originalDrawableVN = vorname.getBackground();
             Drawable originalDrawableNN = nachname.getBackground();
@@ -83,12 +88,7 @@
             Drawable originalDrawablePW = passwort.getBackground();
             Drawable originalDrawablePWW = passwort_wiederholen.getBackground();
 
-            try {
-                userService = new UserServiceImpl(new DBUserDAO(new ConnectionServiceDB(), getApplicationContext()), new TextValidator());
-            } catch (PersistenceException e) {
-                e.printStackTrace();
-            }
-
+            userService = new UserServiceImpl(new FBUserDAO(), new TextValidator());
 
             register.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,6 +99,7 @@
                     email_adresse.setBackground(originalDrawableEM);
                     passwort.setBackground(originalDrawablePW);
                     passwort_wiederholen.setBackground(originalDrawablePWW);
+                    spinner.setVisibility(View.VISIBLE);
 
                     String vorname_text = vorname.getText().toString();
                     String nachname_text = nachname.getText().toString();
@@ -111,7 +112,9 @@
 
                         try {
                             userService.saveUser(new User(vorname_text, nachname_text, email_text, passwort_text));
-                        } catch (PersistenceException | InvalidValueException | MandatoryValueException | IOException | NoSuchAlgorithmException e) {
+                        } catch (PersistenceException | InvalidValueException |
+                                 MandatoryValueException | IOException |
+                                 NoSuchAlgorithmException | InterruptedException e) {
                             e.printStackTrace();
                         }
 
@@ -126,6 +129,7 @@
 
                         //Make Inactive Items Outside Of PopupWindow
                         boolean focusable = true;
+                        spinner.setVisibility(View.GONE);
 
                         //Create a window with our parameters
                         final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
@@ -167,37 +171,44 @@
                 error_field.setText(R.string.vorname_missing);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.vorname.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             } else if (nachname.isEmpty()) {
                 error_field.setText(R.string.nachname_missing);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.nachname.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             } else if (email.isEmpty()) {
                 error_field.setText(R.string.email_missing);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.email_adresse.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 error_field.setText(R.string.email_invalide);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.email_adresse.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             } else if (passwort1.isEmpty()) {
                 error_field.setText(R.string.password_missing);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.passwort.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             } else if (passwort2.isEmpty()) {
                 error_field.setText(R.string.password_missing);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.passwort_wiederholen.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             } else if (!passwort1.equals(passwort2)) {
                 error_field.setText(R.string.password_not_equal);
                 error_field.setBackgroundColor(getResources().getColor(R.color.whiteOP));
                 this.passwort_wiederholen.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
                 this.passwort.setBackgroundColor(getResources().getColor(R.color.rectangle_50_colorOP));
+                spinner.setVisibility(View.INVISIBLE);
                 return false;
             }
             return true;

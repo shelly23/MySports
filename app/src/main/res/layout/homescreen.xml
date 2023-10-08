@@ -428,7 +428,7 @@
 
     <TextView
         android:id="@+id/greeting"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"

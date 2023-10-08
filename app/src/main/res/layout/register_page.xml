@@ -129,10 +129,10 @@
             android:layout_height="40dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/rectangle_2_shape"
-            android:text="@string/register_string"
             android:fontFamily="@font/montserrat_regular"
-            android:textStyle="bold"
-            android:textColor="@color/log_in_color" />
+            android:text="@string/register_string"
+            android:textColor="@color/log_in_color"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -143,6 +143,15 @@
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal|center_vertical"
             android:textColor="@color/rectangle_50_color" />
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/register"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

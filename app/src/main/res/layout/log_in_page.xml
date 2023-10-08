@@ -39,10 +39,10 @@
             android:layout_height="40dp"
             android:layout_marginTop="40dp"
             android:background="@drawable/rectangle_2_shape"
-            android:text="@string/log_in_string"
             android:fontFamily="@font/montserrat_regular"
-            android:textStyle="bold"
-            android:textColor="@color/log_in_color" />
+            android:text="@string/log_in_string"
+            android:textColor="@color/log_in_color"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/_don_t_have_an_account_"
@@ -53,6 +53,14 @@
             android:fontFamily="@font/montserrat_regular"
             android:text="@string/_don_t_have_an_account__string"
             android:textColor="@color/_bg__log_in_page_ek2_color" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@id/_don_t_have_an_account_"
+            android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/error_field"

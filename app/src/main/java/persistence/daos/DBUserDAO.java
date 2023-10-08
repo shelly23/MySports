@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.provider.BaseColumns;
 
 import org.slf4j.Logger;
@@ -13,11 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import persistence.DBHelper;
@@ -40,6 +35,69 @@ public class DBUserDAO implements UserDAO {
         database = con.getWritableDatabase();
     }
 
+    /**
+     * @Override public List<Vehicle> search(VehicleSearchFilter vehicleSearchFilter) throws PersistenceException {
+     * List<Vehicle> result;
+     * boolean plusPeriod = false;
+     * try {
+     * PreparedStatement search;
+     * if (vehicleSearchFilter.getEnddate() != null && vehicleSearchFilter.getStartdate() != null) {
+     * search = con.prepareStatement(searchVehicles + searchVehiclesPeriod);
+     * plusPeriod = true;
+     * } else {
+     * search = con.prepareStatement(searchVehicles + ";");
+     * }
+     * <p>
+     * <p>
+     * search.setString(1, vehicleSearchFilter.getTitle() == null ? "%" : "%" + vehicleSearchFilter.getTitle() + "%");
+     * search.setString(2, vehicleSearchFilter.getSeats() == 0 ? "%" : String.valueOf(vehicleSearchFilter.getSeats()));
+     * search.setString(3, vehicleSearchFilter.getDrive() == null ? "%" : vehicleSearchFilter.getDrive().toString());
+     * search.setLong(4, vehicleSearchFilter.getMaxprice() == 0 ? getMinMaxPrice()[0] : vehicleSearchFilter.getMaxprice());
+     * search.setLong(5, vehicleSearchFilter.getMinprice());
+     * search.setString(6, vehicleSearchFilter.getLicenses().equals("") ? "%" : "%" + vehicleSearchFilter.getLicenses() + "%");
+     * <p>
+     * if (plusPeriod) {
+     * Timestamp start = Timestamp.valueOf(vehicleSearchFilter.getStartdate());
+     * Timestamp end = Timestamp.valueOf(vehicleSearchFilter.getEnddate());
+     * search.setTimestamp(7, start);
+     * search.setTimestamp(8, end);
+     * search.setTimestamp(9, start);
+     * search.setTimestamp(10, end);
+     * search.setTimestamp(11, start);
+     * search.setTimestamp(12, end);
+     * search.setTimestamp(13, start);
+     * search.setTimestamp(14, end);
+     * }
+     * <p>
+     * result = createVehicle(search.executeQuery());
+     * <p>
+     * } catch (SQLException e) {
+     * throw new PersistenceException(e.getMessage());
+     * }
+     * <p>
+     * LOG.debug("Finished search, found {} entries", result.size());
+     * return result;
+     * }
+     **/
+
+    public static String hashPassword(String password) throws NoSuchAlgorithmException {
+
+        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        md.reset();
+        md.update(password.getBytes());
+        byte[] mdArray = md.digest();
+        StringBuilder sb = new StringBuilder(mdArray.length * 2);
+        for (byte b : mdArray) {
+            int v = b & 0xff;
+            if (v < 16)
+                sb.append('0');
+            sb.append(Integer.toHexString(v));
+        }
+
+        return sb.toString();
+
+    }
+
     private ContentValues buildInsert(String prename, String surname, String username, String password, long id) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BaseColumns._ID, id);
@@ -52,9 +110,9 @@ public class DBUserDAO implements UserDAO {
 
     @SuppressLint("Range")
     @Override
-    public void create(User user) throws NoSuchAlgorithmException {
+    public void create(User user) throws NoSuchAlgorithmException, InterruptedException {
 
-        id = DBUtils.getNewId(USER_TABLE, database);
+        id = DBUtils.getNextId(USER_TABLE);
 
         ContentValues values = buildInsert(user.getPrename(), user.getSurname(), user.getUsername(), hashPassword(user.getPassword()), id);
         database.insert(USER_TABLE, null, values);
@@ -140,7 +198,7 @@ public class DBUserDAO implements UserDAO {
         );
 
         if (cursor.moveToNext()) {
-            return new User (cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PRENAME)),
+            return new User(cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PRENAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_SURNAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_USERNAME)),
                     cursor.getString(cursor.getColumnIndexOrThrow(USER_COLUMN_PASSWORD)),
@@ -194,67 +252,6 @@ public class DBUserDAO implements UserDAO {
             result.add(u);
         }
         return result;
-    }
-
-    /**@Override public List<Vehicle> search(VehicleSearchFilter vehicleSearchFilter) throws PersistenceException {
-    List<Vehicle> result;
-    boolean plusPeriod = false;
-    try {
-    PreparedStatement search;
-    if (vehicleSearchFilter.getEnddate() != null && vehicleSearchFilter.getStartdate() != null) {
-    search = con.prepareStatement(searchVehicles + searchVehiclesPeriod);
-    plusPeriod = true;
-    } else {
-    search = con.prepareStatement(searchVehicles + ";");
-    }
-
-
-    search.setString(1, vehicleSearchFilter.getTitle() == null ? "%" : "%" + vehicleSearchFilter.getTitle() + "%");
-    search.setString(2, vehicleSearchFilter.getSeats() == 0 ? "%" : String.valueOf(vehicleSearchFilter.getSeats()));
-    search.setString(3, vehicleSearchFilter.getDrive() == null ? "%" : vehicleSearchFilter.getDrive().toString());
-    search.setLong(4, vehicleSearchFilter.getMaxprice() == 0 ? getMinMaxPrice()[0] : vehicleSearchFilter.getMaxprice());
-    search.setLong(5, vehicleSearchFilter.getMinprice());
-    search.setString(6, vehicleSearchFilter.getLicenses().equals("") ? "%" : "%" + vehicleSearchFilter.getLicenses() + "%");
-
-    if (plusPeriod) {
-    Timestamp start = Timestamp.valueOf(vehicleSearchFilter.getStartdate());
-    Timestamp end = Timestamp.valueOf(vehicleSearchFilter.getEnddate());
-    search.setTimestamp(7, start);
-    search.setTimestamp(8, end);
-    search.setTimestamp(9, start);
-    search.setTimestamp(10, end);
-    search.setTimestamp(11, start);
-    search.setTimestamp(12, end);
-    search.setTimestamp(13, start);
-    search.setTimestamp(14, end);
-    }
-
-    result = createVehicle(search.executeQuery());
-
-    } catch (SQLException e) {
-    throw new PersistenceException(e.getMessage());
-    }
-
-    LOG.debug("Finished search, found {} entries", result.size());
-    return result;
-    }**/
-
-    public static String hashPassword(String password) throws NoSuchAlgorithmException {
-
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
-        md.reset();
-        md.update(password.getBytes());
-        byte[] mdArray = md.digest();
-        StringBuilder sb = new StringBuilder(mdArray.length * 2);
-        for(byte b : mdArray) {
-            int v = b & 0xff;
-            if(v < 16)
-                sb.append('0');
-            sb.append(Integer.toHexString(v));
-        }
-
-        return sb.toString();
-
     }
 
 

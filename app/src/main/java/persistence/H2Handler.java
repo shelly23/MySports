@@ -19,8 +19,8 @@ import persistence.exceptions.PersistenceException;
  */
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class H2Handler {
-    private static Connection con = null;
     private static final Logger LOG = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+    private static Connection con = null;
 
     /**
      * Method to get the a reference connection to the database. If no connection is established yet, a new connection

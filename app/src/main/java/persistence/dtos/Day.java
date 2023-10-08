@@ -1,7 +1,9 @@
 package persistence.dtos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Day implements Serializable {
 
@@ -11,26 +13,43 @@ public class Day implements Serializable {
     private Date current_date;
     private boolean active;
     private boolean attack;
+    private boolean pause;
     private long id;
     private long user_id;
 
-    public Day(int steps, int steps_start, Date current_date, boolean active, boolean attack, long id, long user_id) {
+    public Day() {
+    }
+
+    public Day(int steps, int steps_start, Date current_date, boolean active, boolean pause, boolean attack, long id, long user_id) {
         this.steps = steps;
         this.steps_start = steps_start;
         this.current_date = current_date;
         this.active = active;
         this.attack = attack;
+        this.pause = pause;
         this.id = id;
         this.user_id = user_id;
     }
 
-    public Day(int steps, int steps_start, Date current_date, boolean active, boolean attack, long user_id) {
+    public Day(int steps, int steps_start, Date current_date, boolean active, boolean pause, boolean attack, long user_id) {
         this.steps = steps;
         this.steps_start = steps_start;
         this.current_date = current_date;
         this.active = active;
         this.attack = attack;
+        this.pause = pause;
         this.user_id = user_id;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("steps", this.steps);
+        result.put("steps_start", this.steps_start);
+        result.put("current_date", this.current_date);
+        result.put("active", this.active);
+        result.put("attack", this.attack);
+        result.put("pause", this.pause);
+        return result;
     }
 
     public int getSteps() {
@@ -87,5 +106,13 @@ public class Day implements Serializable {
 
     public void setSteps_start(int steps_start) {
         this.steps_start = steps_start;
+    }
+
+    public boolean isPause() {
+        return pause;
+    }
+
+    public void setPause(boolean pause) {
+        this.pause = pause;
     }
 }

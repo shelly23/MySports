@@ -9,20 +9,19 @@ import android.provider.BaseColumns;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import persistence.DBHelper;
 import persistence.dtos.Day;
-import persistence.dtos.User;
 import persistence.exceptions.PersistenceException;
 import service.ConnectionService;
 
 public class DBDayDAO implements DayDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(DBDayDAO.class);
-    private static long id = 0;
     private static final long userId = 0;
+    private static long id = 0;
     final String DAY_COLUMN_DATE = "actual_date";
     final String DAY_COLUMN_STEPS = "steps";
 
@@ -62,8 +61,8 @@ public class DBDayDAO implements DayDAO {
     }
 
     @Override
-    public Day create(Day day) throws PersistenceException {
-        id = DBUtils.getNewId(DAY_TABLE, database);
+    public Day create(Day day) throws PersistenceException, InterruptedException {
+        id = DBUtils.getNextId(DAY_TABLE);
 
         ContentValues values = buildInsert(day.getCurrent_date(), day.getSteps(), day.getSteps_start(), day.isActive(), day.isAttack(), id, day.getUser_id());
 
@@ -120,15 +119,15 @@ public class DBDayDAO implements DayDAO {
                 null
         );
 
-        if (cursor.moveToNext()) {
-            return new Day(cursor.getInt(cursor.getColumnIndexOrThrow(DAY_COLUMN_STEPS)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(DAY_COLUMN_STEPS_START)),
-                    Date.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_DATE))),
-                    parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_ACTIVE))),
-                    parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_ATTACK))),
-                    cursor.getLong(cursor.getColumnIndexOrThrow(DAY_COLUMN_USERID)));
-
-        }
+        //   if (cursor.moveToNext()) {
+        //       return new Day(cursor.getInt(cursor.getColumnIndexOrThrow(DAY_COLUMN_STEPS)),
+        //               cursor.getInt(cursor.getColumnIndexOrThrow(DAY_COLUMN_STEPS_START)),
+        //               Date.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_DATE))),
+        //               parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_ACTIVE))),
+        //               parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(DAY_COLUMN_ATTACK))),
+        //               cursor.getLong(cursor.getColumnIndexOrThrow(DAY_COLUMN_USERID)));
+//
+        //   }
         cursor.close();
         return null;
     }
