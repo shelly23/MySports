@@ -141,6 +141,7 @@
 
                         if (user != null) {
                             Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
+                            nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
                             nextScreen.putExtra("USER", user);
                             startActivity(nextScreen);
                         } else {

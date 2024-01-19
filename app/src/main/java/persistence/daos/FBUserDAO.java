@@ -25,7 +25,7 @@ public class FBUserDAO implements UserDAO {
     }
 
     @Override
-    public void create(User user) throws PersistenceException, NoSuchAlgorithmException, InterruptedException {
+    public long create(User user) throws PersistenceException, NoSuchAlgorithmException, InterruptedException {
 
         user.setPassword(hashPassword(user.getPassword()));
         long id = DBUtils.getNextId(TABLE_USERS);
@@ -33,6 +33,7 @@ public class FBUserDAO implements UserDAO {
 
         database.child(TABLE_USERS).child(String.valueOf(id)).setValue(user);
 
+        return id;
     }
 
     @Override

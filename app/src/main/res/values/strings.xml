@@ -193,4 +193,26 @@
     <string name="speichern">Speichern</string>
     <string name="pause">Pause</string>
     <string name="schub">Schub</string>
+    <string name="aktivit_tsziel">Aktivitätsziel</string>
+    <string name="schrittziel">Schrittziel:</string>
+    <string name="aktivit_tsdauer">Aktivitätsdauer:</string>
+    <string name="anzahl_an_trainings">Anzahl an Trainings:</string>
+    <string name="verbindung_zu_therapeutinnen">Verbindung zu TherapeutInnen</string>
+    <string name="nutzer_id">Nutzer-ID:</string>
+    <string name="app_module">App-Module</string>
+    <string name="benachrichtigungen">Benachrichtigungen</string>
+    <string name="zeit_f_r_erinnerungen">Zeit für Erinnerungen:</string>
+    <string name="bis">bis</string>
+    <string name="edss_optional">EDSS (optional)</string>
+    <string name="geburtsdatum_optional">Geburtsdatum (optional)</string>
+    <string name="verbindungsanfragen">Verbindungsanfragen</string>
+    <string name="hier_sehen_sie_verbindungsanfragen_von_therapuetinnen_sobald_diese_gestellt_werden">Hier sehen Sie Verbindungsanfragen von \nTherapeutInnen, sobald diese gestellt werden.</string>
+    <string name="kraft">Kraft</string>
+    <string name="ausdauer">Ausdauer</string>
+    <string name="personalisiert">Angepasst</string>
+    <string name="entspannung_aktivierung">Entspannung / Aktivierung</string>
+    <string name="beenden">Beenden</string>
+    <string name="von">von</string>
+    <string name="fortsetzen">Fortsetzen</string>
+    <string name="information">Versuche, die Übungen so lange durchzuführen, bis die empfohlene Dauer erreicht ist. Wird es Dir zu viel, kannst Du mittels des PAUSE-Buttons jederzeit Pausen einlegen. Möchtest Du das Training beenden, so kannst Du dies mittels des BEENDEN-Buttons tun.</string>
 </resources>

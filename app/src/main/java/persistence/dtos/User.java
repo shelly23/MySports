@@ -1,6 +1,7 @@
 package persistence.dtos;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class User implements Serializable {
 
@@ -8,25 +9,34 @@ public class User implements Serializable {
     private String surname;
     private String username;
     private String password;
+
+    private double edss;
+
+    private Date birthdate;
+
     private long id;
 
     public User() {
 
     }
 
-    public User(String prename, String surname, String username, String password, long id) {
+    public User(String prename, String surname, String username, String password, double edss, Date birthdate, long id) {
         this.prename = prename;
         this.surname = surname;
         this.username = username;
         this.password = password;
+        this.edss = edss;
+        this.birthdate = birthdate;
         this.id = id;
     }
 
-    public User(String prename, String surname, String username, String password) {
+    public User(String prename, String surname, String username, String password, double edss, Date birthdate) {
         this.prename = prename;
         this.surname = surname;
         this.username = username;
         this.password = password;
+        this.edss = edss;
+        this.birthdate = birthdate;
     }
 
     public String getUsername() {
@@ -67,5 +77,21 @@ public class User implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public double getEdss() {
+        return edss;
+    }
+
+    public void setEdss(double edss) {
+        this.edss = edss;
+    }
+
+    public Date getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
     }
 }

@@ -20,11 +20,11 @@ public class DayServiceImpl implements DayService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DayServiceImpl.class);
 
-    private final DayDAO DBpersistenceDay;
+    private final DayDAO FBpersistenceDay;
     private final TextValidator textValidator;
 
-    public DayServiceImpl(DayDAO DBpersistenceDay, TextValidator textValidator) {
-        this.DBpersistenceDay = DBpersistenceDay;
+    public DayServiceImpl(DayDAO FBpersistenceDay, TextValidator textValidator) {
+        this.FBpersistenceDay = FBpersistenceDay;
         this.textValidator = textValidator;
     }
 
@@ -32,8 +32,8 @@ public class DayServiceImpl implements DayService {
     public Day saveDay(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException {
         Day result = null;
         if (checkDay(day)) {
-            if (!this.DBpersistenceDay.exists(day.getUser_id(), day.getCurrent_date())) {
-                result = this.DBpersistenceDay.create(day);
+            if (!this.FBpersistenceDay.exists(day.getUser_id(), day.getCurrent_date())) {
+                result = this.FBpersistenceDay.create(day);
                 LOG.debug("Saved day {} for user {}", day.getCurrent_date(), day.getUser_id());
             } else {
                 LOG.debug("Day {} for user {} already exists.", day.getCurrent_date(), day.getUser_id());
@@ -84,12 +84,12 @@ public class DayServiceImpl implements DayService {
     @Override
     public boolean update(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, InterruptedException {
         if (checkDay(day)) {
-            Day dayToBeUpdated = this.DBpersistenceDay.getDay(day.getUser_id(), day.getCurrent_date());
+            Day dayToBeUpdated = this.FBpersistenceDay.getDay(day.getUser_id(), day.getCurrent_date());
             dayToBeUpdated.setSteps(day.getSteps());
             dayToBeUpdated.setSteps_start(day.getSteps_start());
             dayToBeUpdated.setActive(day.isActive());
             dayToBeUpdated.setAttack(day.isAttack());
-            this.DBpersistenceDay.update(dayToBeUpdated);
+            this.FBpersistenceDay.update(dayToBeUpdated);
             return true;
         } else {
             return false;
@@ -99,7 +99,7 @@ public class DayServiceImpl implements DayService {
     @Override
     public Day getDay(long user_id, Date date) throws PersistenceException, InterruptedException {
         if (date != null) {
-            return this.DBpersistenceDay.getDay(user_id, date);
+            return this.FBpersistenceDay.getDay(user_id, date);
         }
         return null;
     }
@@ -113,10 +113,10 @@ public class DayServiceImpl implements DayService {
 
                 Date date = new Date(dateFrom.getTime().getTime());
 
-                Day dayToBeMarked = this.DBpersistenceDay.getDay(user_id, date);
+                Day dayToBeMarked = this.FBpersistenceDay.getDay(user_id, date);
 
                 if (dayToBeMarked == null) {
-                    dayToBeMarked = this.DBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id));
+                    dayToBeMarked = this.FBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id));
                 } else {
 
                     if (schub != null) {
@@ -129,7 +129,7 @@ public class DayServiceImpl implements DayService {
                         dayToBeMarked.setPause(pause);
                     }
 
-                    this.DBpersistenceDay.update(dayToBeMarked);
+                    this.FBpersistenceDay.update(dayToBeMarked);
                 }
 
                 LOG.debug("Day {} successfully marked: Attack: {} and Active: {} and Pause: {}", date, schub != null ? schub.toString() : "-", active != null ? active.toString() : "-", pause != null ? pause.toString() : "-");

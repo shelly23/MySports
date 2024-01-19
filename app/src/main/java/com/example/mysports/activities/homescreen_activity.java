@@ -19,6 +19,7 @@
 
     import android.app.Activity;
     import android.app.DatePickerDialog;
+    import android.content.Intent;
     import android.graphics.Typeface;
     import android.graphics.drawable.Drawable;
     import android.hardware.Sensor;
@@ -36,6 +37,7 @@
     import android.widget.CompoundButton;
     import android.widget.DatePicker;
     import android.widget.EditText;
+    import android.widget.ImageView;
     import android.widget.LinearLayout;
     import android.widget.PopupWindow;
     import android.widget.ProgressBar;
@@ -92,6 +94,9 @@
         private Button schubTracken;
         private DayService dayService;
 
+        private ImageView settings;
+        private ImageView activity;
+
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -132,6 +137,8 @@
             activeDays = findViewById(R.id.active_days);
             herrlicher = findViewById(R.id.herrlicher);
             schubTracken = findViewById(R.id.button_schub);
+            settings = findViewById(R.id.vector_ek123);
+            activity = findViewById(R.id.vector_ek127);
 
             updateSteps();
 
@@ -168,6 +175,26 @@
             greeting.setText(greet_Text);
 
             updateCalendar();
+
+            settings.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), settingsscreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+                    startActivity(nextScreen);
+                }
+            });
+
+            activity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), activityscreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+                    startActivity(nextScreen);
+                }
+            });
 
             schubTracken.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -207,7 +234,7 @@
                     TextView pauseText = popupView.findViewById(R.id.textView);
 
                     ProgressBar spinner = popupView.findViewById(R.id.progressBar2);
-                    spinner.setVisibility(View.GONE);
+                    spinner.setVisibility(View.INVISIBLE);
 
                     Typeface fontBold = Typeface.createFromAsset(getAssets(), "montserrat_bold.ttf");
                     Typeface fontRegular = Typeface.createFromAsset(getAssets(), "montserrat_regular.ttf");

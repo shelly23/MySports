@@ -12,7 +12,7 @@ import persistence.exceptions.PersistenceException;
  */
 public interface UserDAO {
 
-    void create(User user) throws PersistenceException, NoSuchAlgorithmException, InterruptedException;
+    long create(User user) throws PersistenceException, NoSuchAlgorithmException, InterruptedException;
 
     List<User> read() throws PersistenceException, InterruptedException;
 

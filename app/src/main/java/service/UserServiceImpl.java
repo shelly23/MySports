@@ -18,31 +18,33 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    private final UserDAO DBpersistenceUser;
+    private final UserDAO FBpersistenceUser;
     private final TextValidator textValidator;
 
-    public UserServiceImpl(UserDAO DBpersistenceUser, TextValidator textValidator) {
-        this.DBpersistenceUser = DBpersistenceUser;
+    public UserServiceImpl(UserDAO FBpersistenceUser, TextValidator textValidator) {
+        this.FBpersistenceUser = FBpersistenceUser;
         this.textValidator = textValidator;
     }
 
     @Override
-    public void saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException {
+    public long saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException {
         if (checkUser(user)) {
-            this.DBpersistenceUser.create(user);
+            long id = this.FBpersistenceUser.create(user);
             LOG.debug("Saved user {}", user.getUsername());
+            return id;
         } else {
             LOG.error("Failed to create user {}, cause: invalid user", user.getUsername());
+            return -1;
         }
     }
 
     @Override
     public User loginUser(String username, String password) throws InvalidValueException, MandatoryValueException, IOException, PersistenceException, NoSuchAlgorithmException, InterruptedException {
         if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-            boolean result = this.DBpersistenceUser.canLogin(username, password);
+            boolean result = this.FBpersistenceUser.canLogin(username, password);
             if (result) {
                 LOG.debug("Logged in user {}", username);
-                return this.DBpersistenceUser.getUser(username);
+                return this.FBpersistenceUser.getUser(username);
             } else {
                 LOG.error("Failed to login user {}", username);
                 return null;
@@ -55,20 +57,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(List<User> users) throws PersistenceException {
-        this.DBpersistenceUser.delete(users);
+        this.FBpersistenceUser.delete(users);
         LOG.debug("Deleted vehicles");
     }
 
     @Override
     public List<User> getAllUsers() throws PersistenceException, InterruptedException {
         LOG.debug("Read all users");
-        return DBpersistenceUser.read();
+        return FBpersistenceUser.read();
     }
 
     @Override
     public boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException {
         if (checkUser(user)) {
-            DBpersistenceUser.update(user);
+            FBpersistenceUser.update(user);
             return true;
         }
         LOG.error("Failed to update user {}", user.getUsername());

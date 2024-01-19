@@ -18,56 +18,55 @@
     package com.example.mysports.activities;
 
     import android.app.Activity;
-    import android.content.Intent;
+    import android.media.MediaPlayer;
+    import android.net.Uri;
     import android.os.Bundle;
+    import android.os.Handler;
     import android.view.View;
-    import android.widget.ImageView;
+    import android.widget.Button;
+    import android.widget.MediaController;
     import android.widget.TextView;
+    import android.widget.VideoView;
 
     import com.example.mysports.R;
+
+    import persistence.dtos.Connection;
 
     public class workout_activity extends Activity {
 
 
-        private View __bg__workout_ek2;
-        private ImageView background_image_ek3;
-        private ImageView path_ek9;
-        private ImageView path_ek10;
-        private ImageView path_ek11;
-        private ImageView oval_1_ek3;
-        private ImageView oval_1_copy_ek3;
-        private ImageView oval_1_copy_2_ek3;
-        private ImageView shape_ek9;
-        private ImageView shape_ek10;
-        private TextView figma_ek3;
-        private ImageView shape_ek11;
-        private ImageView charge_ek3;
-        private ImageView ___ek3;
-        private TextView _42__ek3;
-        private ImageView vector_3_ek3;
-        private TextView _9_42_am_ek3;
-        private View menu_bar_ek3;
-        private ImageView vector_ek10;
-        private ImageView vector_ek11;
-        private ImageView vector_ek12;
-        private ImageView vector_ek13;
-        private ImageView vector_ek14;
-        private ImageView vector_ek15;
-        private ImageView vector_ek16;
-        private ImageView vector_ek17;
-        private ImageView vector_ek18;
-        private ImageView vector_ek19;
-        private View ellipse_33;
-        private ImageView vector_ek20;
-        private View ellipse_34;
-        private ImageView vector_ek21;
-        private ImageView vector_ek22;
-        private ImageView vector_ek23;
-        private ImageView vector_ek24;
-        private View ellipse_35;
-        private ImageView rectangle_45;
-        private ImageView vector_ek25;
-        private ImageView vector_ek26;
+        long timeInMilliseconds = 0L;
+        private VideoView video;
+        private MediaPlayer mediaPlayer;
+        private Uri uri;
+        private Connection connection;
+        private Handler customHandler = new Handler();
+        private TextView timerValue;
+        private TextView duration;
+
+        private Button pause;
+
+        private Button end;
+
+        private long pausen = 0L;
+
+        private CountUpTimer timer;
+        private boolean original = true;
+        private Runnable updateTimerThread = new Runnable() {
+
+            public void run() {
+
+                timeInMilliseconds = timer.getTime();
+
+                int secs = (int) (timeInMilliseconds / 1000);
+                int mins = secs / 60;
+                secs = secs % 60;
+                timerValue.setText("" + mins + ":"
+                        + String.format("%02d", secs));
+                customHandler.postDelayed(this, 0);
+            }
+
+        };
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -76,58 +75,81 @@
             setContentView(R.layout.workout);
 
 
-            __bg__workout_ek2 = findViewById(R.id.__bg__workout_ek2);
-            background_image_ek3 = findViewById(R.id.background_image_ek3);
-            path_ek9 = findViewById(R.id.path_ek9);
-            path_ek10 = findViewById(R.id.path_ek10);
-            path_ek11 = findViewById(R.id.path_ek11);
-            oval_1_ek3 = findViewById(R.id.oval_1_ek3);
-            oval_1_copy_ek3 = findViewById(R.id.oval_1_copy_ek3);
-            oval_1_copy_2_ek3 = findViewById(R.id.oval_1_copy_2_ek3);
-            shape_ek9 = findViewById(R.id.shape_ek9);
-            shape_ek10 = findViewById(R.id.shape_ek10);
-            figma_ek3 = findViewById(R.id.figma_ek3);
-            shape_ek11 = findViewById(R.id.shape_ek11);
-            charge_ek3 = findViewById(R.id.charge_ek3);
-            ___ek3 = findViewById(R.id.___ek3);
-            _42__ek3 = findViewById(R.id._42__ek3);
-            vector_3_ek3 = findViewById(R.id.vector_3_ek3);
-            _9_42_am_ek3 = findViewById(R.id._9_42_am_ek3);
-            menu_bar_ek3 = findViewById(R.id.menu_bar_ek3);
-            vector_ek10 = findViewById(R.id.vector_ek10);
-            vector_ek11 = findViewById(R.id.vector_ek11);
-            vector_ek12 = findViewById(R.id.vector_ek12);
-            vector_ek13 = findViewById(R.id.vector_ek13);
-            vector_ek14 = findViewById(R.id.vector_ek14);
-            vector_ek15 = findViewById(R.id.vector_ek15);
-            vector_ek16 = findViewById(R.id.vector_ek16);
-            vector_ek17 = findViewById(R.id.vector_ek17);
-            vector_ek18 = findViewById(R.id.vector_ek18);
-            vector_ek19 = findViewById(R.id.vector_ek19);
-            ellipse_33 = findViewById(R.id.ellipse_33);
-            vector_ek20 = findViewById(R.id.vector_ek20);
-            ellipse_34 = findViewById(R.id.ellipse_34);
-            vector_ek21 = findViewById(R.id.vector_ek21);
-            vector_ek22 = findViewById(R.id.vector_ek22);
-            vector_ek23 = findViewById(R.id.vector_ek23);
-            vector_ek24 = findViewById(R.id.vector_ek24);
-            ellipse_35 = findViewById(R.id.ellipse_35);
-            rectangle_45 = findViewById(R.id.rectangle_45);
-            vector_ek25 = findViewById(R.id.vector_ek25);
-            vector_ek26 = findViewById(R.id.vector_ek26);
+            uri = (Uri) getIntent().getParcelableExtra("URI");
+            connection = (Connection) getIntent().getSerializableExtra("CONNECTION");
 
+            // finding videoview by its id
 
-            __bg__workout_ek2.setOnClickListener(new View.OnClickListener() {
+            timerValue = findViewById(R.id.actual);
+            duration = findViewById(R.id.duration);
+            video = findViewById(R.id.videoView);
+            pause = findViewById(R.id.pause);
+            end = findViewById(R.id.end);
 
-                public void onClick(View v) {
+            pause.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (original) {
+                        timer.pause();
+                        customHandler.removeCallbacks(updateTimerThread);
+                        mediaPlayer.pause();
+                        pause.setText(R.string.fortsetzen);
+                        original = false;
+                        pausen++;
+                    } else {
+                        //TBD
+                        original = true;
+                        mediaPlayer.start();
+                        pause.setText(R.string.pause);
+                        timer.resume();
+                        customHandler.postDelayed(updateTimerThread, 0);
+                    }
+                }
+            });
 
-                    Intent nextScreen = new Intent(getApplicationContext(), workout_ende_activity.class);
-                    startActivity(nextScreen);
-
+            end.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
                 }
             });
 
+            duration.setText(connection.getRecommendedDuration() + " Minuten");
+
+            // sets the resource from the
+            // videoUrl to the videoView
+            video.setVideoURI(uri);
+
+            video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer = mp;
+
+                }
+            });
+
+            // creating object of
+            // media controller class
+            MediaController mediaController = new MediaController(this);
+
+            // sets the anchor view
+            // anchor view for the videoView
+            mediaController.setAnchorView(video);
+
+            // sets the media player to the videoView
+            mediaController.setMediaPlayer(video);
+
+            // sets the media controller to the videoView
+            video.setMediaController(mediaController);
+
+            // starts the video
+            video.start();
+
+            timer = new CountUpTimer(true);
+            //
+            // startTime = SystemClock.uptimeMillis();
+            customHandler.postDelayed(updateTimerThread, 0);
 
             //custom code goes here
 

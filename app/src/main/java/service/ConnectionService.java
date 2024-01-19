@@ -2,7 +2,11 @@ package service;
 
 import android.content.Context;
 
+import java.util.List;
+
 import persistence.DBHelper;
+import persistence.dtos.Connection;
+import persistence.dtos.User;
 import persistence.exceptions.PersistenceException;
 
 /**
@@ -10,12 +14,11 @@ import persistence.exceptions.PersistenceException;
  */
 public interface ConnectionService {
 
-    DBHelper getConnection(Context context) throws PersistenceException;
 
-    /**
-     * Method to close the connection to persistence.
-     *
-     * @throws PersistenceException if it is not possible to close the connection
-     */
-    void closeConnection() throws PersistenceException;
+    List<Connection> getUsersConnections(long userId, boolean pending) throws InterruptedException;
+
+    void set(long id, boolean accept) throws InterruptedException;
+
+    void delete(long id) throws InterruptedException;
+
 }

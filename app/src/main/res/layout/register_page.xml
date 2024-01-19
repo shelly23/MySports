@@ -78,10 +78,37 @@
             android:textSize="14sp" />
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/edss"
             android:layout_width="260dp"
             android:layout_height="40dp"
             android:layout_below="@id/nachname"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/edss_optional"
+            android:inputType="numberDecimal"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/birthdate"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/edss"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/geburtsdatum_optional"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/birthdate"
             android:layout_marginTop="10dp"
             android:autofillHints="emailAddress"
             android:fontFamily="@font/montserrat_regular"
@@ -108,7 +135,7 @@
             android:layout_width="260dp"
             android:layout_height="40dp"
             android:autofillHints="name"
-            android:fontFamily="Montserrat"
+            android:fontFamily="@font/montserrat_regular"
             android:hint="@string/vorname_ek1_string"
             android:inputType="textPersonName"
             android:textColor="@color/email_address_color"
@@ -127,7 +154,7 @@
             android:id="@+id/register"
             android:layout_width="260dp"
             android:layout_height="40dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/rectangle_2_shape"
             android:fontFamily="@font/montserrat_regular"
             android:text="@string/register_string"

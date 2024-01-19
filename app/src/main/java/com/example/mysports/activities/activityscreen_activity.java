@@ -19,6 +19,7 @@
 
     import android.app.Activity;
     import android.content.Intent;
+    import android.net.Uri;
     import android.os.Bundle;
     import android.view.View;
     import android.widget.ImageView;
@@ -26,46 +27,32 @@
 
     import com.example.mysports.R;
 
+    import java.util.List;
+
+    import persistence.daos.FBConnectionDAO;
+    import persistence.daos.FBTraining_VideoDAO;
+    import persistence.dtos.Connection;
+    import persistence.dtos.Training_Video;
+    import persistence.dtos.Type;
+    import persistence.dtos.User;
+    import service.ConnectionService;
+    import service.ConnectionServiceImpl;
+    import service.Training_VideoService;
+    import service.Training_VideoServiceImpl;
+
     public class activityscreen_activity extends Activity {
 
+        private ImageView strength;
+        private ImageView endurance;
+        private ImageView personalized;
+        private ImageView relaxation;
 
-        private View _bg__activityscreen_ek2;
-        private ImageView background_image_ek6;
-        private ImageView path_ek15;
-        private ImageView path_ek16;
-        private ImageView path_ek17;
-        private ImageView oval_1_ek5;
-        private ImageView oval_1_copy_ek5;
-        private ImageView oval_1_copy_2_ek5;
-        private ImageView shape_ek15;
-        private ImageView shape_ek16;
-        private TextView figma_ek5;
-        private ImageView shape_ek17;
-        private ImageView charge_ek5;
-        private ImageView ___ek5;
-        private TextView _42__ek5;
-        private ImageView vector_3_ek5;
-        private TextView _9_42_am_ek5;
-        private ImageView _kraft;
-        private ImageView rectangle_27;
-        private TextView ausdauer;
-        private TextView kraft_ek1;
-        private View rectangle_28;
-        private View rectangle_26;
-        private View line_8;
-        private ImageView line_9;
-        private TextView _11_aktive_tage__von_23___das_sind_fast_50___weiter_so_;
-        private View menu_bar_ek9;
-        private ImageView vector_ek112;
-        private ImageView vector_ek113;
-        private ImageView vector_ek114;
-        private ImageView vector_ek115;
-        private ImageView vector_ek116;
-        private ImageView vector_ek117;
-        private ImageView vector_ek118;
-        private ImageView vector_ek119;
-        private ImageView vector_ek120;
-        private ImageView vector_ek121;
+        private User user;
+
+        private Training_VideoService trainingVideoService;
+        private ConnectionService connectionService;
+
+        private Connection connection;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -73,60 +60,77 @@
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activityscreen);
 
+            trainingVideoService = new Training_VideoServiceImpl(new FBTraining_VideoDAO());
+            connectionService = new ConnectionServiceImpl(new FBConnectionDAO());
 
-            _bg__activityscreen_ek2 = findViewById(R.id._bg__activityscreen_ek2);
-            background_image_ek6 = findViewById(R.id.background_image_ek6);
-            path_ek15 = findViewById(R.id.path_ek15);
-            path_ek16 = findViewById(R.id.path_ek16);
-            path_ek17 = findViewById(R.id.path_ek17);
-            oval_1_ek5 = findViewById(R.id.oval_1_ek5);
-            oval_1_copy_ek5 = findViewById(R.id.oval_1_copy_ek5);
-            oval_1_copy_2_ek5 = findViewById(R.id.oval_1_copy_2_ek5);
-            shape_ek15 = findViewById(R.id.shape_ek15);
-            shape_ek16 = findViewById(R.id.shape_ek16);
-            figma_ek5 = findViewById(R.id.figma_ek5);
-            shape_ek17 = findViewById(R.id.shape_ek17);
-            charge_ek5 = findViewById(R.id.charge_ek5);
-            ___ek5 = findViewById(R.id.___ek5);
-            _42__ek5 = findViewById(R.id._42__ek5);
-            vector_3_ek5 = findViewById(R.id.vector_3_ek5);
-            _9_42_am_ek5 = findViewById(R.id._9_42_am_ek5);
-            _kraft = findViewById(R.id._kraft);
-            rectangle_27 = findViewById(R.id.rectangle_27);
-            ausdauer = findViewById(R.id.ausdauer);
-            kraft_ek1 = findViewById(R.id.kraft_ek1);
-            rectangle_28 = findViewById(R.id.rectangle_28);
-            rectangle_26 = findViewById(R.id.rectangle_26);
-            line_8 = findViewById(R.id.line_8);
-            line_9 = findViewById(R.id.line_9);
-            _11_aktive_tage__von_23___das_sind_fast_50___weiter_so_ = findViewById(R.id._11_aktive_tage__von_23___das_sind_fast_50___weiter_so_);
-            menu_bar_ek9 = findViewById(R.id.menu_bar_ek9);
-            vector_ek112 = findViewById(R.id.vector_ek112);
-            vector_ek113 = findViewById(R.id.vector_ek113);
-            vector_ek114 = findViewById(R.id.vector_ek114);
-            vector_ek115 = findViewById(R.id.vector_ek115);
-            vector_ek116 = findViewById(R.id.vector_ek116);
-            vector_ek117 = findViewById(R.id.vector_ek117);
-            vector_ek118 = findViewById(R.id.vector_ek118);
-            vector_ek119 = findViewById(R.id.vector_ek119);
-            vector_ek120 = findViewById(R.id.vector_ek120);
-            vector_ek121 = findViewById(R.id.vector_ek121);
+            strength = findViewById(R.id.kraft);
+            endurance = findViewById(R.id.ausdauer);
+            personalized = findViewById(R.id.personalized);
+            relaxation = findViewById(R.id.entspannung);
 
+            user = (User) getIntent().getSerializableExtra("USER");
 
-            _kraft.setOnClickListener(new View.OnClickListener() {
+            strength.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri;
+                    try {
+                        uri = findTraining(Type.strength, user);
+                        Intent nextScreen = new Intent(getApplicationContext(), workout_activity.class);
+                        nextScreen.putExtra("URI", uri);
+                        nextScreen.putExtra("CONNECTION", connection);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
 
-                public void onClick(View v) {
+            endurance.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri;
+                    try {
+                        uri = findTraining(Type.endurance, user);
+                        Intent nextScreen = new Intent(getApplicationContext(), workout_activity.class);
+                        nextScreen.putExtra("URI", uri);
+                        nextScreen.putExtra("CONNECTION", connection);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
 
-                    Intent nextScreen = new Intent(getApplicationContext(), workout_activity.class);
-                    startActivity(nextScreen);
-
-
+            relaxation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri uri;
+                    try {
+                        uri = findTraining(Type.relaxation, user);
+                        Intent nextScreen = new Intent(getApplicationContext(), workout_activity.class);
+                        nextScreen.putExtra("URI", uri);
+                        nextScreen.putExtra("CONNECTION", connection);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
 
 
             //custom code goes here
 
+        }
+
+        private Uri findTraining(Type type, User user) throws InterruptedException {
+            List<Connection> connections = connectionService.getUsersConnections(user.getId(), false);
+            connection = connections.get(0);
+            Training_Video trainingVideo = trainingVideoService.getTrainingVideo(connection, type);
+            return trainingVideoService.getUrl(trainingVideo);
         }
     }
 	

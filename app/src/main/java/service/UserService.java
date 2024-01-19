@@ -11,7 +11,7 @@ import persistence.exceptions.PersistenceException;
 
 public interface UserService {
 
-    void saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException;
+    long saveUser(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException;
 
     void delete(List<User> users) throws PersistenceException;
 

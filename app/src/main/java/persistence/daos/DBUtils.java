@@ -14,7 +14,12 @@ import persistence.dtos.User;
 public class DBUtils {
 
     public static final String TABLE_USERS = "users";
+    public static final String TABLE_THERAPISTS = "therapists";
+    public static final String TABLE_TRAINING_VIDEOS = "contents";
     public static final String TABLE_DAYS = "days";
+
+    public static final String TABLE_CONNECTIONS = "connections";
+    public static final String TABLE_SETTINGS = "settings";
 
     public static String hashPassword(String password) throws NoSuchAlgorithmException {
 
@@ -65,4 +70,13 @@ public class DBUtils {
         }
         return ++id;
     }
+
+    public static boolean isInRecommendedDuration(long duration, String recommendedDuration) {
+        recommendedDuration = recommendedDuration.replace(" ", "");
+        String[] values = recommendedDuration.split("-");
+        long val1 = Long.parseLong(values[0]);
+        long val2 = Long.parseLong(values[1]);
+        return Long.min(val1, val2) <= duration && Long.max(val1, val2) >= duration;
+    }
+
 }
