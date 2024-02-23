@@ -1,6 +1,6 @@
 package persistence.dtos;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Training_Video {
 

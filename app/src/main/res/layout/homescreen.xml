@@ -256,7 +256,6 @@
                 android:src="@drawable/ellipse_32" />
 
             <TextView
-                android:id="@+id/_47_8_"
                 android:layout_width="25.5dp"
                 android:layout_height="9.5dp"
                 android:layout_marginLeft="0dp"
@@ -276,7 +275,6 @@
             android:layout_marginTop="100dp">
 
             <TextView
-                android:id="@+id/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1"
                 android:layout_width="310dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="10dp"
@@ -365,7 +363,6 @@
             android:layout_marginTop="35dp">
 
             <TextView
-                android:id="@+id/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3"
                 android:layout_width="264dp"
                 android:layout_height="38dp"
                 android:layout_marginStart="10dp"

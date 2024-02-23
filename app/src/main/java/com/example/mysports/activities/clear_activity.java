@@ -37,7 +37,6 @@
             setContentView(R.layout.clear);
 
 
-            _bg__clear_ek2 = findViewById(R.id._bg__clear_ek2);
             vector_ek174 = findViewById(R.id.vector_ek174);
 
 

@@ -18,105 +18,71 @@
     package com.example.mysports.activities;
 
     import android.app.Activity;
+    import android.graphics.Color;
+    import android.os.Build;
     import android.os.Bundle;
     import android.view.View;
     import android.widget.ImageView;
-    import android.widget.TextView;
+
+    import androidx.annotation.RequiresApi;
 
     import com.example.mysports.R;
+    import com.github.mikephil.charting.charts.BarChart;
+    import com.github.mikephil.charting.charts.LineChart;
+    import com.github.mikephil.charting.components.XAxis;
+    import com.github.mikephil.charting.components.YAxis;
+    import com.github.mikephil.charting.data.BarData;
+    import com.github.mikephil.charting.data.BarDataSet;
+    import com.github.mikephil.charting.data.BarEntry;
+    import com.github.mikephil.charting.data.Entry;
+    import com.github.mikephil.charting.data.LineData;
+    import com.github.mikephil.charting.data.LineDataSet;
+    import com.github.mikephil.charting.formatter.ValueFormatter;
+    import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+
+    import java.sql.Date;
+    import java.util.ArrayList;
+    import java.util.Comparator;
+    import java.util.List;
+
+    import persistence.daos.FBDayDAO;
+    import persistence.daos.FBMonthDAO;
+    import persistence.dtos.User;
+    import persistence.validators.TextValidator;
+    import service.DayService;
+    import service.DayServiceImpl;
 
     public class statistik_activity extends Activity {
 
+        private final ArrayList<String> xLabel = new ArrayList<>();
+        private LineChart lineChart;
+        private BarChart barChart;
+        private LineDataSet lineDataSet;
+        private LineData lineData;
+        private List<Entry> lineEntries;
+        private List<BarEntry> barEntries;
+        private BarDataSet barDataSet;
+        private BarData barData;
+        private DayService dayService;
+        private User user;
+        private String yearStrLine;
+        private String yearStrBar;
 
-        private View _bg__statistik_ek2;
-        private ImageView background_image_ek9;
-        private ImageView path_ek24;
-        private ImageView path_ek25;
-        private ImageView path_ek26;
-        private ImageView oval_1_ek8;
-        private ImageView oval_1_copy_ek8;
-        private ImageView oval_1_copy_2_ek8;
-        private ImageView shape_ek24;
-        private ImageView shape_ek25;
-        private TextView figma_ek8;
-        private ImageView shape_ek26;
-        private ImageView charge_ek8;
-        private ImageView ___ek8;
-        private TextView _42__ek8;
-        private ImageView vector_3_ek8;
-        private TextView _9_42_am_ek8;
-        private View menu_bar_ek15;
-        private ImageView vector_ek146;
-        private ImageView vector_ek147;
-        private ImageView vector_ek148;
-        private ImageView vector_ek149;
-        private ImageView vector_ek150;
-        private ImageView vector_ek151;
-        private ImageView vector_ek152;
-        private ImageView vector_ek153;
-        private ImageView vector_ek154;
-        private ImageView vector_ek155;
-        private View popup_ek2;
-        private TextView _100_;
-        private TextView _50_;
-        private TextView _0_;
-        private TextView aug;
-        private TextView jul;
-        private TextView jun;
-        private TextView mai;
-        private TextView apr;
-        private TextView m_r;
-        private TextView feb;
-        private TextView j_n;
-        private View line_10;
-        private View line_11;
-        private View line_18;
-        private View line_17;
-        private View line_16;
-        private View line_15;
-        private View line_14;
-        private View line_13;
-        private View line_12;
-        private TextView verlauf_aktiver_tage;
-        private View popup_ek3;
-        private View kraftlegende;
-        private TextView krafttraining;
-        private TextView ausdauertraining;
-        private View ausdauer_legende;
-        private View rectangle_43;
-        private View rectangle_44;
-        private View rectangle_41;
-        private View rectangle_42;
-        private View rectangle_39;
-        private View rectangle_40;
-        private View rectangle_37;
-        private View rectangle_38;
-        private View rectangle_35;
-        private View rectangle_36;
-        private View rectangle_33;
-        private View rectangle_34;
-        private View rectangle_31;
-        private View rectangle_32;
-        private TextView _100__ek1;
-        private TextView _50__ek1;
-        private TextView _0__ek1;
-        private TextView aug_ek1;
-        private TextView jul_ek1;
-        private TextView jun_ek1;
-        private TextView mai_ek1;
-        private TextView apr_ek1;
-        private TextView m_r_ek1;
-        private TextView feb_ek1;
-        private TextView j_n_ek1;
-        private View line_10_ek1;
-        private View line_11_ek1;
-        private View rectangle_29;
-        private View rectangle_30;
-        private TextView trainingszusammensetzung;
-        private ImageView front_ek2;
-        private ImageView front_ek3;
-        private ImageView back_ek2;
-        private ImageView back_ek3;
+        private ImageView front1;
+        private ImageView front2;
+        private ImageView back1;
+        private ImageView back2;
+
+        private int currentYearLine;
+        private int currentYearBar;
+
+        public static int rgb(String hex) {
+            int color = (int) Long.parseLong(hex.replace("#", ""), 16);
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = (color >> 0) & 0xFF;
+            return Color.rgb(r, g, b);
+        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -124,100 +90,237 @@
             super.onCreate(savedInstanceState);
             setContentView(R.layout.statistik);
 
+            dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
 
-            _bg__statistik_ek2 = findViewById(R.id._bg__statistik_ek2);
-            background_image_ek9 = findViewById(R.id.background_image_ek9);
-            path_ek24 = findViewById(R.id.path_ek24);
-            path_ek25 = findViewById(R.id.path_ek25);
-            path_ek26 = findViewById(R.id.path_ek26);
-            oval_1_ek8 = findViewById(R.id.oval_1_ek8);
-            oval_1_copy_ek8 = findViewById(R.id.oval_1_copy_ek8);
-            oval_1_copy_2_ek8 = findViewById(R.id.oval_1_copy_2_ek8);
-            shape_ek24 = findViewById(R.id.shape_ek24);
-            shape_ek25 = findViewById(R.id.shape_ek25);
-            figma_ek8 = findViewById(R.id.figma_ek8);
-            shape_ek26 = findViewById(R.id.shape_ek26);
-            charge_ek8 = findViewById(R.id.charge_ek8);
-            ___ek8 = findViewById(R.id.___ek8);
-            _42__ek8 = findViewById(R.id._42__ek8);
-            vector_3_ek8 = findViewById(R.id.vector_3_ek8);
-            _9_42_am_ek8 = findViewById(R.id._9_42_am_ek8);
-            menu_bar_ek15 = findViewById(R.id.menu_bar_ek15);
-            vector_ek146 = findViewById(R.id.vector_ek146);
-            vector_ek147 = findViewById(R.id.vector_ek147);
-            vector_ek148 = findViewById(R.id.vector_ek148);
-            vector_ek149 = findViewById(R.id.vector_ek149);
-            vector_ek150 = findViewById(R.id.vector_ek150);
-            vector_ek151 = findViewById(R.id.vector_ek151);
-            vector_ek152 = findViewById(R.id.vector_ek152);
-            vector_ek153 = findViewById(R.id.vector_ek153);
-            vector_ek154 = findViewById(R.id.vector_ek154);
-            vector_ek155 = findViewById(R.id.vector_ek155);
-            popup_ek2 = findViewById(R.id.popup_ek2);
-            _100_ = findViewById(R.id._100_);
-            _50_ = findViewById(R.id._50_);
-            _0_ = findViewById(R.id._0_);
-            aug = findViewById(R.id.aug);
-            jul = findViewById(R.id.jul);
-            jun = findViewById(R.id.jun);
-            mai = findViewById(R.id.mai);
-            apr = findViewById(R.id.apr);
-            m_r = findViewById(R.id.m_r);
-            feb = findViewById(R.id.feb);
-            j_n = findViewById(R.id.j_n);
-            line_10 = findViewById(R.id.line_10);
-            line_11 = findViewById(R.id.line_11);
-            line_18 = findViewById(R.id.line_18);
-            line_17 = findViewById(R.id.line_17);
-            line_16 = findViewById(R.id.line_16);
-            line_15 = findViewById(R.id.line_15);
-            line_14 = findViewById(R.id.line_14);
-            line_13 = findViewById(R.id.line_13);
-            line_12 = findViewById(R.id.line_12);
-            verlauf_aktiver_tage = findViewById(R.id.verlauf_aktiver_tage);
-            popup_ek3 = findViewById(R.id.popup_ek3);
-            kraftlegende = findViewById(R.id.kraftlegende);
-            krafttraining = findViewById(R.id.krafttraining);
-            ausdauertraining = findViewById(R.id.ausdauertraining);
-            ausdauer_legende = findViewById(R.id.ausdauer_legende);
-            rectangle_43 = findViewById(R.id.rectangle_43);
-            rectangle_44 = findViewById(R.id.rectangle_44);
-            rectangle_41 = findViewById(R.id.rectangle_41);
-            rectangle_42 = findViewById(R.id.rectangle_42);
-            rectangle_39 = findViewById(R.id.rectangle_39);
-            rectangle_40 = findViewById(R.id.rectangle_40);
-            rectangle_37 = findViewById(R.id.rectangle_37);
-            rectangle_38 = findViewById(R.id.rectangle_38);
-            rectangle_35 = findViewById(R.id.rectangle_35);
-            rectangle_36 = findViewById(R.id.rectangle_36);
-            rectangle_33 = findViewById(R.id.rectangle_33);
-            rectangle_34 = findViewById(R.id.rectangle_34);
-            rectangle_31 = findViewById(R.id.rectangle_31);
-            rectangle_32 = findViewById(R.id.rectangle_32);
-            _100__ek1 = findViewById(R.id._100__ek1);
-            _50__ek1 = findViewById(R.id._50__ek1);
-            _0__ek1 = findViewById(R.id._0__ek1);
-            aug_ek1 = findViewById(R.id.aug_ek1);
-            jul_ek1 = findViewById(R.id.jul_ek1);
-            jun_ek1 = findViewById(R.id.jun_ek1);
-            mai_ek1 = findViewById(R.id.mai_ek1);
-            apr_ek1 = findViewById(R.id.apr_ek1);
-            m_r_ek1 = findViewById(R.id.m_r_ek1);
-            feb_ek1 = findViewById(R.id.feb_ek1);
-            j_n_ek1 = findViewById(R.id.j_n_ek1);
-            line_10_ek1 = findViewById(R.id.line_10_ek1);
-            line_11_ek1 = findViewById(R.id.line_11_ek1);
-            rectangle_29 = findViewById(R.id.rectangle_29);
-            rectangle_30 = findViewById(R.id.rectangle_30);
-            trainingszusammensetzung = findViewById(R.id.trainingszusammensetzung);
-            front_ek2 = findViewById(R.id.front_ek2);
-            front_ek3 = findViewById(R.id.front_ek3);
-            back_ek2 = findViewById(R.id.back_ek2);
-            back_ek3 = findViewById(R.id.back_ek3);
+            user = (User) getIntent().getSerializableExtra("USER");
+
+            back1 = findViewById(R.id.back1);
+            back2 = findViewById(R.id.back2);
+            front1 = findViewById(R.id.front1);
+            front2 = findViewById(R.id.front2);
+
+            lineChart = findViewById(R.id.linechart);
+            lineChart.getLegend().setEnabled(false);
+            lineChart.getDescription().setEnabled(true);
+            lineChart.getDescription().setPosition(575, 100);
+            lineChart.getDescription().setTextSize(15);
+
+            barChart = findViewById(R.id.barchart);
+            barChart.getLegend().setEnabled(true);
+            barChart.getDescription().setEnabled(true);
+            barChart.getDescription().setPosition(575, 100);
+            barChart.getDescription().setTextSize(15);
+            barChart.setFitBars(true);
+            barChart.setDrawValueAboveBar(false);
+
+            Date date = new Date(System.currentTimeMillis());
+            currentYearLine = date.getYear();
+            currentYearBar = date.getYear();
+            yearStrLine = currentYearLine + "";
+            yearStrBar = currentYearBar + "";
+            yearStrLine = yearStrLine.substring(1);
+            yearStrBar = yearStrBar.substring(1);
+
+            xLabel.add("Januar");
+            xLabel.add("Februar");
+            xLabel.add("März");
+            xLabel.add("April");
+            xLabel.add("Mai");
+            xLabel.add("Juni");
+            xLabel.add("Juli");
+            xLabel.add("August");
+            xLabel.add("September");
+            xLabel.add("Oktober");
+            xLabel.add("November");
+            xLabel.add("Dezember");
+
+            createLineChart(yearStrLine);
+            createBarChart(yearStrBar);
+
+            back1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentYearLine = currentYearLine - 1;
+                    yearStrLine = currentYearLine + "";
+                    yearStrLine = yearStrLine.substring(1);
+
+                    createLineChart(yearStrLine);
+                }
+            });
+
+            front1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentYearLine = currentYearLine + 1;
+                    yearStrLine = currentYearLine + "";
+                    yearStrLine = yearStrLine.substring(1);
+                    createLineChart(yearStrLine);
+                }
+            });
+            back2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentYearBar = currentYearBar - 1;
+                    yearStrBar = currentYearBar + "";
+                    yearStrBar = yearStrBar.substring(1);
+                    createBarChart(yearStrBar);
+                }
+            });
+            front2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    currentYearBar = currentYearBar + 1;
+                    yearStrBar = currentYearBar + "";
+                    yearStrBar = yearStrBar.substring(1);
+                    createBarChart(yearStrBar);
+                }
+            });
 
 
-            //custom code goes here
+        }
 
+        @RequiresApi(api = Build.VERSION_CODES.N)
+        private void createLineChart(String yearStr) {
+            try {
+                lineEntries = dayService.getActiveDays(Integer.parseInt(yearStr), user.getId());
+                if (lineEntries.size() < 12) {
+                    for (int i = 0; i < 12; i++) {
+                        final float temp = (float) i;
+                        if (lineEntries.stream().noneMatch(entry -> (entry.getX() == temp))) {
+                            lineEntries.add(new Entry(temp, 0));
+                        }
+                    }
+                }
+                lineEntries.sort(new Comparator<Entry>() {
+                    @Override
+                    public int compare(Entry entry, Entry t1) {
+                        if (entry.getX() < t1.getX()) {
+                            return -1;
+                        }
+
+                        if (entry.getX() == t1.getX()) {
+                            return 0;
+                        }
+
+                        if (entry.getX() > t1.getX()) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            XAxis xAxis = lineChart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setLabelRotationAngle(45);
+            xAxis.setLabelCount(12, true);
+
+            YAxis yAxis = lineChart.getAxisLeft();
+            lineChart.getAxisRight().setEnabled(false);
+
+            xAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return xLabel.get((int) value);
+                }
+            });
+
+            yAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return (int) value + "%";
+                }
+            });
+
+            lineDataSet = new LineDataSet(lineEntries, "");
+            lineData = new LineData(lineDataSet);
+            lineChart.setData(lineData);
+            lineChart.invalidate();
+            lineChart.getDescription().setText("20" + yearStr);
+            lineDataSet.setValueTextColor(Color.BLACK);
+            lineDataSet.setColor(rgb("#F2994A"));
+            lineDataSet.setCircleColor(R.color.ellipse_27_ek3_color);
+            lineDataSet.setFillColor(R.color.ellipse_27_ek3_color);
+            lineDataSet.setLineWidth(3f);
+            lineDataSet.setValueTextSize(18f);
+
+            lineDataSet.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return "";
+                }
+            });
+
+
+        }
+
+        private void createBarChart(String yearStr) {
+            try {
+                barEntries = dayService.getTrainings(Integer.parseInt(yearStr), user.getId());
+                if (barEntries.size() < 12) {
+                    for (int i = barEntries.size(); i < 12; i++) {
+                        barEntries.add(new BarEntry((float) i, 0));
+                    }
+                }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            XAxis xAxis = barChart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setLabelRotationAngle(45);
+            xAxis.setLabelCount(12, true);
+
+            YAxis yAxis = lineChart.getAxisLeft();
+            lineChart.getAxisRight().setEnabled(false);
+
+            xAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    if (value < 0) {
+                        return "";
+                    }
+                    return xLabel.get((int) value);
+                }
+            });
+
+            yAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return (int) value + "%";
+                }
+            });
+
+            barDataSet = new BarDataSet(barEntries, "");
+            barDataSet.setStackLabels(new String[]{"Kraft", "Ausdauer", "Entspannung / Aktivierung"});
+            barDataSet.setColors(rgb("#F2994A"), rgb("#3EC28F"), rgb("#342FFF"));
+            ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+            dataSets.add(barDataSet);
+
+            barData = new BarData(dataSets);
+
+            barChart.setData(barData);
+            barChart.invalidate();
+            barChart.getDescription().setText("20" + yearStr);
+
+        }
+
+        private void getEntries() {
+            lineEntries = new ArrayList<>();
+            lineEntries.add(new Entry(0f, 50));
+            lineEntries.add(new Entry(1f, 10));
+            lineEntries.add(new Entry(2f, 10));
+            lineEntries.add(new Entry(3f, 30));
+            lineEntries.add(new Entry(4f, 40));
+            lineEntries.add(new Entry(5f, 30));
+            lineEntries.add(new Entry(6f, 30));
+            lineEntries.add(new Entry(7f, 20));
+            lineEntries.add(new Entry(8f, 0));
+            lineEntries.add(new Entry(9f, 10));
+            lineEntries.add(new Entry(10f, 30));
+            lineEntries.add(new Entry(11f, 70));
         }
     }
 	

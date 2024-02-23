@@ -49,7 +49,6 @@
             setContentView(R.layout.gamescreen);
 
 
-            _bg__gamescreen_ek2 = findViewById(R.id._bg__gamescreen_ek2);
             background_image_ek5 = findViewById(R.id.background_image_ek5);
             menu_bar_ek7 = findViewById(R.id.menu_bar_ek7);
             vector_ek102 = findViewById(R.id.vector_ek102);

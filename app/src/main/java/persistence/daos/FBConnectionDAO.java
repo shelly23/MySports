@@ -1,7 +1,6 @@
 package persistence.daos;
 
 import static persistence.daos.DBUtils.TABLE_CONNECTIONS;
-import static persistence.daos.DBUtils.TABLE_DAYS;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;

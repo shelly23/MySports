@@ -13,29 +13,31 @@ public class CountUpTimer {
 
     public static final String TAG = "CountUpTimer";
     private static final int MSG = 1;
-
+    // Tick listener
+    int interval;
+    TickListener tickListener;
+    Handler tickHandler;
     // The timestamp when this timer is initially started, in milliseconds
     private long startTimestamp;
-
     // The total time that the timer is paused. For example clock starts at 0,
     // pauses between 0 and 10, then then 15 and 20. So delay time is 15
     // at timestamp 40, the passed time is current - start - delay = 40 - 0 - 15 = 25
     // See the getTime() method
     private long delayTime;
-
     private long lastPauseTimestamp;
-
     // Whether it is running or not
     private boolean isRunning;
-
     // An array to store lap timestamps
     private ArrayList<Integer> lapTimestamps;
-
-    // Tick listener
-    int interval;
-    TickListener tickListener;
-    Handler tickHandler;
-    Runnable tickSelector = new Runnable() {
+    /**
+     * Create a new counting up timer. Will start immediately
+     */
+    public CountUpTimer(boolean startWhenCreated) {
+        delayTime = 0;
+        isRunning = startWhenCreated;
+        lapTimestamps = new ArrayList<>();
+        reset();
+    }    Runnable tickSelector = new Runnable() {
         @Override
         public void run() {
             if (tickListener != null && isRunning) {
@@ -45,22 +47,26 @@ public class CountUpTimer {
         }
     };
 
-
     /**
-     * Create a new counting up timer. Will start immediately
+     * Helper to parse the milliseconds to human-readable time
+     *
+     * @return the time in format h:mm:ss.SSS, for example 0:28:14.019
      */
-    public CountUpTimer(boolean startWhenCreated){
-        delayTime = 0;
-        isRunning = startWhenCreated;
-        lapTimestamps = new ArrayList<>();
-        reset();
-    }
+    public static String getHumanFriendlyTime(int millis) {
+        int currentTimeSeconds = millis / 1000;
 
+        int hours = currentTimeSeconds / 3600;
+        int minutes = (currentTimeSeconds % 3600) / 60;
+        int seconds = currentTimeSeconds % 60;
+        int milliseconds = millis % 1000;
+
+        return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
+    }
 
     /**
      * Reset the timer, also clears all laps information. Running status will not affected
      */
-    public void reset(){
+    public void reset() {
         startTimestamp = SystemClock.elapsedRealtime();
         delayTime = 0;
         lastPauseTimestamp = startTimestamp;
@@ -71,8 +77,8 @@ public class CountUpTimer {
     /**
      * Pause the timer
      */
-    public void pause(){
-        if (isRunning){
+    public void pause() {
+        if (isRunning) {
             lastPauseTimestamp = SystemClock.elapsedRealtime();
             isRunning = false;
             stopTicking();
@@ -83,8 +89,8 @@ public class CountUpTimer {
     /**
      * Resume the timer
      */
-    public void resume(){
-        if (!isRunning){
+    public void resume() {
+        if (!isRunning) {
             long currentTime = SystemClock.elapsedRealtime();
             delayTime += currentTime - lastPauseTimestamp;
             isRunning = true;
@@ -96,21 +102,22 @@ public class CountUpTimer {
     /**
      * Create a new lap
      */
-    public void lap(){
+    public void lap() {
         lapTimestamps.add(getTime());
     }
 
 
-    public boolean isRunning(){
+    public boolean isRunning() {
         return isRunning;
     }
 
 
     /**
      * Toggle the running state of this timer
+     *
      * @return is the timer running after toggling?
      */
-    public boolean toggleRunning(){
+    public boolean toggleRunning() {
         if (isRunning) pause();
         else resume();
 
@@ -120,9 +127,10 @@ public class CountUpTimer {
 
     /**
      * Get the current time of this timer
+     *
      * @return current time of this timer in milliseconds
      */
-    public int getTime(){
+    public int getTime() {
         if (isRunning) return (int) (SystemClock.elapsedRealtime() - startTimestamp - delayTime);
         else return (int) (lastPauseTimestamp - startTimestamp - delayTime);
     }
@@ -130,10 +138,11 @@ public class CountUpTimer {
 
     /**
      * Get the duration of a specified lap
+     *
      * @param position lap number, starts at 0
      * @return the duration of the lap
      */
-    public int getLapDuration(int position){
+    public int getLapDuration(int position) {
         if (position == 0) return lapTimestamps.get(0);
         else return lapTimestamps.get(position) - lapTimestamps.get(position - 1);
     }
@@ -141,10 +150,11 @@ public class CountUpTimer {
 
     /**
      * Get the begin timestamp of a specified lap, when the lap was started
+     *
      * @param position lap number, starts at 0
      * @return the begin timestamp of the lap
      */
-    public int getLapTimestamp(int position){
+    public int getLapTimestamp(int position) {
         return lapTimestamps.get(position);
     }
 
@@ -152,52 +162,34 @@ public class CountUpTimer {
     /**
      * @return The number of laps
      */
-    public int getLapCount(){
+    public int getLapCount() {
         return lapTimestamps.size();
     }
 
 
     /**
      * Parse the current time of this timer to human-readable time
+     *
      * @return human-readable time in format h:mm:ss.SSS
      */
-    public String getHumanFriendlyTime(){
+    public String getHumanFriendlyTime() {
         return getHumanFriendlyTime(getTime());
     }
 
-
-    /**
-     * Helper to parse the milliseconds to human-readable time
-     * @return the time in format h:mm:ss.SSS, for example 0:28:14.019
-     */
-    public static String getHumanFriendlyTime(int millis){
-        int currentTimeSeconds = millis / 1000;
-
-        int hours = currentTimeSeconds / 3600;
-        int minutes = (currentTimeSeconds % 3600) / 60;
-        int seconds = currentTimeSeconds % 60;
-        int milliseconds = millis % 1000;
-
-        return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
-    }
-
-
-    public CountUpTimer setTickListener(int interval, final TickListener tickListener){
+    public CountUpTimer setTickListener(int interval, final TickListener tickListener) {
         this.interval = interval;
         this.tickListener = tickListener;
 
-        if (tickListener == null){
+        if (tickListener == null) {
             stopTicking();
-        }
-        else {
+        } else {
             startTicking();
         }
 
         return this;
     }
 
-
-    void startTicking(){
+    void startTicking() {
         if (tickHandler == null) tickHandler = new Handler();
         tickHandler.removeCallbacksAndMessages(null);
 
@@ -207,10 +199,9 @@ public class CountUpTimer {
         tickHandler.postDelayed(tickSelector, 0);
     }
 
-    void stopTicking(){
+    void stopTicking() {
         if (tickHandler != null) tickHandler.removeCallbacksAndMessages(null);
     }
-
 
     @Override
     protected void finalize() throws Throwable {
@@ -219,9 +210,11 @@ public class CountUpTimer {
     }
 
 
-
     public interface TickListener {
         void onTick(int milliseconds);
     }
+
+
+
 
 }

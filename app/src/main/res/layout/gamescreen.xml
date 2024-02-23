@@ -35,7 +35,6 @@
                 android:layout_marginTop="0dp">
 
                 <View
-                    android:id="@+id/_bg__gamescreen_ek2"
                     android:layout_width="376dp"
                     android:layout_height="667dp"
                     android:layout_marginStart="0dp"

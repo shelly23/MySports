@@ -45,7 +45,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/_don_t_have_an_account_"
+            android:id="@+id/don_t_have_an_account_"
             android:layout_width="260dp"
             android:layout_height="30dp"
             android:layout_below="@id/log_in"
@@ -59,14 +59,14 @@
             style="?android:attr/progressBarStyleInverse"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_below="@id/_don_t_have_an_account_"
+            android:layout_below="@id/don_t_have_an_account_"
             android:layout_centerHorizontal="true" />
 
         <TextView
             android:id="@+id/error_field"
             android:layout_width="260dp"
             android:layout_height="40dp"
-            android:layout_below="@id/_don_t_have_an_account_"
+            android:layout_below="@id/don_t_have_an_account_"
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal|center_vertical"
             android:textColor="@color/rectangle_50_color" />

@@ -12,7 +12,7 @@ public class Settings implements Serializable {
 
     private long step_goal;
 
-    private long activity_duration;
+    private String activity_duration;
 
     private long training_count;
 
@@ -24,7 +24,7 @@ public class Settings implements Serializable {
     public Settings() {
     }
 
-    public Settings(long id, long user, long step_goal, long activity_duration, long training_count, boolean chat_activated, boolean game_activated, String messages_from, String messages_to) {
+    public Settings(long id, long user, long step_goal, String activity_duration, long training_count, boolean chat_activated, boolean game_activated, String messages_from, String messages_to) {
         this.id = id;
         this.user = user;
         this.step_goal = step_goal;
@@ -74,11 +74,11 @@ public class Settings implements Serializable {
         this.step_goal = step_goal;
     }
 
-    public long getActivity_duration() {
+    public String getActivity_duration() {
         return activity_duration;
     }
 
-    public void setActivity_duration(long activity_duration) {
+    public void setActivity_duration(String activity_duration) {
         this.activity_duration = activity_duration;
     }
 

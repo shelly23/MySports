@@ -1,7 +1,7 @@
 package persistence.dtos;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 public class Activity implements Serializable {
 
@@ -11,6 +11,7 @@ public class Activity implements Serializable {
     private Date date;
     private long content;
     private long duration;
+    private long pausen;
     private Feedback feedback_total;
     private Feedback feedback_breaks;
     private long points_rec;
@@ -106,5 +107,13 @@ public class Activity implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public long getPausen() {
+        return pausen;
+    }
+
+    public void setPausen(long pausen) {
+        this.pausen = pausen;
     }
 }

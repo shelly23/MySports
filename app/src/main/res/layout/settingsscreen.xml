@@ -40,8 +40,8 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="40dp"
             android:layout_toStartOf="@id/vector_ek125"
-            android:contentDescription="@string/settings"
             android:alpha="0.5"
+            android:contentDescription="@string/settings"
             android:src="@drawable/vector_ek123" />
 
         <ImageView
@@ -124,14 +124,14 @@
                 android:id="@+id/step_goal"
                 android:layout_width="75dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:inputType="time"
-                android:textColor="@color/email_address_color"
-                android:text="0000"
-                android:textSize="14sp"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/switch1"
-                android:visibility="invisible"/>
+                android:fontFamily="@font/montserrat_regular"
+                android:inputType="time"
+                android:text="0000"
+                android:textColor="@color/email_address_color"
+                android:textSize="14sp"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/schrittziel"
@@ -158,21 +158,21 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="57dp"
+                android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/aktivitaetsdauer" />
 
             <EditText
                 android:id="@+id/activity_goal"
                 android:layout_width="75dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:inputType="time"
-                android:textColor="@color/email_address_color"
-                android:text="00:00"
-                android:textSize="14sp"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/switch2"
-                android:visibility="invisible"/>
+                android:fontFamily="@font/montserrat_regular"
+                android:inputType="time"
+                android:text="00:00"
+                android:textColor="@color/email_address_color"
+                android:textSize="14sp"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/aktivitaetsdauer"
@@ -208,14 +208,14 @@
                 android:id="@+id/training_goal"
                 android:layout_width="75dp"
                 android:layout_height="40dp"
-                android:fontFamily="@font/montserrat_regular"
-                android:inputType="time"
-                android:textColor="@color/email_address_color"
-                android:text="0000"
-                android:textSize="14sp"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/switch3"
-                android:visibility="invisible"/>
+                android:fontFamily="@font/montserrat_regular"
+                android:inputType="time"
+                android:text="0000"
+                android:textColor="@color/email_address_color"
+                android:textSize="14sp"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/anzahl_trainings"
@@ -322,22 +322,22 @@
                 android:text="" />
 
             <Button
+                android:id="@+id/accept"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:id="@+id/accept"
-                android:background="@drawable/accept"
-                android:layout_toEndOf="@id/herrlicher"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"/>
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/herrlicher"
+                android:background="@drawable/accept" />
 
             <Button
+                android:id="@+id/reject"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
-                android:id="@+id/reject"
-                android:background="@drawable/reject"
-                android:layout_toEndOf="@id/accept"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"/>
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/accept"
+                android:background="@drawable/reject" />
         </RelativeLayout>
 
         <View
@@ -359,7 +359,7 @@
             android:text="@string/hier_sehen_sie_verbindungsanfragen_von_therapuetinnen_sobald_diese_gestellt_werden"
             android:textColor="@color/black"
             android:textSize="12sp"
-            android:visibility="visible"/>
+            android:visibility="visible" />
 
     </RelativeLayout>
 
@@ -450,11 +450,11 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/fourth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/third"
-        android:layout_marginTop="10dp"
-        android:id="@+id/fourth">
+        android:layout_marginTop="10dp">
 
         <TextView
             android:id="@+id/benachrichtigungen"
@@ -478,25 +478,25 @@
                 android:id="@+id/timeFrom"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/erinnerung"
                 android:fontFamily="@font/montserrat_regular"
                 android:inputType="time"
-                android:textColor="@color/email_address_color"
                 android:text="00:00"
-                android:textSize="14sp"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/erinnerung"/>
+                android:textColor="@color/email_address_color"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/timeTo"
                 android:layout_width="50dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:layout_toEndOf="@id/bis"
                 android:fontFamily="@font/montserrat_regular"
                 android:inputType="time"
-                android:textColor="@color/email_address_color"
-                android:textSize="14sp"
                 android:text="00:00"
-                android:layout_marginStart="5dp"
-                android:layout_toEndOf="@id/bis"/>
+                android:textColor="@color/email_address_color"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/erinnerung"
@@ -517,11 +517,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_toEndOf="@id/timeFrom"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="@string/bis"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_toEndOf="@id/timeFrom"/>
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
@@ -539,13 +539,13 @@
         android:id="@+id/save"
         android:layout_width="260dp"
         android:layout_height="40dp"
+        android:layout_below="@id/fourth"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="@drawable/rectangle_2_shape"
         android:fontFamily="@font/montserrat_regular"
         android:text="@string/speichern"
         android:textColor="@color/log_in_color"
-        android:textStyle="bold"
-        android:layout_below="@id/fourth"
-        android:layout_centerHorizontal="true"/>
+        android:textStyle="bold" />
 
 </RelativeLayout>

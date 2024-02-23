@@ -6,9 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 import persistence.daos.TherapistDAO;
-import persistence.daos.UserDAO;
 import persistence.dtos.Therapist;
-import persistence.validators.TextValidator;
 
 public class TherapistServiceImpl implements TherapistService {
 

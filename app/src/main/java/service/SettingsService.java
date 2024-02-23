@@ -1,8 +1,5 @@
 package service;
 
-import java.util.List;
-
-import persistence.dtos.Connection;
 import persistence.dtos.Settings;
 import persistence.exceptions.PersistenceException;
 
@@ -14,5 +11,6 @@ public interface SettingsService {
 
     void delete(long id) throws InterruptedException;
 
+    Settings updateSettings(Settings settings) throws InterruptedException, PersistenceException;
 
 }

@@ -1,5 +1,9 @@
 package service;
 
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +14,9 @@ import java.util.Date;
 import java.util.List;
 
 import persistence.daos.DayDAO;
+import persistence.daos.MonthDAO;
 import persistence.dtos.Day;
+import persistence.dtos.Type;
 import persistence.exceptions.InvalidValueException;
 import persistence.exceptions.MandatoryValueException;
 import persistence.exceptions.PersistenceException;
@@ -21,20 +27,28 @@ public class DayServiceImpl implements DayService {
     private static final Logger LOG = LoggerFactory.getLogger(DayServiceImpl.class);
 
     private final DayDAO FBpersistenceDay;
+
+    private final MonthDAO FBpersistenceMonth;
+
     private final TextValidator textValidator;
 
-    public DayServiceImpl(DayDAO FBpersistenceDay, TextValidator textValidator) {
+    public DayServiceImpl(DayDAO FBpersistenceDay, MonthDAO FBpersistenceMonth, TextValidator textValidator) {
         this.FBpersistenceDay = FBpersistenceDay;
+        this.FBpersistenceMonth = FBpersistenceMonth;
         this.textValidator = textValidator;
     }
 
     @Override
     public Day saveDay(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, NoSuchAlgorithmException, InterruptedException {
         Day result = null;
+        String month = getMonth(day);
         if (checkDay(day)) {
             if (!this.FBpersistenceDay.exists(day.getUser_id(), day.getCurrent_date())) {
                 result = this.FBpersistenceDay.create(day);
                 LOG.debug("Saved day {} for user {}", day.getCurrent_date(), day.getUser_id());
+                if (!this.FBpersistenceMonth.existsMonth(day.getUser_id(), month)) {
+                    this.FBpersistenceMonth.createMonth(day.getUser_id(), month);
+                }
             } else {
                 LOG.debug("Day {} for user {} already exists.", day.getCurrent_date(), day.getUser_id());
             }
@@ -82,14 +96,22 @@ public class DayServiceImpl implements DayService {
     }
 
     @Override
-    public boolean update(Day day) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, InterruptedException {
+    public boolean update(Day day, boolean setActive, Type type) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, InterruptedException {
         if (checkDay(day)) {
             Day dayToBeUpdated = this.FBpersistenceDay.getDay(day.getUser_id(), day.getCurrent_date());
             dayToBeUpdated.setSteps(day.getSteps());
             dayToBeUpdated.setSteps_start(day.getSteps_start());
             dayToBeUpdated.setActive(day.isActive());
             dayToBeUpdated.setAttack(day.isAttack());
+            dayToBeUpdated.setActivity_count(day.getActivity_count());
+            dayToBeUpdated.setActivity_duration(day.getActivity_duration());
+            dayToBeUpdated.setStep_count(day.getStep_count());
             this.FBpersistenceDay.update(dayToBeUpdated);
+
+            if (setActive) {
+                String month = getMonth(day);
+                this.FBpersistenceMonth.updateMonth(day.getUser_id(), month, type);
+            }
             return true;
         } else {
             return false;
@@ -116,7 +138,7 @@ public class DayServiceImpl implements DayService {
                 Day dayToBeMarked = this.FBpersistenceDay.getDay(user_id, date);
 
                 if (dayToBeMarked == null) {
-                    dayToBeMarked = this.FBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id));
+                    dayToBeMarked = this.FBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), 0, 0, 0, Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id));
                 } else {
 
                     if (schub != null) {
@@ -141,5 +163,26 @@ public class DayServiceImpl implements DayService {
 
     }
 
+    public List<Entry> getActiveDays(int year, long user) throws InterruptedException {
+        return FBpersistenceDay.getActiveDays(year, user);
+    }
+
+    public List<BarEntry> getTrainings(int year, long user) throws InterruptedException {
+        return FBpersistenceDay.getTrainings(year, user);
+    }
+
+    private String getMonth(Day day) {
+        String month = "";
+        long mo = day.getCurrent_date().getMonth() + 1;
+        long ye = day.getCurrent_date().getYear();
+        String yearStr = ye + "";
+        yearStr = yearStr.substring(1);
+        String moStr = mo + "";
+        if (mo < 10) {
+            moStr = "0" + moStr;
+        }
+        month = moStr + yearStr;
+        return month;
+    }
 
 }

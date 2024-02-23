@@ -75,7 +75,8 @@
                 android:background="@color/whiteOP"
                 android:padding="10dp"
                 android:textColor="@color/rectangle_2_color"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:fontFamily="@font/montserrat_bold"/>
 
             <EditText
                 android:id="@+id/dateFrom"

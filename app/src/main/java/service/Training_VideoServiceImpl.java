@@ -7,10 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import persistence.daos.TherapistDAO;
 import persistence.daos.Training_VideoDAO;
 import persistence.dtos.Connection;
-import persistence.dtos.Therapist;
 import persistence.dtos.Training_Video;
 import persistence.dtos.Type;
 
@@ -33,8 +31,13 @@ public class Training_VideoServiceImpl implements Training_VideoService {
 
     @Override
     public Training_Video getTrainingVideo(Connection connection, Type type) throws InterruptedException {
-        LOG.debug("Read trainingsvideo for " + connection.getId()+type);
+        LOG.debug("Read trainingsvideo for " + connection.getId() + type);
         return FBpersistenceTraining_Video.getTraining_Video(connection, type);
+    }
+
+    public Training_Video getPersonalized_Video(Connection connection, long level) throws InterruptedException {
+        LOG.debug("Read personalized trainingsvideo for " + connection.getId() + level);
+        return FBpersistenceTraining_Video.getPersonalized_Video(connection, level);
     }
 
     @Override

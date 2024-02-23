@@ -8,7 +8,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import persistence.FirebaseHandler;
+import persistence.dtos.Activity;
 import persistence.dtos.Day;
+import persistence.dtos.Month;
+import persistence.dtos.Type;
 import persistence.dtos.User;
 
 public class DBUtils {
@@ -17,6 +20,8 @@ public class DBUtils {
     public static final String TABLE_THERAPISTS = "therapists";
     public static final String TABLE_TRAINING_VIDEOS = "contents";
     public static final String TABLE_DAYS = "days";
+    public static final String TABLE_MONTHS = "months";
+    public static final String TABLE_ACTIVITIES = "activities";
 
     public static final String TABLE_CONNECTIONS = "connections";
     public static final String TABLE_SETTINGS = "settings";
@@ -46,6 +51,10 @@ public class DBUtils {
 
         Task<DataSnapshot> task = database.child(table).get();
 
+        if (table.contains(TABLE_DAYS)) {
+            table = TABLE_DAYS;
+        }
+
         while (!task.isComplete()) {
             Thread.sleep(10);
         }
@@ -63,6 +72,11 @@ public class DBUtils {
                         assert tempDay != null;
                         id = Math.max(tempDay.getId(), id);
                         break;
+                    case TABLE_ACTIVITIES:
+                        Activity tempActivity = dataSnapshot.getValue(Activity.class);
+                        assert tempActivity != null;
+                        id = Math.max(tempActivity.getId(), id);
+                        break;
                     default:
                         break;
                 }
@@ -77,6 +91,31 @@ public class DBUtils {
         long val1 = Long.parseLong(values[0]);
         long val2 = Long.parseLong(values[1]);
         return Long.min(val1, val2) <= duration && Long.max(val1, val2) >= duration;
+    }
+
+    public static Type whichTypeToChoose(long user, String month, String recommendendedRatio) {
+        recommendendedRatio = recommendendedRatio.replace(" ", "");
+        String[] values = recommendendedRatio.split(":");
+        long ratStrength = Long.parseLong(values[0]);
+        long ratEndurance = Long.parseLong(values[1]);
+        MonthDAO monthDAO = new FBMonthDAO();
+        Month monthObj;
+        try {
+            monthObj = monthDAO.getMonth(user, month);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        long ratStr = (long) (((float) monthObj.getStrength() / (float) monthObj.getActive()) * 100);
+        long ratEnd = (long) (((float) monthObj.getEndurance() / (float) monthObj.getActive()) * 100);
+
+        long diffStr = ratStrength - ratStr;
+        long diffEnd = ratEndurance - ratEnd;
+
+        return diffStr > 0 ? Type.strength : diffEnd > 0 ? Type.endurance : null;
+    }
+
+    static String getTableM(long user) {
+        return user + "/" + TABLE_MONTHS;
     }
 
 }

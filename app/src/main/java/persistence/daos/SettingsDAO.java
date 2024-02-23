@@ -2,9 +2,7 @@ package persistence.daos;
 
 import java.util.List;
 
-import persistence.dtos.Connection;
 import persistence.dtos.Settings;
-import persistence.dtos.User;
 import persistence.exceptions.PersistenceException;
 
 public interface SettingsDAO {
@@ -15,7 +13,7 @@ public interface SettingsDAO {
 
     Settings getSettings(long id) throws PersistenceException, InterruptedException;
 
-    void update(Settings settings) throws PersistenceException;
+    Settings update(Settings settings) throws PersistenceException, InterruptedException;
 
     Settings getForUser(long userId) throws InterruptedException;
 

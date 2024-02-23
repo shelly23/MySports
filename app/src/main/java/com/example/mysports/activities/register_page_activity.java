@@ -157,7 +157,7 @@
                         // save
 
                         try {
-                            long id = userService.saveUser(new User(vorname_text, nachname_text, email_text, passwort_text, edss_text.isEmpty()?-1:Double.parseDouble(edss_text), birthdate.getText().toString().isEmpty()?null:new Date(birthdateCal.getTime().getTime())));
+                            long id = userService.saveUser(new User(vorname_text, nachname_text, email_text, passwort_text, edss_text.isEmpty() ? -1 : Double.parseDouble(edss_text), birthdate.getText().toString().isEmpty() ? null : new Date(birthdateCal.getTime().getTime())));
                             settingsService.createSettings(id);
                         } catch (PersistenceException | InvalidValueException |
                                  MandatoryValueException | IOException |

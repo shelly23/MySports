@@ -106,7 +106,6 @@
                 android:layout_marginTop="0dp">
 
                 <View
-                    android:id="@+id/_bg__clear_ek2"
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:layout_marginStart="0dp"

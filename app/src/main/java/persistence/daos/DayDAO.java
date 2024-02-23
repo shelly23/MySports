@@ -1,5 +1,8 @@
 package persistence.daos;
 
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +13,7 @@ public interface DayDAO {
 
     Day create(Day day) throws PersistenceException, InterruptedException;
 
-    List<Day> read() throws PersistenceException, InterruptedException;
+    List<Day> read(long user) throws PersistenceException, InterruptedException;
 
     void delete(List<Day> days) throws PersistenceException;
 
@@ -18,6 +21,10 @@ public interface DayDAO {
 
     Day getDay(long user_id, Date date) throws PersistenceException, InterruptedException;
 
-    boolean exists(long user_id, Date date) throws PersistenceException;
+    boolean exists(long user_id, Date date) throws PersistenceException, InterruptedException;
+
+    List<Entry> getActiveDays(int year, long user) throws InterruptedException;
+
+    List<BarEntry> getTrainings(int year, long user) throws InterruptedException;
 
 }

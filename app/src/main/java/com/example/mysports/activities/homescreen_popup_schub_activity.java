@@ -122,7 +122,6 @@
             setContentView(R.layout.homescreen_popup_schub);
 
 
-            _bg__homescreen_popup_schub_ek2 = findViewById(R.id._bg__homescreen_popup_schub_ek2);
             background_image_ek8 = findViewById(R.id.background_image_ek8);
             path_ek21 = findViewById(R.id.path_ek21);
             path_ek22 = findViewById(R.id.path_ek22);
@@ -135,10 +134,7 @@
             figma_ek7 = findViewById(R.id.figma_ek7);
             shape_ek23 = findViewById(R.id.shape_ek23);
             charge_ek7 = findViewById(R.id.charge_ek7);
-            ___ek7 = findViewById(R.id.___ek7);
-            _42__ek7 = findViewById(R.id._42__ek7);
             vector_3_ek7 = findViewById(R.id.vector_3_ek7);
-            _9_42_am_ek7 = findViewById(R.id._9_42_am_ek7);
             so_06_13_20_27_ek1 = findViewById(R.id.so_06_13_20_27_ek1);
             sa_05_12_19_26_ek1 = findViewById(R.id.sa_05_12_19_26_ek1);
             fr_04_11_18_25_ek1 = findViewById(R.id.fr_04_11_18_25_ek1);
@@ -181,14 +177,11 @@
             rectangle_26_ek5 = findViewById(R.id.rectangle_26_ek5);
             line_8_ek5 = findViewById(R.id.line_8_ek5);
             line_9_ek5 = findViewById(R.id.line_9_ek5);
-            _11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek5 = findViewById(R.id._11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek5);
             ellipse_31_ek1 = findViewById(R.id.ellipse_31_ek1);
-            _47_8__ek1 = findViewById(R.id._47_8__ek1);
             ellipse_32_ek1 = findViewById(R.id.ellipse_32_ek1);
             rectangle_26_ek6 = findViewById(R.id.rectangle_26_ek6);
             line_8_ek6 = findViewById(R.id.line_8_ek6);
             line_9_ek6 = findViewById(R.id.line_9_ek6);
-            _11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek6 = findViewById(R.id._11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek6);
             menu_bar_ek13 = findViewById(R.id.menu_bar_ek13);
             vector_ek136 = findViewById(R.id.vector_ek136);
             vector_ek137 = findViewById(R.id.vector_ek137);

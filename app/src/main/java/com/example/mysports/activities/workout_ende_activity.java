@@ -21,124 +21,89 @@
     import android.content.Intent;
     import android.os.Bundle;
     import android.view.View;
+    import android.widget.Button;
+    import android.widget.EditText;
     import android.widget.ImageView;
+    import android.widget.ProgressBar;
     import android.widget.TextView;
 
     import com.example.mysports.R;
 
+    import java.io.IOException;
+    import java.util.Date;
+
+    import persistence.daos.FBActivityDAO;
+    import persistence.daos.FBDayDAO;
+    import persistence.daos.FBMonthDAO;
+    import persistence.daos.FBSettingsDAO;
+    import persistence.dtos.Connection;
+    import persistence.dtos.Day;
+    import persistence.dtos.Feedback;
+    import persistence.dtos.Settings;
+    import persistence.dtos.Type;
+    import persistence.dtos.User;
+    import persistence.exceptions.InvalidValueException;
+    import persistence.exceptions.MandatoryValueException;
+    import persistence.exceptions.PersistenceException;
+    import persistence.validators.TextValidator;
+    import service.ActivityService;
+    import service.ActivityServiceImpl;
+    import service.DayService;
+    import service.DayServiceImpl;
+    import service.SettingsService;
+    import service.SettingsServiceImpl;
+
     public class workout_ende_activity extends Activity {
 
+        private User user;
 
-        private View __bg__workout_ende_ek2;
-        private ImageView background_image_ek4;
-        private ImageView path_ek12;
-        private ImageView path_ek13;
-        private ImageView path_ek14;
-        private ImageView oval_1_ek4;
-        private ImageView oval_1_copy_ek4;
-        private ImageView oval_1_copy_2_ek4;
-        private ImageView shape_ek12;
-        private ImageView shape_ek13;
-        private TextView figma_ek4;
-        private ImageView shape_ek14;
-        private ImageView charge_ek4;
-        private ImageView ___ek4;
-        private TextView _42__ek4;
-        private ImageView vector_3_ek4;
-        private TextView _9_42_am_ek4;
-        private View menu_bar_ek5;
-        private ImageView vector_ek27;
-        private ImageView vector_ek28;
-        private ImageView vector_ek29;
-        private ImageView vector_ek30;
-        private ImageView vector_ek31;
-        private ImageView vector_ek32;
-        private ImageView vector_ek33;
-        private ImageView vector_ek34;
-        private ImageView vector_ek35;
-        private ImageView vector_ek36;
-        private TextView titel;
-        private TextView trainingszeit_;
-        private TextView _00_12_23;
-        private ImageView vector_ek37;
-        private ImageView vector_ek38;
-        private ImageView vector_ek39;
-        private ImageView vector_ek40;
-        private ImageView vector_ek41;
-        private ImageView vector_ek42;
-        private ImageView vector_ek43;
-        private ImageView vector_ek44;
-        private ImageView vector_ek45;
-        private TextView skips_;
-        private TextView _2_von_7;
-        private ImageView vector_ek46;
-        private ImageView vector_ek47;
-        private ImageView vector_ek48;
-        private ImageView vector_ek49;
-        private ImageView vector_ek50;
-        private ImageView vector_ek51;
-        private ImageView vector_ek52;
-        private TextView erhaltene_m_nzen_;
-        private TextView erhaltene_belohnungen_;
-        private TextView _120;
-        private View rectangle_47;
-        private ImageView rectangle_46;
-        private View rectangle_47_ek1;
-        private ImageView rectangle_46_ek1;
-        private TextView _2x_karten_teil;
-        private TextView pers_nlicher_eindruck_des_workouts_;
-        private TextView dauer_;
-        private ImageView vector_ek53;
-        private ImageView vector_ek54;
-        private ImageView vector_ek55;
-        private ImageView vector_ek56;
-        private ImageView vector_ek57;
-        private ImageView vector_ek58;
-        private ImageView vector_ek59;
-        private ImageView vector_ek60;
-        private ImageView vector_ek61;
-        private ImageView vector_ek62;
-        private ImageView vector_ek63;
-        private ImageView vector_ek64;
-        private ImageView vector_ek65;
-        private ImageView vector_ek66;
-        private ImageView vector_ek67;
-        private ImageView vector_ek68;
-        private TextView intensit_t_;
-        private ImageView vector_ek69;
-        private ImageView vector_ek70;
-        private ImageView vector_ek71;
-        private ImageView vector_ek72;
-        private ImageView vector_ek73;
-        private ImageView vector_ek74;
-        private ImageView vector_ek75;
-        private ImageView vector_ek76;
-        private ImageView vector_ek77;
-        private ImageView vector_ek78;
-        private ImageView vector_ek79;
-        private ImageView vector_ek80;
-        private ImageView vector_ek81;
-        private ImageView vector_ek82;
-        private ImageView vector_ek83;
-        private ImageView vector_ek84;
-        private TextView _bungen_;
-        private ImageView vector_ek85;
-        private ImageView vector_ek86;
-        private ImageView vector_ek87;
-        private ImageView vector_ek88;
-        private ImageView vector_ek89;
-        private ImageView vector_ek90;
-        private ImageView vector_ek91;
-        private ImageView vector_ek92;
-        private ImageView vector_ek93;
-        private ImageView vector_ek94;
-        private ImageView vector_ek95;
-        private ImageView vector_ek96;
-        private ImageView vector_ek97;
-        private ImageView vector_ek98;
-        private ImageView vector_ek99;
-        private ImageView vector_ek100;
-        private ImageView vector_ek101;
+        private Type type;
+
+        private Day day;
+
+        private persistence.dtos.Activity activity;
+
+        private TextView title;
+
+        private TextView points_view;
+
+        private ImageView points_edit;
+
+        private EditText edit_points;
+
+        private Connection connection;
+
+        private TextView dauer;
+
+        private ProgressBar spinner;
+
+        private ImageView duration_good;
+        private ImageView duration_medium;
+        private ImageView duration_bad;
+
+        private ImageView total_good;
+        private ImageView total_medium;
+        private ImageView total_bad;
+
+        private ImageView breaks_good;
+        private ImageView breaks_medium;
+        private ImageView breaks_bad;
+
+        private Settings settings;
+
+        private Button save;
+
+        private Feedback totalFeedback = null;
+        private Feedback breaksFeedback = null;
+
+        private Feedback durationFeedback = null;
+
+        private int points;
+
+        private ActivityService activityService;
+        private DayService dayService;
+
+        private SettingsService settingsService;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -146,133 +111,265 @@
             super.onCreate(savedInstanceState);
             setContentView(R.layout.workout_ende);
 
+            user = (User) getIntent().getSerializableExtra("USER");
+            type = (Type) getIntent().getSerializableExtra("TYPE");
+            activity = (persistence.dtos.Activity) getIntent().getSerializableExtra("ACTIVITY");
+            connection = (persistence.dtos.Connection) getIntent().getSerializableExtra("CONNECTION");
 
-            __bg__workout_ende_ek2 = findViewById(R.id.__bg__workout_ende_ek2);
-            background_image_ek4 = findViewById(R.id.background_image_ek4);
-            path_ek12 = findViewById(R.id.path_ek12);
-            path_ek13 = findViewById(R.id.path_ek13);
-            path_ek14 = findViewById(R.id.path_ek14);
-            oval_1_ek4 = findViewById(R.id.oval_1_ek4);
-            oval_1_copy_ek4 = findViewById(R.id.oval_1_copy_ek4);
-            oval_1_copy_2_ek4 = findViewById(R.id.oval_1_copy_2_ek4);
-            shape_ek12 = findViewById(R.id.shape_ek12);
-            shape_ek13 = findViewById(R.id.shape_ek13);
-            figma_ek4 = findViewById(R.id.figma_ek4);
-            shape_ek14 = findViewById(R.id.shape_ek14);
-            charge_ek4 = findViewById(R.id.charge_ek4);
-            ___ek4 = findViewById(R.id.___ek4);
-            _42__ek4 = findViewById(R.id._42__ek4);
-            vector_3_ek4 = findViewById(R.id.vector_3_ek4);
-            _9_42_am_ek4 = findViewById(R.id._9_42_am_ek4);
-            menu_bar_ek5 = findViewById(R.id.menu_bar_ek5);
-            vector_ek27 = findViewById(R.id.vector_ek27);
-            vector_ek28 = findViewById(R.id.vector_ek28);
-            vector_ek29 = findViewById(R.id.vector_ek29);
-            vector_ek30 = findViewById(R.id.vector_ek30);
-            vector_ek31 = findViewById(R.id.vector_ek31);
-            vector_ek32 = findViewById(R.id.vector_ek32);
-            vector_ek33 = findViewById(R.id.vector_ek33);
-            vector_ek34 = findViewById(R.id.vector_ek34);
-            vector_ek35 = findViewById(R.id.vector_ek35);
-            vector_ek36 = findViewById(R.id.vector_ek36);
-            titel = findViewById(R.id.titel);
-            trainingszeit_ = findViewById(R.id.trainingszeit_);
-            _00_12_23 = findViewById(R.id._00_12_23);
-            vector_ek37 = findViewById(R.id.vector_ek37);
-            vector_ek38 = findViewById(R.id.vector_ek38);
-            vector_ek39 = findViewById(R.id.vector_ek39);
-            vector_ek40 = findViewById(R.id.vector_ek40);
-            vector_ek41 = findViewById(R.id.vector_ek41);
-            vector_ek42 = findViewById(R.id.vector_ek42);
-            vector_ek43 = findViewById(R.id.vector_ek43);
-            vector_ek44 = findViewById(R.id.vector_ek44);
-            vector_ek45 = findViewById(R.id.vector_ek45);
-            skips_ = findViewById(R.id.skips_);
-            _2_von_7 = findViewById(R.id._2_von_7);
-            vector_ek46 = findViewById(R.id.vector_ek46);
-            vector_ek47 = findViewById(R.id.vector_ek47);
-            vector_ek48 = findViewById(R.id.vector_ek48);
-            vector_ek49 = findViewById(R.id.vector_ek49);
-            vector_ek50 = findViewById(R.id.vector_ek50);
-            vector_ek51 = findViewById(R.id.vector_ek51);
-            vector_ek52 = findViewById(R.id.vector_ek52);
-            erhaltene_m_nzen_ = findViewById(R.id.erhaltene_m_nzen_);
-            erhaltene_belohnungen_ = findViewById(R.id.erhaltene_belohnungen_);
-            _120 = findViewById(R.id._120);
-            rectangle_47 = findViewById(R.id.rectangle_47);
-            rectangle_46 = findViewById(R.id.rectangle_46);
-            rectangle_47_ek1 = findViewById(R.id.rectangle_47_ek1);
-            rectangle_46_ek1 = findViewById(R.id.rectangle_46_ek1);
-            _2x_karten_teil = findViewById(R.id._2x_karten_teil);
-            pers_nlicher_eindruck_des_workouts_ = findViewById(R.id.pers_nlicher_eindruck_des_workouts_);
-            dauer_ = findViewById(R.id.dauer_);
-            vector_ek53 = findViewById(R.id.vector_ek53);
-            vector_ek54 = findViewById(R.id.vector_ek54);
-            vector_ek55 = findViewById(R.id.vector_ek55);
-            vector_ek56 = findViewById(R.id.vector_ek56);
-            vector_ek57 = findViewById(R.id.vector_ek57);
-            vector_ek58 = findViewById(R.id.vector_ek58);
-            vector_ek59 = findViewById(R.id.vector_ek59);
-            vector_ek60 = findViewById(R.id.vector_ek60);
-            vector_ek61 = findViewById(R.id.vector_ek61);
-            vector_ek62 = findViewById(R.id.vector_ek62);
-            vector_ek63 = findViewById(R.id.vector_ek63);
-            vector_ek64 = findViewById(R.id.vector_ek64);
-            vector_ek65 = findViewById(R.id.vector_ek65);
-            vector_ek66 = findViewById(R.id.vector_ek66);
-            vector_ek67 = findViewById(R.id.vector_ek67);
-            vector_ek68 = findViewById(R.id.vector_ek68);
-            intensit_t_ = findViewById(R.id.intensit_t_);
-            vector_ek69 = findViewById(R.id.vector_ek69);
-            vector_ek70 = findViewById(R.id.vector_ek70);
-            vector_ek71 = findViewById(R.id.vector_ek71);
-            vector_ek72 = findViewById(R.id.vector_ek72);
-            vector_ek73 = findViewById(R.id.vector_ek73);
-            vector_ek74 = findViewById(R.id.vector_ek74);
-            vector_ek75 = findViewById(R.id.vector_ek75);
-            vector_ek76 = findViewById(R.id.vector_ek76);
-            vector_ek77 = findViewById(R.id.vector_ek77);
-            vector_ek78 = findViewById(R.id.vector_ek78);
-            vector_ek79 = findViewById(R.id.vector_ek79);
-            vector_ek80 = findViewById(R.id.vector_ek80);
-            vector_ek81 = findViewById(R.id.vector_ek81);
-            vector_ek82 = findViewById(R.id.vector_ek82);
-            vector_ek83 = findViewById(R.id.vector_ek83);
-            vector_ek84 = findViewById(R.id.vector_ek84);
-            _bungen_ = findViewById(R.id._bungen_);
-            vector_ek85 = findViewById(R.id.vector_ek85);
-            vector_ek86 = findViewById(R.id.vector_ek86);
-            vector_ek87 = findViewById(R.id.vector_ek87);
-            vector_ek88 = findViewById(R.id.vector_ek88);
-            vector_ek89 = findViewById(R.id.vector_ek89);
-            vector_ek90 = findViewById(R.id.vector_ek90);
-            vector_ek91 = findViewById(R.id.vector_ek91);
-            vector_ek92 = findViewById(R.id.vector_ek92);
-            vector_ek93 = findViewById(R.id.vector_ek93);
-            vector_ek94 = findViewById(R.id.vector_ek94);
-            vector_ek95 = findViewById(R.id.vector_ek95);
-            vector_ek96 = findViewById(R.id.vector_ek96);
-            vector_ek97 = findViewById(R.id.vector_ek97);
-            vector_ek98 = findViewById(R.id.vector_ek98);
-            vector_ek99 = findViewById(R.id.vector_ek99);
-            vector_ek100 = findViewById(R.id.vector_ek100);
-            vector_ek101 = findViewById(R.id.vector_ek101);
+            activityService = new ActivityServiceImpl(new FBActivityDAO());
+            dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
+            settingsService = new SettingsServiceImpl(new FBSettingsDAO());
 
+            title = findViewById(R.id.title);
+            dauer = findViewById(R.id.time);
+            duration_good = findViewById(R.id.good);
+            duration_medium = findViewById(R.id.neutral);
+            duration_bad = findViewById(R.id.bad);
 
-            __bg__workout_ende_ek2.setOnClickListener(new View.OnClickListener() {
+            total_good = findViewById(R.id.good_1);
+            total_medium = findViewById(R.id.neutral_1);
+            total_bad = findViewById(R.id.bad_1);
 
-                public void onClick(View v) {
+            breaks_good = findViewById(R.id.good_2);
+            breaks_medium = findViewById(R.id.neutral_2);
+            breaks_bad = findViewById(R.id.bad_2);
 
-                    Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
-                    startActivity(nextScreen);
+            points_view = findViewById(R.id.points);
+            edit_points = findViewById(R.id.edit_points);
+            save = findViewById(R.id.save);
 
+            spinner = findViewById(R.id.progressBar);
+            spinner.setVisibility(View.INVISIBLE);
 
+            title.setText(title.getText().toString().replace("Training", type.equals(Type.endurance) ? "Ausdauertraining" : "Krafttraining"));
+            long timeInMillis = activity.getDuration();
+            int secs = (int) (timeInMillis / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            dauer.setText("" + String.format("%02d", mins) + ":"
+                    + String.format("%02d", secs));
+            durationFeedback = getDurationFeedback();
+
+            if (durationFeedback.equals(Feedback.good)) {
+                duration_good.setVisibility(View.VISIBLE);
+            }
+            if (durationFeedback.equals(Feedback.medium)) {
+                duration_medium.setVisibility(View.VISIBLE);
+            }
+            if (durationFeedback.equals(Feedback.bad)) {
+                duration_bad.setVisibility(View.VISIBLE);
+            }
+
+            total_bad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    totalFeedback = Feedback.bad;
+                    total_bad.setAlpha(1.0F);
+                    total_good.setAlpha(0.25F);
+                    total_medium.setAlpha(0.25F);
+                    if (breaksFeedback != null) {
+                        updatePoints();
+                    }
+                }
+            });
+            total_medium.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    totalFeedback = Feedback.medium;
+                    total_medium.setAlpha(1.0F);
+                    total_good.setAlpha(0.25F);
+                    total_bad.setAlpha(0.25F);
+                    if (breaksFeedback != null) {
+                        updatePoints();
+                    }
+                }
+            });
+            total_good.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    totalFeedback = Feedback.good;
+                    total_good.setAlpha(1.0F);
+                    total_bad.setAlpha(0.25F);
+                    total_medium.setAlpha(0.25F);
+                    if (breaksFeedback != null) {
+                        updatePoints();
+                    }
                 }
             });
 
+            breaks_bad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    breaksFeedback = Feedback.bad;
+                    breaks_bad.setAlpha(1.0F);
+                    breaks_good.setAlpha(0.25F);
+                    breaks_medium.setAlpha(0.25F);
+                    if (totalFeedback != null) {
+                        updatePoints();
+                    }
+                }
+            });
+            breaks_medium.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    breaksFeedback = Feedback.medium;
+                    breaks_medium.setAlpha(1.0F);
+                    breaks_good.setAlpha(0.25F);
+                    breaks_bad.setAlpha(0.25F);
+                    if (totalFeedback != null) {
+                        updatePoints();
+                    }
+                }
+            });
+            breaks_good.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    breaksFeedback = Feedback.good;
+                    breaks_good.setAlpha(1.0F);
+                    breaks_bad.setAlpha(0.25F);
+                    breaks_medium.setAlpha(0.25F);
+                    if (totalFeedback != null) {
+                        updatePoints();
+                    }
+                }
+            });
+
+            save.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    activity.setFeedback_breaks(breaksFeedback);
+                    activity.setFeedback_total(totalFeedback);
+                    activity.setPoints_chosen(Long.parseLong(edit_points.getText().toString()));
+                    try {
+                        spinner.setVisibility(View.VISIBLE);
+                        boolean setActive = false;
+
+                        day = dayService.getDay(user.getId(), new Date(System.currentTimeMillis()));
+                        activity.setDate_id(day.getId());
+                        activity.setDate(day.getCurrent_date());
+                        activityService.setActivity(activity);
+                        day.setActivity_duration(day.getActivity_duration() + timeInMillis);
+                        day.setActivity_count(day.getActivity_count() + 1);
+                        settings = settingsService.getUsersSettings(user.getId());
+                        if (settings.getTraining_count() != -1 && settings.getTraining_count() <= day.getActivity_count()) {
+                            if (!day.isActive()) {
+                                day.setActive(true);
+                                setActive = true;
+                            }
+                        }
+
+                        if (!settings.getActivity_duration().equals("-1") && checkDuration(settings.getActivity_duration(), day.getActivity_duration())) {
+                            if (!day.isActive()) {
+                                day.setActive(true);
+                                setActive = true;
+                            }
+                        }
+
+                        dayService.update(day, setActive, activity.getType());
+                    } catch (InterruptedException | PersistenceException | MandatoryValueException |
+                             IOException | InvalidValueException e) {
+                        throw new RuntimeException(e);
+                    }
+                    spinner.setVisibility(View.INVISIBLE);
+                    Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                    finish();
+                }
+            });
 
             //custom code goes here
 
+        }
+
+
+        private Feedback getDurationFeedback() {
+            String recommendedDuration = connection.getRecommendedDuration().replace(" ", "");
+            String[] values = recommendedDuration.split("-");
+            long duration = activity.getDuration();
+            long val1 = Long.parseLong(values[0]);
+            val1 = val1 * 60000;
+            long val2 = Long.parseLong(values[1]);
+            val2 = val2 * 60000;
+            if (Long.min(val1, val2) <= duration && Long.max(val1, val2) >= duration) {
+                return Feedback.good;
+            }
+            if (Long.min(val1, val2) * 0.75 <= duration && Long.max(val1, val2) * 1.25 >= duration) {
+                return Feedback.medium;
+            }
+            return Feedback.bad;
+        }
+
+        private void updatePoints() {
+            points = 0;
+
+            int duration = 0;
+            int total = 0;
+            int breaks = 0;
+            int breaks_1 = 10;
+
+            switch (durationFeedback) {
+                case good:
+                    duration = 30;
+                    break;
+                case medium:
+                    duration = 15;
+                    break;
+                default:
+                    break;
+            }
+
+            switch (totalFeedback) {
+                case good:
+                    total = 30;
+                    break;
+                case medium:
+                    total = 15;
+                    break;
+                default:
+                    break;
+            }
+
+            switch (breaksFeedback) {
+                case good:
+                    breaks = 30;
+                    break;
+                case medium:
+                    breaks = 15;
+                    break;
+                default:
+                    break;
+            }
+
+            breaks_1 = (int) (breaks_1 - activity.getPausen());
+            if (breaks_1 < 0) {
+                breaks_1 = 0;
+            }
+
+            points = duration + total + breaks + breaks_1;
+
+            edit_points.setText(String.valueOf(points));
+            edit_points.setVisibility(View.VISIBLE);
+            activity.setPoints_rec(points);
+        }
+
+        private boolean checkDuration(String goal, long millis) {
+            goal = goal.replace(" ", "");
+            String[] vals = goal.split(":");
+            long hours = Long.parseLong(vals[0]);
+            long minutes = Long.parseLong(vals[1]);
+            long minutes1 = millis / 60000;
+            long hours1 = minutes1 / 60;
+            minutes1 = minutes1 % 60;
+
+            if (hours1 > hours) {
+                return true;
+            }
+            if (hours1 == hours && minutes1 >= minutes) {
+                return true;
+            }
+            return false;
         }
     }
 	

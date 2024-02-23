@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/popup_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <RelativeLayout
+                android:id="@+id/buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/thoughts"
+                android:layout_marginTop="10dp">
+
+                <Button
+                    android:id="@+id/messageButtonOK"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/rectangle_2_shape"
+                    android:text="@string/weiter"
+                    android:textColor="@color/log_in_color" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/titleText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:background="@color/whiteOP"
+                android:fontFamily="@font/montserrat_bold"
+                android:padding="10dp"
+                android:text="@string/wie_f_hlst_du_dich_heute_am_ehesten"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/switch_schub_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/titleText1"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp">
+
+                <Switch
+                    android:id="@+id/switch1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/switch1"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/slider" />
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="260dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_toStartOf="@id/switch1"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/gedanken"
+                    android:textAlignment="textEnd"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/switch_schub_pause"
+                android:layout_marginTop="150dp"
+                android:id="@+id/sliderview"
+                android:visibility="invisible">
+
+                <com.google.android.material.slider.Slider
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:valueFrom="0"
+                    android:valueTo="10"
+                    android:stepSize="1"
+                    android:id="@+id/slider"/>
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Ich könnte Bäume ausreißen!"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="end"
+                    android:layout_below="@id/slider"/>
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="Ich will eigentlich nur ins Bett..."
+                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_alignParentStart="true"
+                    android:gravity="start"
+                    android:layout_below="@id/slider"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/thoughts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/switch_schub_pause"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/bett"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/julius"
+                    android:text="Ich will eigentlich nur ins Bett"
+                    android:textColor="#7927E0"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/ausgeglichen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/bett"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/lily"
+                    android:text="Ich fühle mich ausgeglichen"
+                    android:textColor="#3430FF"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/baum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ausgeglichen"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/irish"
+                    android:text="Ich könnte Bäume ausreißen!"
+                    android:textColor="#14E097"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/geschlaucht"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/baum"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/itim"
+                    android:text="Ich bin echt geschlaucht"
+                    android:textColor="#FF473A"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/lust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/geschlaucht"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/cang"
+                    android:text="Ich habe Lust, mich zu bewegen!"
+                    android:textColor="#FF473A"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/fit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/lust"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/hand"
+                    android:text="Ich fühle mich ganz fit"
+                    android:textColor="#F2994A"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/lang"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fit"
+                    android:layout_marginTop="25dp"
+                    android:fontFamily="@font/aurore"
+                    android:text="Heute war ein langer Tag"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

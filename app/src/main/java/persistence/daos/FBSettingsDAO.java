@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import persistence.FirebaseHandler;
 import persistence.dtos.Settings;
@@ -23,7 +24,7 @@ public class FBSettingsDAO implements SettingsDAO {
 
     public void create(long user) throws InterruptedException {
         long id = DBUtils.getNextId(TABLE_SETTINGS);
-        Settings settings = new Settings(id, user, -1, -1, -1, true, true, "00:00", "00:00");
+        Settings settings = new Settings(id, user, -1, "-1", -1, true, true, "00:00", "00:00");
 
         database.child(TABLE_SETTINGS).child(String.valueOf(id)).setValue(settings);
     }
@@ -62,8 +63,21 @@ public class FBSettingsDAO implements SettingsDAO {
     }
 
     @Override
-    public void update(Settings settings) throws PersistenceException {
+    public Settings update(Settings settings) throws PersistenceException, InterruptedException {
+        Settings settingsToBeUpdated = getSettings(settings.getId());
 
+        settingsToBeUpdated.setStep_goal(settings.getStep_goal());
+        settingsToBeUpdated.setActivity_duration(settings.getActivity_duration());
+        settingsToBeUpdated.setTraining_count(settings.getTraining_count());
+        settingsToBeUpdated.setChat_activated(settings.isChat_activated());
+        settingsToBeUpdated.setGame_activated(settings.isGame_activated());
+        settingsToBeUpdated.setMessages_to(settings.getMessages_to());
+        settingsToBeUpdated.setMessages_from(settings.getMessages_from());
+
+        Map<String, Object> settingsValues = settingsToBeUpdated.toMap();
+
+        database.child(TABLE_SETTINGS).child(String.valueOf(settings.getId())).updateChildren(settingsValues);
+        return settingsToBeUpdated;
     }
 
     @Override

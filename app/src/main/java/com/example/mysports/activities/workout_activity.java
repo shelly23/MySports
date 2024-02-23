@@ -18,6 +18,7 @@
     package com.example.mysports.activities;
 
     import android.app.Activity;
+    import android.content.Intent;
     import android.media.MediaPlayer;
     import android.net.Uri;
     import android.os.Bundle;
@@ -31,6 +32,10 @@
     import com.example.mysports.R;
 
     import persistence.dtos.Connection;
+    import persistence.dtos.Day;
+    import persistence.dtos.Settings;
+    import persistence.dtos.Type;
+    import persistence.dtos.User;
 
     public class workout_activity extends Activity {
 
@@ -40,6 +45,14 @@
         private MediaPlayer mediaPlayer;
         private Uri uri;
         private Connection connection;
+        private User user;
+
+        private Day day;
+        private Type type;
+
+        private Settings settings;
+
+        private long content_id;
         private Handler customHandler = new Handler();
         private TextView timerValue;
         private TextView duration;
@@ -61,7 +74,7 @@
                 int secs = (int) (timeInMilliseconds / 1000);
                 int mins = secs / 60;
                 secs = secs % 60;
-                timerValue.setText("" + mins + ":"
+                timerValue.setText("" + String.format("%02d", mins) + ":"
                         + String.format("%02d", secs));
                 customHandler.postDelayed(this, 0);
             }
@@ -76,8 +89,10 @@
 
 
             uri = (Uri) getIntent().getParcelableExtra("URI");
+            content_id = getIntent().getLongExtra("CONTENT", 0);
             connection = (Connection) getIntent().getSerializableExtra("CONNECTION");
-
+            user = (User) getIntent().getSerializableExtra("USER");
+            type = (Type) getIntent().getSerializableExtra("TYPE");
             // finding videoview by its id
 
             timerValue = findViewById(R.id.actual);
@@ -110,7 +125,20 @@
             end.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    persistence.dtos.Activity activity = new persistence.dtos.Activity();
+                    activity.setDuration(timeInMilliseconds);
+                    activity.setPausen(pausen);
+                    activity.setType(type);
+                    activity.setUser(user.getId());
+                    activity.setContent(content_id);
+                    Intent nextScreen = new Intent(getApplicationContext(), workout_ende_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.putExtra("ACTIVITY", activity);
+                    nextScreen.putExtra("TYPE", type);
+                    nextScreen.putExtra("CONNECTION", connection);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                    finish();
                 }
             });
 
@@ -125,6 +153,7 @@
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mediaPlayer = mp;
+                    mp.setLooping(true);
 
                 }
             });

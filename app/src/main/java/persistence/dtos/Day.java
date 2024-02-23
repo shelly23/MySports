@@ -12,6 +12,10 @@ public class Day implements Serializable {
     private int steps_start;
     private Date current_date;
     private boolean active;
+
+    private long activity_duration;
+    private long step_count;
+    private long activity_count;
     private boolean attack;
     private boolean pause;
     private long id;
@@ -20,11 +24,14 @@ public class Day implements Serializable {
     public Day() {
     }
 
-    public Day(int steps, int steps_start, Date current_date, boolean active, boolean pause, boolean attack, long id, long user_id) {
+    public Day(int steps, int steps_start, Date current_date, boolean active, long activity_duration, long step_count, long activity_count, boolean attack, boolean pause, long id, long user_id) {
         this.steps = steps;
         this.steps_start = steps_start;
         this.current_date = current_date;
         this.active = active;
+        this.activity_duration = activity_duration;
+        this.step_count = step_count;
+        this.activity_count = activity_count;
         this.attack = attack;
         this.pause = pause;
         this.id = id;
@@ -47,9 +54,36 @@ public class Day implements Serializable {
         result.put("steps_start", this.steps_start);
         result.put("current_date", this.current_date);
         result.put("active", this.active);
+        result.put("activity_duration", this.activity_duration);
+        result.put("step_count", this.step_count);
+        result.put("activity_count", this.activity_count);
         result.put("attack", this.attack);
         result.put("pause", this.pause);
         return result;
+    }
+
+    public long getActivity_duration() {
+        return activity_duration;
+    }
+
+    public void setActivity_duration(long activityDuration) {
+        this.activity_duration = activityDuration;
+    }
+
+    public long getStep_count() {
+        return step_count;
+    }
+
+    public void setStep_count(long stepCount) {
+        this.step_count = stepCount;
+    }
+
+    public long getActivity_count() {
+        return activity_count;
+    }
+
+    public void setActivity_count(long activityCount) {
+        this.activity_count = activityCount;
     }
 
     public int getSteps() {

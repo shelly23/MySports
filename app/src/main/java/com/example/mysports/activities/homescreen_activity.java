@@ -19,6 +19,10 @@
 
     import android.app.Activity;
     import android.app.DatePickerDialog;
+    import android.app.Notification;
+    import android.app.NotificationChannel;
+    import android.app.NotificationManager;
+    import android.app.PendingIntent;
     import android.content.Intent;
     import android.graphics.Typeface;
     import android.graphics.drawable.Drawable;
@@ -45,6 +49,8 @@
     import android.widget.TextView;
 
     import androidx.annotation.RequiresApi;
+    import androidx.core.app.NotificationCompat;
+    import androidx.core.app.NotificationManagerCompat;
 
     import com.example.mysports.R;
     import com.github.mikephil.charting.charts.PieChart;
@@ -65,7 +71,10 @@
     import java.util.Locale;
 
     import persistence.daos.FBDayDAO;
+    import persistence.daos.FBMonthDAO;
+    import persistence.daos.FBSettingsDAO;
     import persistence.dtos.Day;
+    import persistence.dtos.Settings;
     import persistence.dtos.User;
     import persistence.exceptions.InvalidValueException;
     import persistence.exceptions.MandatoryValueException;
@@ -73,6 +82,8 @@
     import persistence.validators.TextValidator;
     import service.DayService;
     import service.DayServiceImpl;
+    import service.SettingsService;
+    import service.SettingsServiceImpl;
 
     public class homescreen_activity extends Activity implements SensorEventListener {
 
@@ -81,6 +92,8 @@
         private boolean isSensorPresent;
         private CalendarPickerView calendarPickerView;
         private User user;
+
+        private Settings settings;
         private Day day;
         private Date currentDate;
         private TextView greeting;
@@ -92,10 +105,16 @@
         private long stepsTodayStart;
         private long stepsTotal;
         private Button schubTracken;
+
+        private Button activity_Button;
         private DayService dayService;
 
-        private ImageView settings;
+        private SettingsService settingsService;
+
+        private ImageView settings_btn;
         private ImageView activity;
+
+        private ImageView statistik;
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
@@ -105,6 +124,19 @@
             setContentView(R.layout.homescreen);
 
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            // Create the NotificationChannel, but only on API 26+ because
+            // the NotificationChannel class is not in the Support Library.
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                NotificationChannel channel = new NotificationChannel("push", "Erinnerung", importance);
+                channel.setDescription("Erinnerungen an das Erreichen von Aktivitätszielen");
+                // Register the channel with the system. You can't change the importance
+                // or other notification behaviors after this.
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+
 
             sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
             if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
@@ -118,9 +150,11 @@
             currentDate = new Date(System.currentTimeMillis());
 
             try {
-                dayService = new DayServiceImpl(new FBDayDAO(), new TextValidator());
+                dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
+                settingsService = new SettingsServiceImpl(new FBSettingsDAO());
                 user = (User) getIntent().getSerializableExtra("USER");
                 day = dayService.getDay(user.getId(), currentDate);
+                settings = settingsService.getUsersSettings(user.getId());
             } catch (PersistenceException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -137,8 +171,10 @@
             activeDays = findViewById(R.id.active_days);
             herrlicher = findViewById(R.id.herrlicher);
             schubTracken = findViewById(R.id.button_schub);
-            settings = findViewById(R.id.vector_ek123);
+            activity_Button = findViewById(R.id.button_aktivitaet);
+            settings_btn = findViewById(R.id.vector_ek123);
             activity = findViewById(R.id.vector_ek127);
+            statistik = findViewById(R.id.vector_ek129);
 
             updateSteps();
 
@@ -176,13 +212,14 @@
 
             updateCalendar();
 
-            settings.setOnClickListener(new View.OnClickListener() {
+            settings_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent nextScreen = new Intent(getApplicationContext(), settingsscreen_activity.class);
                     nextScreen.putExtra("USER", user);
-                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
+                    finish();
                 }
             });
 
@@ -191,8 +228,22 @@
                 public void onClick(View view) {
                     Intent nextScreen = new Intent(getApplicationContext(), activityscreen_activity.class);
                     nextScreen.putExtra("USER", user);
-                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+                    nextScreen.putExtra("DAY", day);
+                    nextScreen.putExtra("SETTINGS", settings);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
+                    finish();
+                }
+            });
+
+            statistik.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), statistik_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                    finish();
                 }
             });
 
@@ -347,6 +398,25 @@
 
             });
 
+            activity_Button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), "push")
+                            .setSmallIcon(R.mipmap.ic_launcher_round)
+                            .setContentTitle("Aktivitätserinnerung")
+                            .setContentText("Hi! Dir fehlen noch blabla")
+                            .setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText("more text"))
+                            .addAction(R.drawable.check_vector, "AUF GEHT'S", PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(getApplicationContext(), log_in_page_activity.class), PendingIntent.FLAG_IMMUTABLE))
+                            .addAction(R.drawable.clock_vector, "ERINNERN", null)
+                            .build();
+
+                    NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
+                    notificationManagerCompat.notify(0, notification);
+
+                }
+            });
+
         }
 
         private void setSpinner(ProgressBar spinner, EditText dateFrom, EditText dateTo, TextView error_field) {
@@ -487,7 +557,7 @@
                 updateSteps();
                 updatePieChart();
                 try {
-                    dayService.update(day);
+                    dayService.update(day, false, null);
                 } catch (PersistenceException | InvalidValueException | MandatoryValueException |
                          IOException | InterruptedException e) {
                     e.printStackTrace();

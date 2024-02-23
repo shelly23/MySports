@@ -26,77 +26,18 @@
         android:src="@drawable/background_image" />
 
     <RelativeLayout
-        android:id="@+id/menu_bar_ek10"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/whiteOP">
-
-        <ImageView
-            android:id="@+id/vector_ek123"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="40dp"
-            android:layout_toStartOf="@id/vector_ek125"
-            android:contentDescription="@string/settings"
-            android:src="@drawable/vector_ek123" />
-
-        <ImageView
-            android:id="@+id/vector_ek127"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/vector_ek131"
-            android:alpha="0.5"
-            android:contentDescription="@string/exercise"
-            android:src="@drawable/vector_ek127" />
-
-        <ImageView
-            android:id="@+id/vector_ek129"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="40dp"
-            android:layout_toEndOf="@id/vector_ek127"
-            android:contentDescription="@string/statistics"
-            android:src="@drawable/vector_ek129" />
-
-        <ImageView
-            android:id="@+id/vector_ek131"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:contentDescription="@string/home"
-            android:src="@drawable/vector_ek131" />
-
-        <ImageView
-            android:id="@+id/vector_ek125"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="40dp"
-            android:layout_toStartOf="@id/vector_ek131"
-            android:contentDescription="@string/game"
-            android:src="@drawable/vector_ek125" />
-    </RelativeLayout>
-
-    <RelativeLayout
+        android:id="@+id/video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:id="@+id/video">
+        android:layout_marginTop="25dp">
 
         <VideoView
             android:id="@+id/videoView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -104,14 +45,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/video"
-        android:layout_marginTop="110dp"
-        android:layout_marginStart="25dp">
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="110dp">
 
         <TextView
             android:id="@+id/actual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_regular"
+            android:fontFamily="@font/montserrat_bold"
             android:text="00:00" />
 
 
@@ -136,36 +77,36 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/video"
-        android:layout_marginTop="150dp"
-        android:id="@+id/buttons">
+        android:layout_marginTop="150dp">
 
-    <Button
-        android:id="@+id/end"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="25dp"
-        android:background="@drawable/rectangle_2_shape"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="@string/beenden"
-        android:textColor="@color/log_in_color"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/end"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/rectangle_2_shape"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/beenden"
+            android:textColor="@color/log_in_color"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/pause"
-        android:layout_width="160dp"
-        android:layout_height="40dp"
-        android:layout_toStartOf="@id/end"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/rectangle_2_shape"
-        android:fontFamily="@font/montserrat_regular"
-        android:text="@string/pause"
-        android:textColor="@color/log_in_color"
-        android:textStyle="bold" />
+        <Button
+            android:id="@+id/pause"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/end"
+            android:background="@drawable/rectangle_2_shape"
+            android:fontFamily="@font/montserrat_regular"
+            android:text="@string/pause"
+            android:textColor="@color/log_in_color"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
@@ -173,12 +114,12 @@
         android:id="@+id/information"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_below="@id/buttons"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
         android:fontFamily="@font/montserrat_regular"
-        android:text="@string/information"/>
+        android:text="@string/information" />
 
 
 </RelativeLayout>

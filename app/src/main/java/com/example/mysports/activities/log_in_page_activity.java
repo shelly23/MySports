@@ -17,9 +17,13 @@
 
     package com.example.mysports.activities;
 
-    import android.app.Activity;
+    import android.Manifest;
+    import android.app.NotificationChannel;
+    import android.app.NotificationManager;
     import android.content.Intent;
+    import android.content.pm.PackageManager;
     import android.graphics.drawable.Drawable;
+    import android.os.Build;
     import android.os.Bundle;
     import android.util.Patterns;
     import android.view.View;
@@ -28,13 +32,19 @@
     import android.widget.ProgressBar;
     import android.widget.TextView;
 
+    import androidx.appcompat.app.AppCompatActivity;
+    import androidx.core.app.ActivityCompat;
+    import androidx.core.content.ContextCompat;
+
     import com.example.mysports.R;
+    import com.example.mysports.databinding.LogInPageBinding;
 
     import java.io.IOException;
     import java.security.NoSuchAlgorithmException;
     import java.util.Date;
 
     import persistence.daos.FBDayDAO;
+    import persistence.daos.FBMonthDAO;
     import persistence.daos.FBUserDAO;
     import persistence.dtos.Day;
     import persistence.dtos.User;
@@ -47,7 +57,9 @@
     import service.UserService;
     import service.UserServiceImpl;
 
-    public class log_in_page_activity extends Activity {
+    public class log_in_page_activity extends AppCompatActivity {
+
+        private LogInPageBinding binding;
 
         private UserService userService;
         private DayService dayService;
@@ -79,9 +91,25 @@
         public void onCreate(Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.log_in_page);
 
-            _don_t_have_an_account_ = findViewById(R.id._don_t_have_an_account_);
+            binding = LogInPageBinding.inflate(getLayoutInflater());
+
+            setContentView(binding.getRoot());
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Create a notification channel for Oreo and higher versions
+                NotificationChannel channel = new NotificationChannel("channel_id", "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
+
+            // Check if notification permission is granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // If not granted, request permission
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+            }
+
+            _don_t_have_an_account_ = findViewById(R.id.don_t_have_an_account_);
             log_in = findViewById(R.id.log_in);
             email = findViewById(R.id.email_address);
             error_field = findViewById(R.id.error_field);
@@ -97,7 +125,7 @@
             Drawable originalDrawableEF = error_field.getBackground();
 
             userService = new UserServiceImpl(new FBUserDAO(), new TextValidator());
-            dayService = new DayServiceImpl(new FBDayDAO(), new TextValidator());
+            dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
 
             _don_t_have_an_account_.setOnClickListener(new View.OnClickListener() {
 
@@ -105,6 +133,7 @@
 
                     Intent nextScreen = new Intent(getApplicationContext(), register_page_activity.class);
                     startActivity(nextScreen);
+                    finish();
 
                 }
             });
@@ -130,7 +159,8 @@
                                 Date current = new Date(System.currentTimeMillis());
                                 currentDay = dayService.getDay(user.getId(), current);
                                 if (currentDay == null) {
-                                    currentDay = dayService.saveDay(new Day(0, -1, new Date(System.currentTimeMillis()), false, false, false, 0, user.getId()));
+                                    currentDay = dayService.saveDay(new Day(0, -1, new Date(System.currentTimeMillis()), false, 0, 0, 0,
+                                            false, false, 0, user.getId()));
                                 }
                             }
                         } catch (InvalidValueException | MandatoryValueException | IOException |
@@ -141,9 +171,11 @@
 
                         if (user != null) {
                             Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
-                            nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT );
+                            nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                             nextScreen.putExtra("USER", user);
                             startActivity(nextScreen);
+                            finish();
+
                         } else {
                             spinner.setVisibility(View.INVISIBLE);
                             error_field.setText(R.string.login_incorrect);

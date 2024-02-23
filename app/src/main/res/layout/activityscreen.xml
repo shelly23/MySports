@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
     <!--
     /*
      *	This content is generated from the API File Info.
@@ -51,8 +50,8 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="40dp"
             android:layout_toEndOf="@id/vector_ek131"
-            android:contentDescription="@string/exercise"
             android:alpha="0.5"
+            android:contentDescription="@string/exercise"
             android:src="@drawable/vector_ek127" />
 
         <ImageView
@@ -96,20 +95,20 @@
             android:id="@+id/kraft"
             android:layout_width="282dp"
             android:layout_height="150dp"
-            android:src="@drawable/kraft"
             android:contentDescription="@string/kraft"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/kraft" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="120dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="@string/kraft"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:layout_marginTop="120dp"
-            android:layout_marginStart="5dp"/>
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/ausdauer"
@@ -118,67 +117,67 @@
             android:layout_below="@id/kraft"
             android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
+            android:alpha="0.75"
             android:contentDescription="@string/ausdauer"
             android:scaleType="fitXY"
-            android:alpha="0.75"
             android:src="@drawable/ausdauer" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/kraft"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="130dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="@string/ausdauer"
             android:textColor="@color/white"
-            android:layout_below="@id/kraft"
-            android:textSize="25sp"
-            android:layout_marginTop="130dp"
-            android:layout_marginStart="5dp"/>
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/personalized"
             android:layout_width="282dp"
             android:layout_height="150dp"
-            android:layout_centerInParent="true"
             android:layout_below="@id/ausdauer"
-            android:src="@drawable/angepasst"
+            android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
-            android:contentDescription="@string/personalisiert"
             android:alpha="0.75"
-            android:scaleType="fitXY"/>
+            android:contentDescription="@string/personalisiert"
+            android:scaleType="fitXY"
+            android:src="@drawable/angepasst" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/ausdauer"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="130dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="@string/personalisiert"
             android:textColor="@color/white"
-            android:layout_below="@id/ausdauer"
-            android:textSize="25sp"
-            android:layout_marginTop="130dp"
-            android:layout_marginStart="5dp"/>
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/entspannung"
             android:layout_width="282dp"
             android:layout_height="150dp"
-            android:layout_centerInParent="true"
             android:layout_below="@id/personalized"
-            android:src="@drawable/entspannung"
+            android:layout_centerInParent="true"
             android:layout_marginTop="10dp"
             android:alpha="0.75"
             android:contentDescription="@string/entspannung_aktivierung"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:src="@drawable/entspannung" />
 
         <TextView
             android:layout_width="282dp"
             android:layout_height="wrap_content"
+            android:layout_below="@id/personalized"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="95dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="@string/entspannung_aktivierung"
             android:textColor="@color/white"
-            android:layout_below="@id/personalized"
-            android:textSize="25sp"
-            android:layout_marginTop="95dp"
-            android:layout_marginStart="5dp"/>
+            android:textSize="25sp" />
 
     </RelativeLayout>
 

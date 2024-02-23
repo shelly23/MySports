@@ -3,7 +3,6 @@ package persistence.daos;
 import java.util.List;
 
 import persistence.dtos.Connection;
-import persistence.dtos.User;
 import persistence.exceptions.PersistenceException;
 
 public interface ConnectionDAO {

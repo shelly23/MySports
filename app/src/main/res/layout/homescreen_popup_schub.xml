@@ -35,7 +35,6 @@
                 android:layout_marginTop="0dp">
 
                 <View
-                    android:id="@+id/_bg__homescreen_popup_schub_ek2"
                     android:layout_width="376dp"
                     android:layout_height="667dp"
                     android:layout_marginStart="0dp"
@@ -223,7 +222,6 @@
                                         android:src="@drawable/charge_ek7" />
 
                                     <ImageView
-                                        android:id="@+id/___ek7"
                                         android:layout_width="1.5dp"
                                         android:layout_height="3.46dp"
                                         android:layout_marginStart="23dp"
@@ -234,7 +232,6 @@
                                 </RelativeLayout>
 
                                 <TextView
-                                    android:id="@+id/_42__ek7"
                                     android:layout_width="42dp"
                                     android:layout_height="23dp"
                                     android:layout_marginLeft="29.86dp"
@@ -256,7 +253,6 @@
                             </RelativeLayout>
 
                             <TextView
-                                android:id="@+id/_9_42_am_ek7"
                                 android:layout_width="67dp"
                                 android:layout_height="23dp"
                                 android:layout_marginLeft="163.5dp"
@@ -789,7 +785,6 @@
                                 android:src="@drawable/line_9_ek5" />
 
                             <TextView
-                                android:id="@+id/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek5"
                                 android:layout_width="183dp"
                                 android:layout_height="23dp"
                                 android:layout_marginLeft="135dp"
@@ -811,7 +806,6 @@
                             android:src="@drawable/ellipse_31_ek1" />
 
                         <TextView
-                            android:id="@+id/_47_8__ek1"
                             android:layout_width="25.5dp"
                             android:layout_height="9.5dp"
                             android:layout_marginLeft="292dp"
@@ -863,7 +857,6 @@
                                 android:src="@drawable/line_9_ek6" />
 
                             <TextView
-                                android:id="@+id/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek6"
                                 android:layout_width="264dp"
                                 android:layout_height="38dp"
                                 android:layout_marginLeft="54dp"

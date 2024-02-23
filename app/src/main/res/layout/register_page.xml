@@ -95,14 +95,14 @@
             android:layout_height="40dp"
             android:layout_below="@id/edss"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/montserrat_regular"
-            android:hint="@string/geburtsdatum_optional"
-            android:textColor="@color/email_address_color"
-            android:textSize="14sp"
             android:clickable="false"
             android:cursorVisible="false"
             android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/montserrat_regular"
+            android:hint="@string/geburtsdatum_optional"
+            android:textColor="@color/email_address_color"
+            android:textSize="14sp" />
 
         <EditText
             android:id="@+id/email"
@@ -177,8 +177,8 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@id/register"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
 
     </RelativeLayout>
 
