@@ -50,4 +50,8 @@
     <color name="dateTimeRangePickerStateNonSelectable">@android:color/white</color>
     <color name="dateTimeRangePickerStateToday">#ffcf40</color>
     <color name="dateTimeRangePickerTitleTextColor">@android:color/black</color>
+    <array name="sample_progress_gradient">
+        <item>#342FFF</item>
+        <item>#85342FFF</item>
+    </array>
 </resources>

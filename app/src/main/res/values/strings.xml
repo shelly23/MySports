@@ -227,4 +227,7 @@
     <string name="wie_f_hlst_du_dich_heute_am_ehesten">Wie fühlst Du Dich heute am Ehesten?</string>
     <string name="gedanken">Gedanken</string>
     <string name="slider">Slider</string>
+    <string name="spielfeld">Spielfeld</string>
+    <string name="erfahrungspunkte">Erfahrungspunkte:</string>
+    <string name="n_chstes_feld">nächstes Feld</string>
 </resources>

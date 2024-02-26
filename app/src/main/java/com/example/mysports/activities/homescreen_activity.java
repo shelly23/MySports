@@ -116,6 +116,8 @@
 
         private ImageView statistik;
 
+        private ImageView game;
+
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -175,6 +177,7 @@
             settings_btn = findViewById(R.id.vector_ek123);
             activity = findViewById(R.id.vector_ek127);
             statistik = findViewById(R.id.vector_ek129);
+            game = findViewById(R.id.vector_ek125);
 
             updateSteps();
 
@@ -240,6 +243,17 @@
                 @Override
                 public void onClick(View view) {
                     Intent nextScreen = new Intent(getApplicationContext(), statistik_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                    finish();
+                }
+            });
+
+            game.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
                     nextScreen.putExtra("USER", user);
                     nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
