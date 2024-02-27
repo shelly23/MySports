@@ -49,19 +49,7 @@
             setContentView(R.layout.gamescreen);
 
 
-            background_image_ek5 = findViewById(R.id.background_image_ek5);
-            menu_bar_ek7 = findViewById(R.id.menu_bar_ek7);
-            vector_ek102 = findViewById(R.id.vector_ek102);
-            vector_ek103 = findViewById(R.id.vector_ek103);
-            vector_ek104 = findViewById(R.id.vector_ek104);
-            vector_ek105 = findViewById(R.id.vector_ek105);
-            vector_ek106 = findViewById(R.id.vector_ek106);
-            vector_ek107 = findViewById(R.id.vector_ek107);
-            vector_ek108 = findViewById(R.id.vector_ek108);
-            vector_ek109 = findViewById(R.id.vector_ek109);
-            vector_ek110 = findViewById(R.id.vector_ek110);
-            vector_ek111 = findViewById(R.id.vector_ek111);
-            popup = findViewById(R.id.popup);
+
 
 
             //custom code goes here

@@ -35,7 +35,6 @@ public class FirebaseHandler {
             });
             first = false;
         }
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         return database.getReference();
     }
 

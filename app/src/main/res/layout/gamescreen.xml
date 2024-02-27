@@ -135,7 +135,7 @@
 
         <TextView
             android:id="@+id/herrlicher"
-            android:layout_width="100dp"
+            android:layout_width="105dp"
             android:layout_height="100dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
@@ -145,7 +145,7 @@
             android:text="@string/n_chstes_feld"
             android:layout_above="@id/bar" />
 
-        <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+        <com.akexorcist.roundcornerprogressbar.TextRoundCornerProgressBar
             android:id="@+id/bar"
             android:layout_width="match_parent"
             android:layout_height="25dp"
@@ -159,7 +159,9 @@
             app:rcProgress="75"
             app:rcProgressColors="@array/sample_progress_gradient"
             app:rcRadius="30dp"
-            app:rcTextPositionPriority="inside" />
+            app:rcTextPositionPriority="inside"
+            app:rcTextProgress="75"
+            />
     </RelativeLayout>
 
 </RelativeLayout>
