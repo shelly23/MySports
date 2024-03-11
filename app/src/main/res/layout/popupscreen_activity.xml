@@ -82,46 +82,45 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
                     android:layout_toStartOf="@id/switch1"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:fontFamily="@font/montserrat_bold"
                     android:text="@string/gedanken"
-                    android:textAlignment="textEnd"
-                    android:textStyle="bold" />
+                    android:textAlignment="textEnd" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/sliderview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/switch_schub_pause"
                 android:layout_marginTop="150dp"
-                android:id="@+id/sliderview"
                 android:visibility="invisible">
 
                 <com.google.android.material.slider.Slider
+                    android:id="@+id/slider"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:valueFrom="0"
-                    android:valueTo="10"
                     android:stepSize="1"
-                    android:id="@+id/slider"/>
+                    android:valueFrom="0"
+                    android:valueTo="10" />
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Ich könnte Bäume ausreißen!"
-                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_below="@id/slider"
                     android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/montserrat_regular"
                     android:gravity="end"
-                    android:layout_below="@id/slider"/>
+                    android:text="Ich könnte Bäume ausreißen!" />
 
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Ich will eigentlich nur ins Bett..."
-                    android:fontFamily="@font/montserrat_regular"
+                    android:layout_below="@id/slider"
                     android:layout_alignParentStart="true"
+                    android:fontFamily="@font/montserrat_regular"
                     android:gravity="start"
-                    android:layout_below="@id/slider"/>
+                    android:text="Ich will eigentlich nur ins Bett..." />
             </RelativeLayout>
 
             <RelativeLayout

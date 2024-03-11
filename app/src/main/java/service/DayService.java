@@ -29,6 +29,8 @@ public interface DayService {
 
     void markDays(long user_id, Calendar dateFrom, Calendar dateTo, Boolean schub, Boolean pause, Boolean active) throws PersistenceException, InvalidValueException, MandatoryValueException, InterruptedException;
 
+    boolean isChain(long user_id, Day dayFrom, int days) throws PersistenceException, InterruptedException;
+
     List<Entry> getActiveDays(int year, long user) throws InterruptedException;
 
     List<BarEntry> getTrainings(int year, long user) throws InterruptedException;

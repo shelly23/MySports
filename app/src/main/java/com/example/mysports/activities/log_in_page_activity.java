@@ -18,8 +18,10 @@
     package com.example.mysports.activities;
 
     import android.Manifest;
+    import android.app.AlarmManager;
     import android.app.NotificationChannel;
     import android.app.NotificationManager;
+    import android.app.PendingIntent;
     import android.content.Intent;
     import android.content.pm.PackageManager;
     import android.graphics.drawable.Drawable;
@@ -54,6 +56,7 @@
     import persistence.validators.TextValidator;
     import service.DayService;
     import service.DayServiceImpl;
+    import service.SingletonUser;
     import service.UserService;
     import service.UserServiceImpl;
 
@@ -76,6 +79,11 @@
 
         private ProgressBar spinner;
 
+
+        private AlarmManager alarmManager;
+
+        private PendingIntent pendingIntent;
+
         public log_in_page_activity() throws PersistenceException {
         }
 
@@ -96,12 +104,7 @@
 
             setContentView(binding.getRoot());
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Create a notification channel for Oreo and higher versions
-                NotificationChannel channel = new NotificationChannel("channel_id", "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
-                NotificationManager notificationManager = getSystemService(NotificationManager.class);
-                notificationManager.createNotificationChannel(channel);
-            }
+            createNotificationChannel();
 
             // Check if notification permission is granted
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -133,7 +136,6 @@
 
                     Intent nextScreen = new Intent(getApplicationContext(), register_page_activity.class);
                     startActivity(nextScreen);
-                    finish();
 
                 }
             });
@@ -160,7 +162,7 @@
                                 currentDay = dayService.getDay(user.getId(), current);
                                 if (currentDay == null) {
                                     currentDay = dayService.saveDay(new Day(0, -1, new Date(System.currentTimeMillis()), false, 0, 0, 0,
-                                            false, false, 0, user.getId()));
+                                            false, false, 0, user.getId(), false));
                                 }
                             }
                         } catch (InvalidValueException | MandatoryValueException | IOException |
@@ -170,6 +172,8 @@
                         }
 
                         if (user != null) {
+                            SingletonUser singletonUser = SingletonUser.getInstance();
+                            singletonUser.setUserId(user.getId());
                             Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
                             nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                             nextScreen.putExtra("USER", user);
@@ -187,6 +191,16 @@
                 }
             });
 
+        }
+
+        private void createNotificationChannel() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel("push", "ActivityReminderChannel", NotificationManager.IMPORTANCE_HIGH);
+                channel.setDescription("Channel for Activity-Reminders");
+
+                NotificationManager notificationManager = getSystemService(NotificationManager.class);
+                notificationManager.createNotificationChannel(channel);
+            }
         }
 
         private boolean validateCredentials(String email, String password) {

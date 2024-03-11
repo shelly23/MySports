@@ -34,11 +34,13 @@
 
     import persistence.daos.FBActivityDAO;
     import persistence.daos.FBDayDAO;
+    import persistence.daos.FBGame_ProgressDAO;
     import persistence.daos.FBMonthDAO;
     import persistence.daos.FBSettingsDAO;
     import persistence.dtos.Connection;
     import persistence.dtos.Day;
     import persistence.dtos.Feedback;
+    import persistence.dtos.Game_Progress;
     import persistence.dtos.Settings;
     import persistence.dtos.Type;
     import persistence.dtos.User;
@@ -50,6 +52,8 @@
     import service.ActivityServiceImpl;
     import service.DayService;
     import service.DayServiceImpl;
+    import service.GameProgressService;
+    import service.GameProgressServiceImpl;
     import service.SettingsService;
     import service.SettingsServiceImpl;
 
@@ -105,6 +109,8 @@
 
         private SettingsService settingsService;
 
+        private GameProgressService gameProgressService;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
 
@@ -119,6 +125,7 @@
             activityService = new ActivityServiceImpl(new FBActivityDAO());
             dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
             settingsService = new SettingsServiceImpl(new FBSettingsDAO());
+            gameProgressService = new GameProgressServiceImpl(new FBGame_ProgressDAO());
 
             title = findViewById(R.id.title);
             dauer = findViewById(R.id.time);
@@ -266,6 +273,9 @@
                         }
 
                         dayService.update(day, setActive, activity.getType());
+                        Game_Progress gameProgress = gameProgressService.getGame_progress(user.getId());
+                        gameProgress.setPoints(gameProgress.getPoints() + activity.getPoints_chosen());
+                        gameProgressService.update(gameProgress);
                     } catch (InterruptedException | PersistenceException | MandatoryValueException |
                              IOException | InvalidValueException e) {
                         throw new RuntimeException(e);

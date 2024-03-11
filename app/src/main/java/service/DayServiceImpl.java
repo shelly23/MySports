@@ -1,6 +1,5 @@
 package service;
 
-import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 
@@ -106,6 +105,7 @@ public class DayServiceImpl implements DayService {
             dayToBeUpdated.setActivity_count(day.getActivity_count());
             dayToBeUpdated.setActivity_duration(day.getActivity_duration());
             dayToBeUpdated.setStep_count(day.getStep_count());
+            dayToBeUpdated.setChecked(day.isChecked());
             this.FBpersistenceDay.update(dayToBeUpdated);
 
             if (setActive) {
@@ -138,7 +138,7 @@ public class DayServiceImpl implements DayService {
                 Day dayToBeMarked = this.FBpersistenceDay.getDay(user_id, date);
 
                 if (dayToBeMarked == null) {
-                    dayToBeMarked = this.FBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), 0, 0, 0, Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id));
+                    dayToBeMarked = this.FBpersistenceDay.create(new Day(0, -1, new Date(dateFrom.getTime().getTime()), Boolean.TRUE.equals(active), 0, 0, 0, Boolean.TRUE.equals(pause), Boolean.TRUE.equals(schub), 0, user_id, false));
                 } else {
 
                     if (schub != null) {
@@ -161,6 +161,31 @@ public class DayServiceImpl implements DayService {
 
         }
 
+    }
+
+    @Override
+    public boolean isChain(long user_id, Day dayFrom, int days) throws PersistenceException, InterruptedException {
+        Day first = FBpersistenceDay.getDay(user_id, dayFrom.getCurrent_date());
+
+        if (first.isActive()) {
+            for (int i = 1; i < days; i++) {
+                Calendar date = Calendar.getInstance();
+                date.setTime(dayFrom.getCurrent_date());
+                date.add(Calendar.DATE, -i);
+                Day tmp = FBpersistenceDay.getDay(user_id, new Date(date.getTime().getTime()));
+                if (tmp.isPause() || tmp.isAttack()) {
+                    days++;
+                } else {
+                    if (!tmp.isActive()) {
+                        return false;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     public List<Entry> getActiveDays(int year, long user) throws InterruptedException {

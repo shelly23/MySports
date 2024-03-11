@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import persistence.FirebaseHandler;
 import persistence.dtos.User;
@@ -63,8 +64,20 @@ public class FBUserDAO implements UserDAO {
     }
 
     @Override
-    public void update(User vehicle) throws PersistenceException {
+    public void update(User user) throws PersistenceException, InterruptedException {
+        User userToBeUpdated = getUser(user.getUsername());
 
+        userToBeUpdated.setPrename(user.getPrename());
+        userToBeUpdated.setSurname(user.getSurname());
+        userToBeUpdated.setUsername(user.getUsername());
+        userToBeUpdated.setPassword(user.getPassword());
+        userToBeUpdated.setEdss(user.getEdss());
+        userToBeUpdated.setBirthdate(user.getBirthdate());
+        userToBeUpdated.setBadge(user.getBadge());
+
+        Map<String, Object> userValues = userToBeUpdated.toMap();
+
+        database.child(TABLE_USERS).child(String.valueOf(user.getId())).updateChildren(userValues);
     }
 
     @Override

@@ -17,37 +17,54 @@
 
     package com.example.mysports.activities;
 
+    import android.Manifest;
     import android.app.Activity;
+    import android.app.AlarmManager;
+    import android.app.PendingIntent;
+    import android.content.Context;
     import android.content.Intent;
+    import android.content.pm.PackageManager;
     import android.graphics.drawable.Drawable;
     import android.os.Bundle;
-    import android.view.Gravity;
-    import android.view.LayoutInflater;
     import android.view.View;
     import android.widget.Button;
     import android.widget.CompoundButton;
     import android.widget.EditText;
     import android.widget.ImageView;
-    import android.widget.LinearLayout;
-    import android.widget.PopupWindow;
     import android.widget.RelativeLayout;
     import android.widget.Switch;
     import android.widget.TextView;
+    import android.widget.Toast;
+
+    import androidx.core.app.ActivityCompat;
+    import androidx.core.content.ContextCompat;
 
     import com.example.mysports.R;
 
+    import java.text.DateFormat;
+    import java.text.ParseException;
+    import java.text.SimpleDateFormat;
+    import java.util.Calendar;
+    import java.util.Date;
     import java.util.List;
 
     import persistence.daos.FBConnectionDAO;
+    import persistence.daos.FBDayDAO;
+    import persistence.daos.FBMonthDAO;
     import persistence.daos.FBSettingsDAO;
     import persistence.daos.FBTherapistDAO;
     import persistence.dtos.Connection;
+    import persistence.dtos.Day;
     import persistence.dtos.Settings;
     import persistence.dtos.Therapist;
     import persistence.dtos.User;
     import persistence.exceptions.PersistenceException;
+    import persistence.validators.TextValidator;
+    import service.AlarmReceiver;
     import service.ConnectionService;
     import service.ConnectionServiceImpl;
+    import service.DayService;
+    import service.DayServiceImpl;
     import service.SettingsService;
     import service.SettingsServiceImpl;
     import service.TherapistService;
@@ -63,6 +80,9 @@
 
         private ImageView home;
         private ImageView activity;
+        private ImageView game;
+        private ImageView statistik;
+
 
         private TextView hinweis;
         private TextView therapeut;
@@ -91,9 +111,19 @@
         private TherapistService therapistService;
         private SettingsService settingsService;
 
+        private DayService dayService;
+
         private Connection connection;
         private List<Connection> connections;
         private Settings settings;
+
+        private long window;
+
+        private AlarmManager alarmManager;
+
+        private PendingIntent pendingIntent;
+
+        private DateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -104,6 +134,8 @@
             nutzerIdFeld = findViewById(R.id.nutzerid_feld);
             home = findViewById(R.id.vector_ek131);
             activity = findViewById(R.id.vector_ek127);
+            game = findViewById(R.id.vector_ek125);
+            statistik = findViewById(R.id.vector_ek129);
             hinweis = findViewById(R.id.hinweis);
             speechbubble = findViewById(R.id.chat2);
             therapeut = findViewById(R.id.herrlicher);
@@ -130,6 +162,7 @@
             connectionService = new ConnectionServiceImpl(new FBConnectionDAO());
             therapistService = new TherapistServiceImpl(new FBTherapistDAO());
             settingsService = new SettingsServiceImpl(new FBSettingsDAO());
+            dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
 
             home.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -138,7 +171,6 @@
                     nextScreen.putExtra("USER", user);
                     nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
-                    finish();
                 }
             });
 
@@ -149,9 +181,48 @@
                     nextScreen.putExtra("USER", user);
                     nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
-                    finish();
                 }
             });
+
+            statistik.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), statistik_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            try {
+                settings = settingsService.getUsersSettings(user.getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (!settings.isGame_activated()) {
+                game.setActivated(false);
+                game.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                game.setImageResource(R.drawable.vector_ek125);
+                game.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Day day = null;
+                        try {
+                            day = dayService.getDay(user.getId(), new Date(Calendar.getInstance().getTime().getTime()));
+                        } catch (PersistenceException | InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
 
             accept.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -230,12 +301,41 @@
                         }
                         settings.setChat_activated(switch_chat.isChecked());
                         settings.setGame_activated(switch_game.isChecked());
-                        settings.setMessages_from(timeFrom.getText().toString());
-                        settings.setMessages_to(timeTo.getText().toString());
+                        if (!settings.getMessages_from().equals(timeFrom.getText().toString()) || !settings.getMessages_to().equals(timeTo.getText().toString())) {
+                            settings.setMessages_from(timeFrom.getText().toString());
+                            settings.setMessages_to(timeTo.getText().toString());
+                            setAlarm();
+                        }
                         try {
                             settings = settingsService.updateSettings(settings);
                             setFields();
+                            if (!settings.isGame_activated()) {
+                                game.setActivated(false);
+                                game.setImageResource(R.drawable.vector_ek125_disabled);
+                            } else {
+                                game.setImageResource(R.drawable.vector_ek125);
+                                game.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Day day = null;
+                                        try {
+                                            day = dayService.getDay(user.getId(), new Date(Calendar.getInstance().getTime().getTime()));
+                                        } catch (PersistenceException | InterruptedException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                                        nextScreen.putExtra("USER", user);
+                                        nextScreen.putExtra("SETTINGS", settings);
+                                        nextScreen.putExtra("DAY", day);
+                                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                                        startActivity(nextScreen);
+                                    }
+                                });
+                            }
 
+                            Toast.makeText(getApplicationContext(), "Einstellungen erfolgreich gespeichert.", Toast.LENGTH_LONG).show();
+
+                            /*
                             //Create a View object yourself through inflater
                             view.getContext();
                             LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -265,7 +365,7 @@
                                 public void onClick(View view) {
                                     popupWindow.dismiss();
                                 }
-                            });
+                            });*/
                         } catch (InterruptedException | PersistenceException e) {
                             throw new RuntimeException(e);
                         }
@@ -276,9 +376,44 @@
 
         }
 
+        private void setAlarm() {
+
+            // Check if notification permission is granted
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // If not granted, request permission
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
+            }
+
+            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            Intent intent = new Intent(this, AlarmReceiver.class);
+
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+            Calendar calendarFrom = Calendar.getInstance();
+            String timeFrom = settings.getMessages_from();
+            String[] vals = timeFrom.split(":");
+            calendarFrom.set(Calendar.HOUR_OF_DAY, Integer.parseInt(vals[0]));
+            calendarFrom.set(Calendar.MINUTE, Integer.parseInt(vals[1]));
+
+            Calendar calendarTo = Calendar.getInstance();
+            String timeTo = settings.getMessages_to();
+            String[] vals1 = timeFrom.split(":");
+            calendarTo.set(Calendar.HOUR_OF_DAY, Integer.parseInt(vals1[0]));
+            calendarTo.set(Calendar.MINUTE, Integer.parseInt(vals1[1]));
+
+            if (Calendar.getInstance().get(Calendar.HOUR_OF_DAY) >= calendarTo.get(Calendar.HOUR_OF_DAY) && Calendar.getInstance().get(Calendar.MINUTE) >= calendarTo.get(Calendar.MINUTE)) {
+                calendarFrom.add(Calendar.DATE, 1);
+            }
+
+            alarmManager.setWindow(AlarmManager.RTC_WAKEUP, calendarFrom.getTimeInMillis(), calculateWindow(settings.getMessages_from(), settings.getMessages_to()), pendingIntent);
+            //alarmManager.setWindow(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 10, pendingIntent);
+
+        }
+
         @Override
-        protected void onStart() {
-            super.onStart();
+        protected void onResume() {
+            super.onResume();
             initialize();
         }
 
@@ -381,6 +516,16 @@
                 return false;
             }
             return true;
+        }
+
+        private long calculateWindow(String from, String to) {
+            try {
+                java.sql.Time timeFrom = new java.sql.Time(simpleDateFormat.parse(from).getTime());
+                java.sql.Time timeTo = new java.sql.Time(simpleDateFormat.parse(to).getTime());
+                return Math.abs(timeTo.getTime() - timeFrom.getTime());
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 	

@@ -18,7 +18,7 @@ public interface UserDAO {
 
     void delete(List<User> vehicles) throws PersistenceException;
 
-    void update(User vehicle) throws PersistenceException;
+    void update(User vehicle) throws PersistenceException, InterruptedException;
 
     User getUser(String username) throws PersistenceException, InterruptedException;
 

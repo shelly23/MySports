@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException {
+    public boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, InterruptedException {
         if (checkUser(user)) {
             FBpersistenceUser.update(user);
             return true;

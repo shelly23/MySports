@@ -21,10 +21,12 @@ public class Day implements Serializable {
     private long id;
     private long user_id;
 
+    private boolean checked;
+
     public Day() {
     }
 
-    public Day(int steps, int steps_start, Date current_date, boolean active, long activity_duration, long step_count, long activity_count, boolean attack, boolean pause, long id, long user_id) {
+    public Day(int steps, int steps_start, Date current_date, boolean active, long activity_duration, long step_count, long activity_count, boolean attack, boolean pause, long id, long user_id, boolean checked) {
         this.steps = steps;
         this.steps_start = steps_start;
         this.current_date = current_date;
@@ -36,6 +38,7 @@ public class Day implements Serializable {
         this.pause = pause;
         this.id = id;
         this.user_id = user_id;
+        this.checked = checked;
     }
 
     public Day(int steps, int steps_start, Date current_date, boolean active, boolean pause, boolean attack, long user_id) {
@@ -46,6 +49,14 @@ public class Day implements Serializable {
         this.attack = attack;
         this.pause = pause;
         this.user_id = user_id;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public Map<String, Object> toMap() {
@@ -59,6 +70,7 @@ public class Day implements Serializable {
         result.put("activity_count", this.activity_count);
         result.put("attack", this.attack);
         result.put("pause", this.pause);
+        result.put("checked", this.checked);
         return result;
     }
 

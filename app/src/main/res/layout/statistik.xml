@@ -60,10 +60,9 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="40dp"
             android:layout_toEndOf="@id/vector_ek127"
-            android:contentDescription="@string/statistics"
-            android:src="@drawable/vector_ek129"
             android:alpha="0.5"
-            />
+            android:contentDescription="@string/statistics"
+            android:src="@drawable/vector_ek129" />
 
         <ImageView
             android:id="@+id/vector_ek131"
@@ -92,10 +91,10 @@
         android:layout_marginTop="40dp">
 
         <RelativeLayout
+            android:id="@+id/title_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/title_layout">
+            android:layout_centerHorizontal="true">
 
             <ImageView
                 android:id="@+id/back1"
@@ -104,7 +103,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@id/title"
-                android:src="@drawable/back"/>
+                android:src="@drawable/back" />
 
             <TextView
                 android:id="@+id/title"
@@ -123,7 +122,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/title"
-                android:src="@drawable/front"/>
+                android:src="@drawable/front" />
         </RelativeLayout>
 
         <com.github.mikephil.charting.charts.LineChart
@@ -141,10 +140,10 @@
         android:layout_marginTop="40dp">
 
         <RelativeLayout
+            android:id="@+id/title1_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/title1_layout">
+            android:layout_centerHorizontal="true">
 
             <ImageView
                 android:id="@+id/back2"
@@ -153,7 +152,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:layout_toStartOf="@id/title1"
-                android:src="@drawable/back"/>
+                android:src="@drawable/back" />
 
             <TextView
                 android:id="@+id/title1"
@@ -172,7 +171,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
                 android:layout_toEndOf="@id/title1"
-                android:src="@drawable/front"/>
+                android:src="@drawable/front" />
         </RelativeLayout>
 
         <com.github.mikephil.charting.charts.BarChart

@@ -25,6 +25,7 @@
     import android.view.Gravity;
     import android.view.LayoutInflater;
     import android.view.View;
+    import android.widget.Button;
     import android.widget.CompoundButton;
     import android.widget.ImageView;
     import android.widget.LinearLayout;
@@ -34,10 +35,12 @@
     import android.widget.TextView;
 
     import com.example.mysports.R;
+    import com.google.android.material.slider.Slider;
 
     import java.util.List;
 
     import persistence.daos.FBConnectionDAO;
+    import persistence.daos.FBSettingsDAO;
     import persistence.daos.FBTraining_VideoDAO;
     import persistence.dtos.Connection;
     import persistence.dtos.Day;
@@ -47,6 +50,8 @@
     import persistence.dtos.User;
     import service.ConnectionService;
     import service.ConnectionServiceImpl;
+    import service.SettingsService;
+    import service.SettingsServiceImpl;
     import service.Training_VideoService;
     import service.Training_VideoServiceImpl;
 
@@ -56,6 +61,11 @@
         private ImageView endurance;
         private ImageView personalized;
         private ImageView relaxation;
+
+        private ImageView settingsscreen;
+        private ImageView homescreen;
+        private ImageView statisticsscreen;
+        private ImageView gamescreen;
 
         private User user;
         private Day day;
@@ -67,6 +77,8 @@
         private Training_VideoService trainingVideoService;
         private ConnectionService connectionService;
 
+        private SettingsService settingsService;
+
         private Connection connection;
 
         @Override
@@ -77,11 +89,18 @@
 
             trainingVideoService = new Training_VideoServiceImpl(new FBTraining_VideoDAO());
             connectionService = new ConnectionServiceImpl(new FBConnectionDAO());
+            settingsService = new SettingsServiceImpl(new FBSettingsDAO());
 
             strength = findViewById(R.id.kraft);
             endurance = findViewById(R.id.ausdauer);
             personalized = findViewById(R.id.personalized);
             relaxation = findViewById(R.id.entspannung);
+
+            settingsscreen = findViewById(R.id.vector_ek123);
+            gamescreen = findViewById(R.id.vector_ek125);
+            homescreen = findViewById(R.id.vector_ek131);
+            statisticsscreen = findViewById(R.id.vector_ek129);
+
 
             user = (User) getIntent().getSerializableExtra("USER");
             day = (Day) getIntent().getSerializableExtra("DAY");
@@ -175,9 +194,12 @@
                     RelativeLayout thoughts = popupView.findViewById(R.id.thoughts);
                     RelativeLayout sliderview = popupView.findViewById(R.id.sliderview);
 
+                    Slider slider = popupView.findViewById(R.id.slider);
+
                     final long[] level = {0};
 
                     Switch switch1 = popupView.findViewById(R.id.switch1);
+                    Button weiter = popupView.findViewById(R.id.messageButtonOK);
 
                     TextView thought = popupView.findViewById(R.id.textView1);
                     TextView slide = popupView.findViewById(R.id.textView);
@@ -308,12 +330,115 @@
                             }
                         }
                     });
+
+                    weiter.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Uri uri;
+                            try {
+                                if (switch1.isChecked()) {
+                                    uri = findPersonalizedTraining(user, (long) slider.getValue());
+                                } else {
+                                    uri = findPersonalizedTraining(user, level[0]);
+                                }
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            Intent nextScreen = new Intent(getApplicationContext(), workout_activity.class);
+                            nextScreen.putExtra("URI", uri);
+                            nextScreen.putExtra("CONNECTION", connection);
+                            nextScreen.putExtra("USER", user);
+                            nextScreen.putExtra("TYPE", Type.strength);
+                            nextScreen.putExtra("CONTENT", content_id);
+                            nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                            startActivity(nextScreen);
+                            finish();
+                        }
+                    });
                 }
             });
 
+            settingsscreen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), settingsscreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            homescreen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), homescreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            statisticsscreen.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), statistik_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            try {
+                settings = settingsService.getUsersSettings(user.getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (!settings.isGame_activated()) {
+                gamescreen.setActivated(false);
+                gamescreen.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                gamescreen.setImageResource(R.drawable.vector_ek125);
+                gamescreen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
 
             //custom code goes here
 
+        }
+        @Override
+        public void onResume() {
+            super.onResume();
+            try {
+                settings = settingsService.getUsersSettings(user.getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (!settings.isGame_activated()) {
+                gamescreen.setActivated(false);
+                gamescreen.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                gamescreen.setImageResource(R.drawable.vector_ek125);
+                gamescreen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
         }
 
         private Uri findTraining(Type type, User user) throws InterruptedException {

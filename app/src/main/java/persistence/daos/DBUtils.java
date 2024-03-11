@@ -25,6 +25,8 @@ public class DBUtils {
 
     public static final String TABLE_CONNECTIONS = "connections";
     public static final String TABLE_SETTINGS = "settings";
+    public static final String TABLE_GAME_PROGRESS = "game_progress";
+    public static final String TABLE_REWARDS = "rewards";
 
     public static String hashPassword(String password) throws NoSuchAlgorithmException {
 
@@ -95,9 +97,16 @@ public class DBUtils {
 
     public static Type whichTypeToChoose(long user, String month, String recommendendedRatio) {
         recommendendedRatio = recommendendedRatio.replace(" ", "");
-        String[] values = recommendendedRatio.split(":");
-        long ratStrength = Long.parseLong(values[0]);
-        long ratEndurance = Long.parseLong(values[1]);
+        long ratStrength;
+        long ratEndurance;
+        if (!recommendendedRatio.isEmpty()) {
+            String[] values = recommendendedRatio.split(":");
+            ratStrength = Long.parseLong(values[0]);
+            ratEndurance = Long.parseLong(values[1]);
+        } else {
+            ratStrength = 50;
+            ratEndurance = 50;
+        }
         MonthDAO monthDAO = new FBMonthDAO();
         Month monthObj;
         try {
@@ -112,6 +121,7 @@ public class DBUtils {
         long diffEnd = ratEndurance - ratEnd;
 
         return diffStr > 0 ? Type.strength : diffEnd > 0 ? Type.endurance : null;
+
     }
 
     static String getTableM(long user) {

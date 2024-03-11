@@ -2,6 +2,8 @@ package persistence.dtos;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User implements Serializable {
 
@@ -15,6 +17,8 @@ public class User implements Serializable {
     private Date birthdate;
 
     private long id;
+
+    private Badge badge;
 
     public User() {
 
@@ -39,12 +43,32 @@ public class User implements Serializable {
         this.birthdate = birthdate;
     }
 
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("prename", this.prename);
+        result.put("surname", this.surname);
+        result.put("username", this.username);
+        result.put("password", this.password);
+        result.put("edss", this.edss);
+        result.put("birthdate", this.birthdate);
+        result.put("badge", this.badge);
+        return result;
+    }
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Badge getBadge() {
+        return badge;
+    }
+
+    public void setBadge(Badge badge) {
+        this.badge = badge;
     }
 
     public String getPassword() {

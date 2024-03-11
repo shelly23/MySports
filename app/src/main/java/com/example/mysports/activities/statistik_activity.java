@@ -18,6 +18,7 @@
     package com.example.mysports.activities;
 
     import android.app.Activity;
+    import android.content.Intent;
     import android.graphics.Color;
     import android.os.Build;
     import android.os.Bundle;
@@ -42,15 +43,22 @@
 
     import java.sql.Date;
     import java.util.ArrayList;
+    import java.util.Calendar;
     import java.util.Comparator;
     import java.util.List;
 
     import persistence.daos.FBDayDAO;
     import persistence.daos.FBMonthDAO;
+    import persistence.daos.FBSettingsDAO;
+    import persistence.dtos.Day;
+    import persistence.dtos.Settings;
     import persistence.dtos.User;
+    import persistence.exceptions.PersistenceException;
     import persistence.validators.TextValidator;
     import service.DayService;
     import service.DayServiceImpl;
+    import service.SettingsService;
+    import service.SettingsServiceImpl;
 
     public class statistik_activity extends Activity {
 
@@ -64,14 +72,29 @@
         private BarDataSet barDataSet;
         private BarData barData;
         private DayService dayService;
+
+        private SettingsService settingsService;
+
         private User user;
         private String yearStrLine;
         private String yearStrBar;
+
+        private Day day;
+
+        private Settings settings;
 
         private ImageView front1;
         private ImageView front2;
         private ImageView back1;
         private ImageView back2;
+
+        private ImageView settings_btn;
+
+        private ImageView game;
+
+        private ImageView home;
+
+        private ImageView activity;
 
         private int currentYearLine;
         private int currentYearBar;
@@ -91,13 +114,26 @@
             setContentView(R.layout.statistik);
 
             dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
+            settingsService = new SettingsServiceImpl(new FBSettingsDAO());
 
             user = (User) getIntent().getSerializableExtra("USER");
+
+            try {
+                assert user != null;
+                day = dayService.getDay(user.getId(), new java.util.Date(Calendar.getInstance().getTime().getTime()));
+            } catch (PersistenceException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
             back1 = findViewById(R.id.back1);
             back2 = findViewById(R.id.back2);
             front1 = findViewById(R.id.front1);
             front2 = findViewById(R.id.front2);
+
+            settings_btn = findViewById(R.id.vector_ek123);
+            game = findViewById(R.id.vector_ek125);
+            home = findViewById(R.id.vector_ek131);
+            activity = findViewById(R.id.vector_ek127);
 
             lineChart = findViewById(R.id.linechart);
             lineChart.getLegend().setEnabled(false);
@@ -176,6 +212,60 @@
                 }
             });
 
+            settings_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), settingsscreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            activity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), activityscreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.putExtra("DAY", day);
+                    nextScreen.putExtra("SETTINGS", settings);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            home.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), statistik_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
+
+            try {
+                settings = settingsService.getUsersSettings(user.getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (!settings.isGame_activated()) {
+                game.setActivated(false);
+                game.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                game.setImageResource(R.drawable.vector_ek125);
+                game.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
 
         }
 
@@ -321,6 +411,35 @@
             lineEntries.add(new Entry(9f, 10));
             lineEntries.add(new Entry(10f, 30));
             lineEntries.add(new Entry(11f, 70));
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            try {
+                settings = settingsService.getUsersSettings(user.getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            createLineChart(yearStrLine);
+            createBarChart(yearStrBar);
+            if (!settings.isGame_activated()) {
+                game.setActivated(false);
+                game.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                game.setImageResource(R.drawable.vector_ek125);
+                game.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
         }
     }
 	

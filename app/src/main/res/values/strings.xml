@@ -75,7 +75,7 @@
     <string name="akuten_schub_tracken_string">Schub/Pause tracken</string>
     <string name="aktivit_t_durchf_hren_string">Aktivität durchführen</string>
     <string name="chat_ek1_string">CHAT</string>
-    <string name="schritte_heute__1253_von_1500_string">Schritte heute: {} von 1500</string>
+    <string name="schritte_heute__1253_von_1500_string">Schritte heute: {} von []</string>
     <string name="figma_ek7_string">Figma</string>
     <string name="_42__ek7_string">42%</string>
     <string name="_9_42_am_ek7_string">9:42 AM</string>
@@ -230,4 +230,14 @@
     <string name="spielfeld">Spielfeld</string>
     <string name="erfahrungspunkte">Erfahrungspunkte:</string>
     <string name="n_chstes_feld">nächstes Feld</string>
+    <string name="feld_erreicht">Feld [] erreicht!</string>
+    <string name="belohnung_probier_doch_mal_das_folgende_rezept_aus"><b>Belohnung:</b> </string>
+    <string name="u_u"><u>[]</u></string>
+    <string name="gratulation">Gratulation!</string>
+    <string name="description">Perfekte Woche! Du hast an allen 7 Tagen Dein Aktivitätsziel erreicht!\n\nVersuche als nächstes 2 perfekte Wochen zu erreichen!\n(Keine Sorge, Tage, welche als Pause oder Schub gekennzeichnet sind zählen dabei als aktiver Tag)</string>
+    <string name="chat">CHAT</string>
+    <string name="therapeutin">TherapeutIn</string>
+    <string name="system">System</string>
+    <string name="ich_wollte_mich_erkundigen_ob_wir_meinen_derzeitigen_trainingsplan_noch_etwas_mehr_auf_ausdauer_anpassen_k_nnten">Ich wollte mich erkundigen, ob wir meinen derzeitigen Trainingsplan noch etwas mehr auf Ausdauer anpassen könnten?</string>
+    <string name="nat_rlich_ich_versuche_ihnen_entsprechende_inhalte_hochzuladen_alles_weitere_besprechen_wir_am_besten_bei_ihrem_n_chsten_termin">Natürlich, ich versuche, Ihnen entsprechende Inhalte hochzuladen, alles Weitere besprechen wir am Besten bei Ihrem nächsten Termin.</string>
 </resources>

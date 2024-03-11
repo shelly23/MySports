@@ -77,6 +77,7 @@ public class FBDayDAO implements DayDAO {
         dayToBeUpdated.setStep_count(day.getStep_count());
         dayToBeUpdated.setActivity_count(day.getActivity_count());
         dayToBeUpdated.setActivity_duration(day.getActivity_duration());
+        dayToBeUpdated.setChecked(day.isChecked());
 
         Map<String, Object> dayValues = dayToBeUpdated.toMap();
 

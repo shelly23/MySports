@@ -17,7 +17,7 @@ public interface UserService {
 
     List<User> getAllUsers() throws PersistenceException, InterruptedException;
 
-    boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException;
+    boolean update(User user) throws PersistenceException, InvalidValueException, MandatoryValueException, IOException, InterruptedException;
 
     User loginUser(String username, String password) throws InvalidValueException, MandatoryValueException, IOException, PersistenceException, NoSuchAlgorithmException, InterruptedException;
 

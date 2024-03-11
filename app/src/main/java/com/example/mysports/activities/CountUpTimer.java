@@ -29,6 +29,7 @@ public class CountUpTimer {
     private boolean isRunning;
     // An array to store lap timestamps
     private ArrayList<Integer> lapTimestamps;
+
     /**
      * Create a new counting up timer. Will start immediately
      */
@@ -37,15 +38,7 @@ public class CountUpTimer {
         isRunning = startWhenCreated;
         lapTimestamps = new ArrayList<>();
         reset();
-    }    Runnable tickSelector = new Runnable() {
-        @Override
-        public void run() {
-            if (tickListener != null && isRunning) {
-                tickListener.onTick(getTime());
-                startTicking();
-            }
-        }
-    };
+    }
 
     /**
      * Helper to parse the milliseconds to human-readable time
@@ -61,7 +54,15 @@ public class CountUpTimer {
         int milliseconds = millis % 1000;
 
         return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
-    }
+    }    Runnable tickSelector = new Runnable() {
+        @Override
+        public void run() {
+            if (tickListener != null && isRunning) {
+                tickListener.onTick(getTime());
+                startTicking();
+            }
+        }
+    };
 
     /**
      * Reset the timer, also clears all laps information. Running status will not affected
@@ -73,7 +74,6 @@ public class CountUpTimer {
         lapTimestamps.clear();
     }
 
-
     /**
      * Pause the timer
      */
@@ -84,7 +84,6 @@ public class CountUpTimer {
             stopTicking();
         }
     }
-
 
     /**
      * Resume the timer
@@ -98,7 +97,6 @@ public class CountUpTimer {
         }
     }
 
-
     /**
      * Create a new lap
      */
@@ -106,11 +104,9 @@ public class CountUpTimer {
         lapTimestamps.add(getTime());
     }
 
-
     public boolean isRunning() {
         return isRunning;
     }
-
 
     /**
      * Toggle the running state of this timer
@@ -124,7 +120,6 @@ public class CountUpTimer {
         return isRunning;
     }
 
-
     /**
      * Get the current time of this timer
      *
@@ -134,7 +129,6 @@ public class CountUpTimer {
         if (isRunning) return (int) (SystemClock.elapsedRealtime() - startTimestamp - delayTime);
         else return (int) (lastPauseTimestamp - startTimestamp - delayTime);
     }
-
 
     /**
      * Get the duration of a specified lap
@@ -147,7 +141,6 @@ public class CountUpTimer {
         else return lapTimestamps.get(position) - lapTimestamps.get(position - 1);
     }
 
-
     /**
      * Get the begin timestamp of a specified lap, when the lap was started
      *
@@ -158,14 +151,12 @@ public class CountUpTimer {
         return lapTimestamps.get(position);
     }
 
-
     /**
      * @return The number of laps
      */
     public int getLapCount() {
         return lapTimestamps.size();
     }
-
 
     /**
      * Parse the current time of this timer to human-readable time
@@ -209,10 +200,10 @@ public class CountUpTimer {
         Log.d(TAG, "finalize");
     }
 
-
     public interface TickListener {
         void onTick(int milliseconds);
     }
+
 
 
 

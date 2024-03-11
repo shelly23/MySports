@@ -73,10 +73,10 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
                 android:background="@color/whiteOP"
+                android:fontFamily="@font/montserrat_bold"
                 android:padding="10dp"
                 android:textColor="@color/rectangle_2_color"
-                android:textSize="20sp"
-                android:fontFamily="@font/montserrat_bold"/>
+                android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/dateFrom"

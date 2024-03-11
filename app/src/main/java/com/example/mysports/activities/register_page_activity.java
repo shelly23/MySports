@@ -22,16 +22,13 @@
     import android.graphics.drawable.Drawable;
     import android.os.Bundle;
     import android.util.Patterns;
-    import android.view.Gravity;
-    import android.view.LayoutInflater;
     import android.view.View;
     import android.widget.Button;
     import android.widget.DatePicker;
     import android.widget.EditText;
-    import android.widget.LinearLayout;
-    import android.widget.PopupWindow;
     import android.widget.ProgressBar;
     import android.widget.TextView;
+    import android.widget.Toast;
 
     import com.example.mysports.R;
 
@@ -42,6 +39,7 @@
     import java.util.Date;
     import java.util.Locale;
 
+    import persistence.daos.FBGame_ProgressDAO;
     import persistence.daos.FBSettingsDAO;
     import persistence.daos.FBUserDAO;
     import persistence.dtos.User;
@@ -49,6 +47,8 @@
     import persistence.exceptions.MandatoryValueException;
     import persistence.exceptions.PersistenceException;
     import persistence.validators.TextValidator;
+    import service.GameProgressService;
+    import service.GameProgressServiceImpl;
     import service.SettingsService;
     import service.SettingsServiceImpl;
     import service.UserService;
@@ -77,6 +77,10 @@
         private UserService userService;
 
         private SettingsService settingsService;
+
+        private GameProgressService gameProgressService;
+
+        private boolean back = false;
 
 
         public register_page_activity() throws PersistenceException {
@@ -112,6 +116,7 @@
 
             userService = new UserServiceImpl(new FBUserDAO(), new TextValidator());
             settingsService = new SettingsServiceImpl(new FBSettingsDAO());
+            gameProgressService = new GameProgressServiceImpl(new FBGame_ProgressDAO());
 
             Calendar birthdateCal = Calendar.getInstance();
 
@@ -136,35 +141,46 @@
             register.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    error_field.setText("");
-                    vorname.setBackground(originalDrawableVN);
-                    nachname.setBackground(originalDrawableNN);
-                    edss.setBackground(originalDrawableED);
-                    birthdate.setBackground(originalDrawableBD);
-                    email_adresse.setBackground(originalDrawableEM);
-                    passwort.setBackground(originalDrawablePW);
-                    passwort_wiederholen.setBackground(originalDrawablePWW);
-                    spinner.setVisibility(View.VISIBLE);
+                    if (back) {
+                        finish();
+                    } else {
+                        error_field.setText("");
+                        vorname.setBackground(originalDrawableVN);
+                        nachname.setBackground(originalDrawableNN);
+                        edss.setBackground(originalDrawableED);
+                        birthdate.setBackground(originalDrawableBD);
+                        email_adresse.setBackground(originalDrawableEM);
+                        passwort.setBackground(originalDrawablePW);
+                        passwort_wiederholen.setBackground(originalDrawablePWW);
+                        spinner.setVisibility(View.VISIBLE);
 
-                    String vorname_text = vorname.getText().toString();
-                    String nachname_text = nachname.getText().toString();
-                    String edss_text = edss.getText().toString();
-                    String email_text = email_adresse.getText().toString();
-                    String passwort_text = passwort.getText().toString();
-                    String passwort_wiederholen_text = passwort_wiederholen.getText().toString();
+                        String vorname_text = vorname.getText().toString();
+                        String nachname_text = nachname.getText().toString();
+                        String edss_text = edss.getText().toString();
+                        String email_text = email_adresse.getText().toString();
+                        String passwort_text = passwort.getText().toString();
+                        String passwort_wiederholen_text = passwort_wiederholen.getText().toString();
 
-                    if (validateData(vorname_text, nachname_text, email_text, passwort_text, passwort_wiederholen_text)) {
-                        // save
+                        if (validateData(vorname_text, nachname_text, email_text, passwort_text, passwort_wiederholen_text)) {
+                            // save
 
-                        try {
-                            long id = userService.saveUser(new User(vorname_text, nachname_text, email_text, passwort_text, edss_text.isEmpty() ? -1 : Double.parseDouble(edss_text), birthdate.getText().toString().isEmpty() ? null : new Date(birthdateCal.getTime().getTime())));
-                            settingsService.createSettings(id);
-                        } catch (PersistenceException | InvalidValueException |
-                                 MandatoryValueException | IOException |
-                                 NoSuchAlgorithmException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                            try {
+                                long id = userService.saveUser(new User(vorname_text, nachname_text, email_text, passwort_text, edss_text.isEmpty() ? -1 : Double.parseDouble(edss_text), birthdate.getText().toString().isEmpty() ? null : new Date(birthdateCal.getTime().getTime())));
+                                settingsService.createSettings(id);
+                                gameProgressService.createGame_Progress(id);
+                            } catch (PersistenceException | InvalidValueException |
+                                     MandatoryValueException | IOException |
+                                     NoSuchAlgorithmException | InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
+
+                            Toast.makeText(getApplicationContext(), "Nutzer " + email_text + " erfolgreich angelegt.", Toast.LENGTH_LONG).show();
+                            spinner.setVisibility(View.INVISIBLE);
+                            back = true;
+                            register.setText("Zurück");
+
+                        /*
                         //Create a View object yourself through inflater
                         view.getContext();
                         LayoutInflater inflater = (LayoutInflater) view.getContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -203,7 +219,8 @@
                             public void onClick(View view) {
                                 popupWindow.dismiss();
                             }
-                        });
+                        });*/
+                        }
                     }
 
                 }

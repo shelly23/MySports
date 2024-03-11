@@ -1,4 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homescreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--
@@ -31,7 +33,8 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/whiteOP">
+        android:background="@color/whiteOP"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/vector_ek123"
@@ -125,101 +128,268 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/chat1"
+    <View
         android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_height="2dp"
         android:layout_below="@id/steps_today"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/speech_bubble_nine_patch_agent">
-
-        <TextView
-            android:id="@+id/active_days"
-            android:layout_width="260dp"
-            android:layout_height="35dp"
-            android:layout_centerInParent="true"
-            android:fontFamily="@font/montserrat_regular"
-            android:text="@string/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3_string" />
-    </RelativeLayout>
+        android:layout_marginTop="25dp"
+        android:background="@color/menu_bar_ek1_color"
+        android:id="@+id/ruler"/>
 
     <RelativeLayout
-        android:id="@+id/chat2"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/chat1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/speech_bubble_nine_patch_agent">
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ruler"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp">
 
         <TextView
-            android:id="@+id/herrlicher"
-            android:layout_width="260dp"
-            android:layout_height="35dp"
-            android:layout_centerInParent="true"
+            android:id="@+id/title_chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:fontFamily="@font/montserrat_regular"
-            android:text="@string/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/buttons"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/chat2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/speech_bubble_nine_patch_user">
+            android:text="@string/chat" />
 
         <RelativeLayout
-            android:layout_width="260dp"
-            android:layout_height="40dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="3dp">
+            android:id="@+id/switch_schub_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/title_chat">
 
-            <Button
-                android:id="@+id/button_schub"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:background="@drawable/rectangle_2_ek3_shape"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/akuten_schub_tracken_string"
-                android:textAllCaps="false"
-                android:textColor="@color/log_in_color"
-                android:textSize="12sp"
-                android:textStyle="normal" />
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true" />
 
-            <Button
-                android:id="@+id/button_statistiken"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="500dp"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/button_schub"
-                android:background="@drawable/rectangle_2_ek3_shape"
+                android:layout_toEndOf="@id/switch1"
                 android:fontFamily="@font/montserrat_regular"
-                android:text="@string/statistiken_anzeigen_string"
-                android:textAllCaps="false"
-                android:textColor="@color/log_in_color"
-                android:textSize="12sp"
-                android:textStyle="normal" />
+                android:text="@string/system" />
 
-            <Button
-                android:id="@+id/button_aktivitaet"
-                android:layout_width="80dp"
-                android:layout_height="30dp"
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="500dp"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_toEndOf="@id/button_statistiken"
-                android:background="@drawable/rectangle_2_ek3_shape"
-                android:fontFamily="@font/montserrat_regular"
-                android:text="@string/aktivit_t_durchf_hren_string"
-                android:textAllCaps="false"
-                android:textColor="@color/log_in_color"
-                android:textSize="12sp"
-                android:textStyle="normal" />
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@id/switch1"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/therapeutin"
+                android:textAlignment="textEnd" />
+
         </RelativeLayout>
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/system_view"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:id="@+id/chat1"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/speech_bubble_nine_patch_agent">
+
+            <TextView
+                android:id="@+id/active_days"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek3_string" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat2"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/chat1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/speech_bubble_nine_patch_agent">
+
+            <TextView
+                android:id="@+id/herrlicher"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/_11_aktive_tage__von_23___das_sind_fast_50___weiter_so__ek1_string" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/buttons"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/chat2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/speech_bubble_nine_patch_user">
+
+            <RelativeLayout
+                android:layout_width="260dp"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dp">
+
+                <Button
+                    android:id="@+id/button_schub"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/rectangle_2_ek3_shape"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/akuten_schub_tracken_string"
+                    android:textAllCaps="false"
+                    android:textColor="@color/log_in_color"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/button_statistiken"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/button_schub"
+                    android:background="@drawable/rectangle_2_ek3_shape"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/statistiken_anzeigen_string"
+                    android:textAllCaps="false"
+                    android:textColor="@color/log_in_color"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:ignore="TouchTargetSizeCheck" />
+
+                <Button
+                    android:id="@+id/button_aktivitaet"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/button_statistiken"
+                    android:background="@drawable/rectangle_2_ek3_shape"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="@string/aktivit_t_durchf_hren_string"
+                    android:textAllCaps="false"
+                    android:textColor="@color/log_in_color"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/chat_view"
+        android:visibility="visible"
+        android:layout_marginTop="10dp">
+
+        <RelativeLayout
+            android:id="@+id/chat1a"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/speech_bubble_nine_patch_user">
+
+            <TextView
+                android:id="@+id/active_daysa"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="@string/ich_wollte_mich_erkundigen_ob_wir_meinen_derzeitigen_trainingsplan_noch_etwas_mehr_auf_ausdauer_anpassen_k_nnten"
+                android:textSize="10sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat2a"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/chat1a"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/speech_bubble_nine_patch_agent">
+
+            <TextView
+                android:id="@+id/herrlichera"
+                android:layout_width="260dp"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/montserrat_regular"
+                android:textSize="10sp"
+                android:text="@string/nat_rlich_ich_versuche_ihnen_entsprechende_inhalte_hochzuladen_alles_weitere_besprechen_wir_am_besten_bei_ihrem_n_chsten_termin" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/buttonsa"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/chat2a"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="3dp">
+
+                <EditText
+                    android:id="@+id/message"
+                    android:layout_width="180dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:inputType="time"
+                    android:text="Neue Nachricht"
+                    android:textColor="@color/email_address_color"
+                    android:textSize="14sp"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/button_send"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/message"
+                    android:background="@drawable/rectangle_2_ek3_shape"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="Senden"
+                    android:textAllCaps="false"
+                    android:textColor="@color/log_in_color"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </RelativeLayout>
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
@@ -392,7 +562,8 @@
             android:fontFamily="Montserrat"
             android:text="@string/chat_ek1_string"
             android:textColor="@color/email_address_color"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:id="@+id/chat_rectangle"
@@ -423,22 +594,39 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/greeting"
-        android:layout_width="300dp"
-        android:layout_height="40dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:fontFamily="@font/montserrat_regular"
-        android:textAlignment="viewStart"
-        android:textColor="@color/rectangle_2_color"
-        android:textSize="25sp" />
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/greeting"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/montserrat_regular"
+            android:textAlignment="viewStart"
+            android:textColor="@color/rectangle_2_color"
+            android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/badge"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/greeting"
+            android:src="@drawable/award"
+            android:visibility="invisible" />
+    </RelativeLayout>
 
     <com.savvi.rangedatepicker.CalendarPickerView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendar_view"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/greeting"
+        android:layout_below="@id/header"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:background="@color/whiteOP"

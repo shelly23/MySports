@@ -19,10 +19,9 @@
 
     import android.app.Activity;
     import android.app.DatePickerDialog;
-    import android.app.Notification;
     import android.app.NotificationChannel;
     import android.app.NotificationManager;
-    import android.app.PendingIntent;
+    import android.content.Context;
     import android.content.Intent;
     import android.graphics.Typeface;
     import android.graphics.drawable.Drawable;
@@ -45,12 +44,11 @@
     import android.widget.LinearLayout;
     import android.widget.PopupWindow;
     import android.widget.ProgressBar;
+    import android.widget.RelativeLayout;
     import android.widget.Switch;
     import android.widget.TextView;
 
     import androidx.annotation.RequiresApi;
-    import androidx.core.app.NotificationCompat;
-    import androidx.core.app.NotificationManagerCompat;
 
     import com.example.mysports.R;
     import com.github.mikephil.charting.charts.PieChart;
@@ -73,6 +71,8 @@
     import persistence.daos.FBDayDAO;
     import persistence.daos.FBMonthDAO;
     import persistence.daos.FBSettingsDAO;
+    import persistence.daos.FBUserDAO;
+    import persistence.dtos.Badge;
     import persistence.dtos.Day;
     import persistence.dtos.Settings;
     import persistence.dtos.User;
@@ -84,6 +84,8 @@
     import service.DayServiceImpl;
     import service.SettingsService;
     import service.SettingsServiceImpl;
+    import service.UserService;
+    import service.UserServiceImpl;
 
     public class homescreen_activity extends Activity implements SensorEventListener {
 
@@ -107,9 +109,12 @@
         private Button schubTracken;
 
         private Button activity_Button;
+        private Button statistics_Button;
         private DayService dayService;
 
         private SettingsService settingsService;
+
+        private UserService userService;
 
         private ImageView settings_btn;
         private ImageView activity;
@@ -117,6 +122,17 @@
         private ImageView statistik;
 
         private ImageView game;
+
+        private ImageView badge;
+
+        private Switch aSwitch;
+
+        private TextView therapist;
+
+        private RelativeLayout therapistView;
+        private TextView system;
+
+        private RelativeLayout systemView;
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
@@ -140,20 +156,21 @@
             }
 
 
-            sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-            if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
-                stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-                isSensorPresent = true;
-            } else {
-                isSensorPresent = false;
-                // set text of stepcounter
-            }
+            //sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+            //if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            //    stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            //    isSensorPresent = true;
+            //} else {
+            //    isSensorPresent = false;
+            //    // set text of stepcounter
+            //}
 
             currentDate = new Date(System.currentTimeMillis());
 
             try {
                 dayService = new DayServiceImpl(new FBDayDAO(), new FBMonthDAO(), new TextValidator());
                 settingsService = new SettingsServiceImpl(new FBSettingsDAO());
+                userService = new UserServiceImpl(new FBUserDAO(), new TextValidator());
                 user = (User) getIntent().getSerializableExtra("USER");
                 day = dayService.getDay(user.getId(), currentDate);
                 settings = settingsService.getUsersSettings(user.getId());
@@ -161,10 +178,13 @@
                 e.printStackTrace();
             }
 
-
-            stepsToday = day.getSteps(); // wir holen den day noch nicht, getter fehlt!!
+            stepsToday = day.getSteps();
             stepsTodayStart = day.getSteps_start();
-            stepsTotal = 1500; // TODOMOCK --> SETTINGS
+            if (settings.getStep_goal() != -1) {
+                stepsTotal = settings.getStep_goal();
+            } else {
+                stepsTotal = 1;
+            }
 
             greeting = findViewById(R.id.greeting);
             calendarPickerView = findViewById(R.id.calendar_view);
@@ -174,46 +194,19 @@
             herrlicher = findViewById(R.id.herrlicher);
             schubTracken = findViewById(R.id.button_schub);
             activity_Button = findViewById(R.id.button_aktivitaet);
+            statistics_Button = findViewById(R.id.button_statistiken);
             settings_btn = findViewById(R.id.vector_ek123);
             activity = findViewById(R.id.vector_ek127);
             statistik = findViewById(R.id.vector_ek129);
             game = findViewById(R.id.vector_ek125);
 
-            updateSteps();
+            aSwitch = findViewById(R.id.switch1);
+            therapist = findViewById(R.id.textView1);
+            system = findViewById(R.id.textView);
+            therapistView = findViewById(R.id.chat_view);
+            systemView = findViewById(R.id.system_view);
 
-            updatePieChart();
-
-            String greet_Text;
-            Date morning = null;
-            Date evening = null;
-
-            SimpleDateFormat sdf = new SimpleDateFormat("HH-mm");
-
-            try {
-                morning = sdf.parse("10-00");
-                evening = sdf.parse("18-00");
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            Calendar now = Calendar.getInstance();
-
-            if (morning != null && now.before(morning)) {
-                greet_Text = "Guten Morgen, ";
-                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Morgen"));
-            } else if (evening != null && now.after(evening)) {
-                greet_Text = "Guten Abend, ";
-                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Abend"));
-            } else {
-                greet_Text = "Hallo, ";
-                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Tag"));
-            }
-
-            greet_Text += user.getPrename();
-            greet_Text += "!";
-            greeting.setText(greet_Text);
-
-            updateCalendar();
+            badge = findViewById(R.id.badge);
 
             settings_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -222,7 +215,6 @@
                     nextScreen.putExtra("USER", user);
                     nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
-                    finish();
                 }
             });
 
@@ -235,7 +227,6 @@
                     nextScreen.putExtra("SETTINGS", settings);
                     nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
-                    finish();
                 }
             });
 
@@ -246,20 +237,26 @@
                     nextScreen.putExtra("USER", user);
                     nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(nextScreen);
-                    finish();
                 }
             });
 
-            game.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
-                    nextScreen.putExtra("USER", user);
-                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(nextScreen);
-                    finish();
-                }
-            });
+            if (!settings.isGame_activated()) {
+                game.setActivated(false);
+                game.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                game.setImageResource(R.drawable.vector_ek125);
+                game.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
 
             schubTracken.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -386,7 +383,7 @@
                                 if (fromSet[0] && toSet[0]) {
                                     spinner.setVisibility(View.VISIBLE);
 
-                                    dayService.markDays(day.getUser_id(), dateFromCal, dateToCal, schub, pause, day.isActive());
+                                    dayService.markDays(day.getUser_id(), dateFromCal, dateToCal, schub, pause, null);
                                     updateCalendar();
                                     popupWindow.dismiss();
                                 } else {
@@ -415,19 +412,46 @@
             activity_Button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Notification notification = new NotificationCompat.Builder(getApplicationContext(), "push")
-                            .setSmallIcon(R.mipmap.ic_launcher_round)
-                            .setContentTitle("Aktivitätserinnerung")
-                            .setContentText("Hi! Dir fehlen noch blabla")
-                            .setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText("more text"))
-                            .addAction(R.drawable.check_vector, "AUF GEHT'S", PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(getApplicationContext(), log_in_page_activity.class), PendingIntent.FLAG_IMMUTABLE))
-                            .addAction(R.drawable.clock_vector, "ERINNERN", null)
-                            .build();
+                    Intent nextScreen = new Intent(getApplicationContext(), activityscreen_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.putExtra("DAY", day);
+                    nextScreen.putExtra("SETTINGS", settings);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+            });
 
-                    NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-                    notificationManagerCompat.notify(0, notification);
+            statistics_Button.setOnClickListener(new View.OnClickListener() {
 
+                @Override
+                public void onClick(View view) {
+                    Intent nextScreen = new Intent(getApplicationContext(), statistik_activity.class);
+                    nextScreen.putExtra("USER", user);
+                    nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(nextScreen);
+                }
+
+            });
+
+            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+
+                    Typeface fontBold = Typeface.createFromAsset(getAssets(), "montserrat_bold.ttf");
+                    Typeface fontRegular = Typeface.createFromAsset(getAssets(), "montserrat_regular.ttf");
+
+                    if (b) {
+                        therapist.setTypeface(fontRegular);
+                        therapistView.setVisibility(View.INVISIBLE);
+                        system.setTypeface(fontBold);
+                        systemView.setVisibility(View.VISIBLE);
+                    } else {
+                        therapist.setTypeface(fontBold);
+                        therapistView.setVisibility(View.VISIBLE);
+                        system.setTypeface(fontRegular);
+                        systemView.setVisibility(View.INVISIBLE);
+                    }
                 }
             });
 
@@ -451,6 +475,7 @@
 
         private void updateSteps() {
             String text = getResources().getString(R.string.schritte_heute__1253_von_1500_string);
+            text = text.replace("[]", String.valueOf(stepsTotal));
             if (stepsTodayStart == -1.0) {
                 stepMessage.setText(text.replace("{}", String.valueOf((int) stepsToday)));
             } else {
@@ -587,17 +612,145 @@
         @Override
         public void onResume() {
             super.onResume();
-            if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
-                sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+            //if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            //    sensorManager.registerListener(this, stepCounter, SensorManager.SENSOR_DELAY_NORMAL);
+            //}
+            try {
+                day = dayService.getDay(user.getId(), currentDate);
+                if (!day.isChecked()) {
+                    if (dayService.isChain(user.getId(), day, 2)) {
+                        user.setBadge(Badge.perfect_week);
+                        userService.update(user);
+                        // Post a Runnable to show the popup after the activity is fully loaded
+                        findViewById(android.R.id.content).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                showPopup();
+                            }
+                        });
+                    }
+                    day.setChecked(true);
+                    dayService.update(day, false, null);
+                    if (user.getBadge() != null) {
+                        badge.setVisibility(View.VISIBLE);
+                        badge.setImageResource(R.drawable.award);
+                    }
+                }
+            } catch (PersistenceException | InterruptedException | InvalidValueException |
+                     MandatoryValueException | IOException e) {
+                throw new RuntimeException(e);
             }
+            updateSteps();
+
+            updatePieChart();
+
+            stepsToday = day.getSteps();
+            stepsTodayStart = day.getSteps_start();
+            if (settings.getStep_goal() != -1) {
+                stepsTotal = settings.getStep_goal();
+            } else {
+                stepsTotal = 1;
+            }
+
+            String greet_Text;
+            Date morning = null;
+            Date evening = null;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH-mm");
+
+            try {
+                morning = sdf.parse("10-00");
+                evening = sdf.parse("18-00");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Calendar now = Calendar.getInstance();
+
+            if (morning != null && now.before(morning)) {
+                greet_Text = "Guten Morgen, ";
+                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Morgen"));
+            } else if (evening != null && now.after(evening)) {
+                greet_Text = "Guten Abend, ";
+                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Abend"));
+            } else {
+                greet_Text = "Hallo, ";
+                herrlicher.setText(herrlicher.getText().toString().replace("{}", "Tag"));
+            }
+
+            greet_Text += user.getPrename();
+            greet_Text += "!";
+            greeting.setText(greet_Text);
+
+            if (user.getBadge() != null) {
+                badge.setVisibility(View.VISIBLE);
+                badge.setImageResource(R.drawable.award);
+            }
+
+            updateCalendar();
+            try {
+                settings = settingsService.getUsersSettings(user.getId());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            if (!settings.isGame_activated()) {
+                game.setActivated(false);
+                game.setImageResource(R.drawable.vector_ek125_disabled);
+            } else {
+                game.setImageResource(R.drawable.vector_ek125);
+                game.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent nextScreen = new Intent(getApplicationContext(), gamescreen_activity.class);
+                        nextScreen.putExtra("USER", user);
+                        nextScreen.putExtra("SETTINGS", settings);
+                        nextScreen.putExtra("DAY", day);
+                        nextScreen.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        startActivity(nextScreen);
+                    }
+                });
+            }
+
         }
 
         @Override
         public void onPause() {
             super.onPause();
-            if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
-                sensorManager.unregisterListener(this, stepCounter);
-            }
+            //if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            //    sensorManager.unregisterListener(this, stepCounter);
+            //}
+        }
+
+        private void showPopup() {
+            // popup mit reward
+
+            //Create a View object yourself through inflater
+            Context c = getApplicationContext();
+            LayoutInflater inflater = (LayoutInflater) c.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View popupView = inflater.inflate(R.layout.popupscreen_reward, findViewById(R.id.popup_root));
+
+            //Specify the length and width through constants
+            int width = LinearLayout.LayoutParams.MATCH_PARENT;
+            int height = LinearLayout.LayoutParams.MATCH_PARENT;
+
+            //Make Inactive Items Outside Of PopupWindow
+            boolean focusable = true;
+
+            //Create a window with our parameters
+            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+            //Set the location of the window on the screen
+            popupWindow.showAtLocation(findViewById(R.id.homescreen), Gravity.CENTER, 0, 0);
+
+            //Initialize the elements of our window, install the handler
+
+            Button back = popupView.findViewById(R.id.messageButtonBack);
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    popupWindow.dismiss();
+                }
+            });
         }
     }
 	
